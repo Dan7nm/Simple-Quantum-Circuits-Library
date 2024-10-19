@@ -6,7 +6,9 @@ API References
    :undoc-members:
    :show-inheritance:
 
-   .. automodule:: qubit_tensor
+Qubit Tensor Module
+-----------------
+.. automodule:: qubit_tensor
    :members:
    :undoc-members:
    :show-inheritance:
