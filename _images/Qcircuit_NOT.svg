@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="60.772pt" width="200.25pt" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 200.248 60.772">
+ <desc>https://commons.wikimedia.org/wiki/File:Qcircuit_NOT.svg</desc>
+ <g stroke-linejoin="round" stroke="#000" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1.99" fill="none">
+  <path d="m80.699 30.387h38.848"/>
+  <path d="m100.12 49.812v-38.852"/>
+  <path d="m100.12 10.461c-10.992 0-19.922 8.9297-19.922 19.926"/>
+  <path d="m80.199 30.387c0 10.996 8.9297 19.926 19.922 19.926"/>
+  <path d="m100.12 50.312c10.996 0 19.926-8.9297 19.926-19.926"/>
+  <path d="m120.05 30.387c0-10.996-8.9297-19.926-19.926-19.926"/>
+  <path d="m79.703 30.387h-69.738"/>
+  <path d="m190.29 30.387h-69.742"/>
+ </g>
+</svg>

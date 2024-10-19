@@ -6,8 +6,32 @@ In quantum computing, gates manipulate qubits through various transformations. H
 Single Qubit Gates:
 ------------------
 
+I Gate (The identity gate)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. image:: ../../img/Qcircuit_I.svg
+   :alt: I Gate
+   :width: 250px
+   :align: center
+
+The I gate or the identity gate is the identity matrix and is defined as follows:
+
+.. math::
+   I =  \begin{pmatrix}
+         1 & 0 \\
+         0 & 1
+      \end{pmatrix}
+
+The identity gate doesn't change the the quantum state or the qubit state. This property is useful in some cases.
+
 X Gate (Pauli-X)
 ~~~~~~~~~~~~~~~~
+
+.. image:: ../../img/Qcircuit_NOT.svg
+   :alt: NOT Gate
+   :width: 250px
+   :align: center
+
 The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from |0⟩ to |1⟩ or from |1⟩ to |0⟩.
 
 .. math::
@@ -21,6 +45,13 @@ This gate acts similarly to the classical NOT gate, flipping the value of the qu
 
 Y Gate (Pauli-Y)
 ~~~~~~~~~~~~~~~~
+
+.. image:: ../../img/Qcircuit_Y.svg
+   :alt: Y Gate
+   :width: 250px
+   :align: center
+
+
 The Y gate, also known as the Pauli-Y gate, combines the flipping of the qubit’s state with a phase shift of π radians.
 
 .. math::
@@ -34,6 +65,12 @@ The Y gate flips the qubit like the X gate but introduces an imaginary phase fac
 
 Z Gate (Pauli-Z)
 ~~~~~~~~~~~~~~~~
+
+.. image:: ../../img/Qcircuit_Z.svg
+   :alt: NOT Gate
+   :width: 250px
+   :align: center
+
 The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the |1⟩ state while leaving the |0⟩ state unchanged.
 
 .. math::
@@ -45,8 +82,14 @@ The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians 
 
 In effect, the Z gate flips the phase of the |1⟩ state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.
 
-Hadamard Gate (H)
+H Gate (Hadamard Gate)
 ~~~~~~~~~~~~~~~~
+
+.. image:: ../../img/Hadamard_gate.svg
+   :alt: NOT Gate
+   :width: 250px
+   :align: center
+
 The Hadamard gate creates a superposition of the |0⟩ and |1⟩ states. When applied to a qubit in the |0⟩ state, it generates an equal superposition of |0⟩ and |1⟩, sometimes denoted as the plus state:
 
 .. math::
@@ -70,7 +113,7 @@ The Hadamard gate matrix:
 
 The Hadamard gate plays a crucial role in quantum algorithms such as QFT, creating superpositions and allowing interference patterns to emerge in quantum computations.
 
-Phase Shift Gate
+R Gate (Phase Shift Gate)
 ~~~~~~~~~~~~~~~~
 The Phase Shift gate introduces a phase shift of φ to the |1⟩ state while leaving the |0⟩ state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.
 
