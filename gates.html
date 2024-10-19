@@ -1,0 +1,201 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Gates &mdash; Simple Quantum Circuits Library  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Simple Quantum Circuits Library" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Simple Quantum Circuits Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quantum Gates</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#x-gate-pauli-x">X Gate (Pauli-X)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#y-gate-pauli-y">Y Gate (Pauli-Y)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#z-gate-pauli-z">Z Gate (Pauli-Z)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hadamard-gate-h">Hadamard Gate (H)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-shift-gate">Phase Shift Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#swap-gate">Swap Gate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gates-summary">Gates Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Simple Quantum Circuits Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quantum Gates</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gates.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quantum-gates">
+<h1>Quantum Gates<a class="headerlink" href="#quantum-gates" title="Permalink to this heading"></a></h1>
+<p>In quantum computing, gates manipulate qubits through various transformations. Here we describe some of the most commonly used gates in quantum circuits, including the X, Y, Z, Hadamard, Phase Shift, and Swap gates.</p>
+<section id="x-gate-pauli-x">
+<h2>X Gate (Pauli-X)<a class="headerlink" href="#x-gate-pauli-x" title="Permalink to this heading"></a></h2>
+<p>The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from <a href="#id1"><span class="problematic" id="id2">|</span></a>0⟩ to <a href="#id3"><span class="problematic" id="id4">|</span></a>1⟩ or from <a href="#id5"><span class="problematic" id="id6">|</span></a>1⟩ to <a href="#id7"><span class="problematic" id="id8">|</span></a>0⟩.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}X = \begin{pmatrix}
+0 &amp; 1 \\
+1 &amp; 0
+\end{pmatrix}\end{split}\]</div>
+<p>This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is <a href="#id9"><span class="problematic" id="id10">|</span></a>0⟩, applying an X gate transforms it to <a href="#id11"><span class="problematic" id="id12">|</span></a>1⟩, and vice versa.</p>
+</section>
+<section id="y-gate-pauli-y">
+<h2>Y Gate (Pauli-Y)<a class="headerlink" href="#y-gate-pauli-y" title="Permalink to this heading"></a></h2>
+<p>The Y gate, also known as the Pauli-Y gate, combines the flipping of the qubit’s state with a phase shift of π radians.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Y = \begin{pmatrix}
+0 &amp; -i \\
+i &amp; 0
+\end{pmatrix}\end{split}\]</div>
+<p>The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the <a href="#id13"><span class="problematic" id="id14">|</span></a>0⟩ state into i|1⟩ and the <a href="#id15"><span class="problematic" id="id16">|</span></a>1⟩ state into -i|0⟩.</p>
+</section>
+<section id="z-gate-pauli-z">
+<h2>Z Gate (Pauli-Z)<a class="headerlink" href="#z-gate-pauli-z" title="Permalink to this heading"></a></h2>
+<p>The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the <a href="#id17"><span class="problematic" id="id18">|</span></a>1⟩ state while leaving the <a href="#id19"><span class="problematic" id="id20">|</span></a>0⟩ state unchanged.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}Z = \begin{pmatrix}
+1 &amp; 0 \\
+0 &amp; -1
+\end{pmatrix}\end{split}\]</div>
+<p>In effect, the Z gate flips the phase of the <a href="#id21"><span class="problematic" id="id22">|</span></a>1⟩ state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.</p>
+</section>
+<section id="hadamard-gate-h">
+<h2>Hadamard Gate (H)<a class="headerlink" href="#hadamard-gate-h" title="Permalink to this heading"></a></h2>
+<p>The Hadamard gate creates a superposition of the <a href="#id23"><span class="problematic" id="id24">|</span></a>0⟩ and <a href="#id25"><span class="problematic" id="id26">|</span></a>1⟩ states. When applied to a qubit in the <a href="#id27"><span class="problematic" id="id28">|</span></a>0⟩ state, it generates an equal superposition of <a href="#id29"><span class="problematic" id="id30">|</span></a>0⟩ and <a href="#id31"><span class="problematic" id="id32">|</span></a>1⟩, sometimes denoted as the plus state:</p>
+<div class="math notranslate nohighlight">
+\[|+⟩ = \frac{1}{\sqrt{2}}(|0⟩+|1⟩)\]</div>
+<p>And when applied on the <a href="#id33"><span class="problematic" id="id34">|</span></a>1⟩ state, it generates the minus state:</p>
+<div class="math notranslate nohighlight">
+\[|-⟩ = \frac{1}{\sqrt{2}}(|0⟩-|1⟩)\]</div>
+<p>The Hadamard gate matrix:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H = \frac{1}{\sqrt{2}} \begin{pmatrix}
+1 &amp; 1 \\
+1 &amp; -1
+\end{pmatrix}\end{split}\]</div>
+<p>The Hadamard gate plays a crucial role in quantum algorithms such as QFT, creating superpositions and allowing interference patterns to emerge in quantum computations.</p>
+</section>
+<section id="phase-shift-gate">
+<h2>Phase Shift Gate<a class="headerlink" href="#phase-shift-gate" title="Permalink to this heading"></a></h2>
+<p>The Phase Shift gate introduces a phase shift of φ to the <a href="#id35"><span class="problematic" id="id36">|</span></a>1⟩ state while leaving the <a href="#id37"><span class="problematic" id="id38">|</span></a>0⟩ state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}R_\phi = \begin{pmatrix}
+1 &amp; 0 \\
+0 &amp; e^{i\phi}
+\end{pmatrix}\end{split}\]</div>
+<p>The Phase Shift gate is important in many quantum algorithms where phase manipulation is needed, such as in the Quantum Fourier Transform.</p>
+</section>
+<section id="swap-gate">
+<h2>Swap Gate<a class="headerlink" href="#swap-gate" title="Permalink to this heading"></a></h2>
+<p>The Swap gate exchanges the states of two qubits.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}SWAP = \begin{pmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{pmatrix}\end{split}\]</div>
+<p>It swaps the qubit states <a href="#id39"><span class="problematic" id="id40">|</span></a>01⟩ and <a href="#id41"><span class="problematic" id="id42">|</span></a>10⟩, leaving <a href="#id43"><span class="problematic" id="id44">|</span></a>00⟩ and <a href="#id45"><span class="problematic" id="id46">|</span></a>11⟩ unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.</p>
+</section>
+<section id="gates-summary">
+<h2>Gates Summary<a class="headerlink" href="#gates-summary" title="Permalink to this heading"></a></h2>
+<p>Here’s a summary of how each gate operates on the standard computational basis:</p>
+<ul class="simple">
+<li><p><strong>X Gate</strong>: Flips <a href="#id47"><span class="problematic" id="id48">|</span></a>0⟩ to <a href="#id49"><span class="problematic" id="id50">|</span></a>1⟩ and <a href="#id51"><span class="problematic" id="id52">|</span></a>1⟩ to <a href="#id53"><span class="problematic" id="id54">|</span></a>0⟩.</p></li>
+<li><p><strong>Y Gate</strong>: Flips the state and adds a phase of π to the <a href="#id55"><span class="problematic" id="id56">|</span></a>1⟩ state.</p></li>
+<li><p><strong>Z Gate</strong>: Adds a phase of π to the <a href="#id57"><span class="problematic" id="id58">|</span></a>1⟩ state.</p></li>
+<li><p><strong>Hadamard Gate</strong>: Creates a superposition of <a href="#id59"><span class="problematic" id="id60">|</span></a>0⟩ and <a href="#id61"><span class="problematic" id="id62">|</span></a>1⟩.</p></li>
+<li><p><strong>Phase Shift Gate</strong>: Adds a phase of φ to the <a href="#id63"><span class="problematic" id="id64">|</span></a>1⟩ state.</p></li>
+<li><p><strong>Swap Gate</strong>: Exchanges the states of two qubits.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Simple Quantum Circuits Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Dan Nemirovski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

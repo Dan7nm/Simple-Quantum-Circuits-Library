@@ -16,5 +16,5 @@ The **Quantum Fourier Transform (QFT)** is a fundamental operation in quantum co
    :maxdepth: 2
    :caption: Contents:
 
+   gates
    api
-
