@@ -1,10 +1,6 @@
 API Reference
 ============
 
-.. toctree::
-   :maxdepth: 2
-
-
 Qubit Module
 ------------
 .. automodule:: qubit
