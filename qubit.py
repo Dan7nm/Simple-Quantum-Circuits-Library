@@ -141,6 +141,15 @@ class Qubit:
 
         The phase terms are included only if their corresponding relative phases are non-zero.
         """
-        alpha_term = f"exp(i{self.__rel_ph_zero}π){self.__alpha:.4f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.4f}"
-        beta_term = f"exp(i{self.__rel_ph_one}π){self.__beta:.4f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.4f}"
+        alpha_term = f"exp(i{self.__rel_ph_zero}π){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
+        beta_term = f"exp(i{self.__rel_ph_one}π){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
         print(f"Qubit state is {alpha_term}|0⟩ + {beta_term}|1⟩")
+
+    def print_vector_form(self):
+        """
+        Prints the qubit state in the vector form:
+        Qubit state is [alpha,beta].
+        """
+        alpha_term = f"exp(i{self.__rel_ph_zero}π){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
+        beta_term = f"exp(i{self.__rel_ph_one}π){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
+        print(f"Qubit vector form is [{alpha_term},{beta_term}]")
