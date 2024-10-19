@@ -44,13 +44,29 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#qubit-module">Qubit Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit"><code class="docutils literal notranslate"><span class="pre">Qubit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-qubit">Qubit Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qubit.Qubit"><code class="docutils literal notranslate"><span class="pre">Qubit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_alpha"><code class="docutils literal notranslate"><span class="pre">Qubit.get_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_beta"><code class="docutils literal notranslate"><span class="pre">Qubit.get_beta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_rel_ph_one"><code class="docutils literal notranslate"><span class="pre">Qubit.get_rel_ph_one()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_rel_ph_zero"><code class="docutils literal notranslate"><span class="pre">Qubit.get_rel_ph_zero()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_qubit"><code class="docutils literal notranslate"><span class="pre">Qubit.print_qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_vector_form"><code class="docutils literal notranslate"><span class="pre">Qubit.print_vector_form()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_alpha"><code class="docutils literal notranslate"><span class="pre">Qubit.set_alpha()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_beta"><code class="docutils literal notranslate"><span class="pre">Qubit.set_beta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_rel_ph_one"><code class="docutils literal notranslate"><span class="pre">Qubit.set_rel_ph_one()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_rel_ph_zero"><code class="docutils literal notranslate"><span class="pre">Qubit.set_rel_ph_zero()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#qubit-tensor-module">Qubit Tensor Module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor"><code class="docutils literal notranslate"><span class="pre">QubitTensor</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-qubit_tensor">Qubit Tensor Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qubit_tensor.QubitTensor"><code class="docutils literal notranslate"><span class="pre">QubitTensor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.add_qubit"><code class="docutils literal notranslate"><span class="pre">QubitTensor.add_qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.compute_tensor_vector"><code class="docutils literal notranslate"><span class="pre">QubitTensor.compute_tensor_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.get_number_of_qubits"><code class="docutils literal notranslate"><span class="pre">QubitTensor.get_number_of_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_tensor_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_tensor_form()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_vector_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_vector_form()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -87,11 +103,9 @@
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<section id="modules">
-<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this heading"></a></h2>
-<section id="qubit-module">
-<h3>Qubit Module<a class="headerlink" href="#qubit-module" title="Permalink to this heading"></a></h3>
-<span class="target" id="module-qubit"></span><dl class="py class">
+<section id="module-qubit">
+<span id="qubit-module"></span><h2>Qubit Module<a class="headerlink" href="#module-qubit" title="Permalink to this heading"></a></h2>
+<dl class="py class">
 <dt class="sig sig-object py" id="qubit.Qubit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_one</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -231,9 +245,9 @@ Qubit state is [alpha,beta].</p>
 </dd></dl>
 
 </section>
-<section id="qubit-tensor-module">
-<h3>Qubit Tensor Module<a class="headerlink" href="#qubit-tensor-module" title="Permalink to this heading"></a></h3>
-<span class="target" id="module-qubit_tensor"></span><dl class="py class">
+<section id="module-qubit_tensor">
+<span id="qubit-tensor-module"></span><h2>Qubit Tensor Module<a class="headerlink" href="#module-qubit_tensor" title="Permalink to this heading"></a></h2>
+<dl class="py class">
 <dt class="sig sig-object py" id="qubit_tensor.QubitTensor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit_tensor.</span></span><span class="sig-name descname"><span class="pre">QubitTensor</span></span><a class="headerlink" href="#qubit_tensor.QubitTensor" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -251,7 +265,7 @@ It maintains both the vector representation and the quantum state notation.</p>
 </dd>
 </dl>
 <section id="example">
-<h4>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h4>
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h3>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># |+⟩ state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -275,7 +289,7 @@ product state vector accordingly.</p>
 </dd>
 </dl>
 <section id="id45">
-<h5>Example<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h5>
+<h4>Example<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># |0⟩ state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -296,7 +310,7 @@ vector and the new qubit’s state vector.</p>
 </dd>
 </dl>
 <section id="note">
-<h5>Note<a class="headerlink" href="#note" title="Permalink to this heading"></a></h5>
+<h4>Note<a class="headerlink" href="#note" title="Permalink to this heading"></a></h4>
 <p>The computation follows these steps:
 1. Calculate the phases for <a href="#id46"><span class="problematic" id="id47">|</span></a>0⟩ and <a href="#id48"><span class="problematic" id="id49">|</span></a>1⟩ states
 2. Get the amplitude coefficients (α and β)
@@ -317,7 +331,7 @@ vector and the new qubit’s state vector.</p>
 </dd>
 </dl>
 <section id="id50">
-<h5>Example<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h5>
+<h4>Example<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -335,13 +349,13 @@ vector and the new qubit’s state vector.</p>
 <p>Displays the quantum state as a sum of computational basis states
 with their corresponding complex coefficients.</p>
 <section id="format">
-<h5>Format<a class="headerlink" href="#format" title="Permalink to this heading"></a></h5>
+<h4>Format<a class="headerlink" href="#format" title="Permalink to this heading"></a></h4>
 <p>The output follows the form:
 a|000⟩ + b|001⟩ + c|010⟩ + … + h|111⟩
 where a, b, c, …, h are complex coefficients</p>
 </section>
 <section id="id51">
-<h5>Note<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h5>
+<h4>Note<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h4>
 <ul class="simple">
 <li><p>Terms with zero coefficients are omitted</p></li>
 <li><p>Complex coefficients are displayed in (a+bj) format</p></li>
@@ -350,7 +364,7 @@ where a, b, c, …, h are complex coefficients</p>
 </ul>
 </section>
 <section id="id52">
-<h5>Example<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h5>
+<h4>Example<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -371,7 +385,7 @@ where a, b, c, …, h are complex coefficients</p>
 <p>Displays the coefficients of the quantum state in the computational
 basis as a list of complex numbers.</p>
 <section id="id53">
-<h5>Example<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h5>
+<h4>Example<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -385,7 +399,6 @@ basis as a list of complex numbers.</p>
 </section>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
