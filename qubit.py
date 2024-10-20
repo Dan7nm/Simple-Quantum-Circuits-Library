@@ -1,5 +1,7 @@
 import numpy as np
 
+EPSILON = 1e-10
+
 INV_AMP = "Amplitude is invalid. The given amplitude needs to be between 0 and 1 and satisfy the normalization condition."
 
 class Qubit:
@@ -36,9 +38,32 @@ class Qubit:
             self.__beta = beta
             self.__rel_ph_zero = rel_ph_zero
             self.__rel_ph_one = rel_ph_one
+            first_elem = self.__euler_to_complex(alpha, rel_ph_zero)
+            second_elem = self.__euler_to_complex(beta, rel_ph_one)
+
+            self.__qubit_vector = np.array([first_elem,second_elem])
         else:
             raise ValueError(INV_AMP)
 
+    def __euler_to_complex(self,r,theta):
+        """
+        Converts a complex number from Euler form to complex form.
+
+        :param r: The distance from origin in complex space.
+        :type r: float
+        :param theta: The angle from origin in complex space in radians.
+        :type theta: float 
+        """
+        z = r * np.exp(1j * theta)
+        real_val = z.real
+        imag_val = z.imag
+        if abs(real_val) < EPSILON:
+            real_val = 0
+        if abs(imag_val) < EPSILON:
+            imag_val = 0
+        return_z = real_val + imag_val * 1j
+        return return_z
+    
     def _is_valid_amplitudes(self, alpha, beta):
         """
         Checks if the given amplitudes are valid and satisfy the normalization condition.
@@ -89,6 +114,15 @@ class Qubit:
         :rtype: float
         """
         return self.__rel_ph_one
+    
+    def get_vector(self):
+        """
+        Returns the qubit in vector form.
+
+        :return: The vector form of the qubit (__qubit_vector).
+        :rtype: np.array
+        """
+        return self.__qubit_vector
 
     def set_alpha(self, alpha):
         """
@@ -102,7 +136,7 @@ class Qubit:
             self.__alpha = alpha
         else:
             raise ValueError(INV_AMP)
-
+        
     def set_beta(self, beta):
         """
         Sets the amplitude of the |1⟩ state.
@@ -141,8 +175,8 @@ class Qubit:
 
         The phase terms are included only if their corresponding relative phases are non-zero.
         """
-        alpha_term = f"exp(i{self.__rel_ph_zero}π){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
-        beta_term = f"exp(i{self.__rel_ph_one}π){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
+        alpha_term = f"exp(i{self.__rel_ph_zero}){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
+        beta_term = f"exp(i{self.__rel_ph_one}){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
         print(f"Qubit state is {alpha_term}|0⟩ + {beta_term}|1⟩")
 
     def print_vector_form(self):
@@ -150,6 +184,4 @@ class Qubit:
         Prints the qubit state in the vector form:
         Qubit state is [alpha,beta].
         """
-        alpha_term = f"exp(i{self.__rel_ph_zero}π){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
-        beta_term = f"exp(i{self.__rel_ph_one}π){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
-        print(f"Qubit vector form is [{alpha_term},{beta_term}]")
+        print(self.__qubit_vector)

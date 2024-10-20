@@ -1,16 +1,23 @@
 API Reference
 ============
 
-Qubit Module
+Qubit Class
 ------------
-.. automodule:: qubit
+.. autoclass:: qubit.Qubit
    :members:
    :undoc-members:
    :show-inheritance:
 
-Qubit Tensor Module
+Qubit Tensor Class
 -------------------
-.. automodule:: qubit_tensor
+.. autoclass:: qubit_tensor.QubitTensor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Gate Class
+----------
+.. autoclass:: gate.SingleQubitGate
    :members:
    :undoc-members:
    :show-inheritance:
