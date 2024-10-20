@@ -6,16 +6,16 @@ INV_AMP = "Amplitude is invalid. The given amplitude needs to be between 0 and 1
 
 class Qubit:
     """
-    A class to represent a quantum bit (Qubit) with two possible states: |0⟩ and |1⟩,
+    A class to represent a quantum bit (Qubit) with two possible states: :math:`|0⟩` and :math:`|1⟩`,
     described by complex amplitudes alpha and beta.
 
-    :ivar alpha: The amplitude of the |0⟩ state, a value between 0 and 1.
+    :ivar alpha: The amplitude of the :math:`|0⟩` state, a value between 0 and 1.
     :vartype alpha: float
-    :ivar beta: The amplitude of the |1⟩ state, a value between 0 and 1.
+    :ivar beta: The amplitude of the :math:`|1⟩` state, a value between 0 and 1.
     :vartype beta: float
-    :ivar rel_ph_zero: The relative phase of the |0⟩ state is exp(rel_ph_zero*π*i). Default value is 0.0.
+    :ivar rel_ph_zero: The relative phase of the :math:`|0⟩` state is :math:`\exp(i\phi)`. Default value is 0.0.
     :vartype rel_ph_zero: float
-    :ivar rel_ph_one: The relative phase of the |1⟩ state is exp(rel_ph_one*π*i). Default value is 0.0.
+    :ivar rel_ph_one: The relative phase of the :math:`|1⟩` state is :math:`\exp(i\phi)`. Default value is 0.0.
     :vartype rel_ph_one: float
     """
 
@@ -23,13 +23,13 @@ class Qubit:
         """
         Constructs all the necessary attributes for the qubit object.
 
-        :param alpha: The amplitude of the |0⟩ state, should be a value between 0 and 1.
+        :param alpha: The amplitude of the :math:`|0⟩` state, should be a value between 0 and 1.
         :type alpha: float
-        :param beta: The amplitude of the |1⟩ state, should be a value between 0 and 1.
+        :param beta: The amplitude of the :math:`|1⟩` state, should be a value between 0 and 1.
         :type beta: float
-        :param rel_ph_zero: The relative phase of the |0⟩ state, defaults to 0.0
+        :param rel_ph_zero: The relative phase of the :math:`|0⟩` state, defaults to 0.0
         :type rel_ph_zero: float, optional
-        :param rel_ph_one: The relative phase of the |1⟩ state, defaults to 0.0
+        :param rel_ph_one: The relative phase of the :math:`|1⟩` state, defaults to 0.0
         :type rel_ph_one: float, optional
         :raises ValueError: If the given amplitudes do not satisfy the normalization condition.
         """
@@ -68,9 +68,9 @@ class Qubit:
         """
         Checks if the given amplitudes are valid and satisfy the normalization condition.
 
-        :param alpha: The amplitude of the |0⟩ state.
+        :param alpha: The amplitude of the :math:`|0⟩` state.
         :type alpha: float
-        :param beta: The amplitude of the |1⟩ state.
+        :param beta: The amplitude of the :math:`|1⟩` state.
         :type beta: float
         :return: True if the amplitudes are valid and their squares sum to 1, False otherwise.
         :rtype: bool
@@ -81,36 +81,36 @@ class Qubit:
 
     def get_alpha(self):
         """
-        Returns the amplitude of the |0⟩ state.
+        Returns the amplitude of the :math:`|0⟩` state.
 
-        :return: The amplitude of the |0⟩ state (alpha).
+        :return: The amplitude of the :math:`|0⟩` state (alpha).
         :rtype: float
         """
         return self.__alpha
 
     def get_beta(self):
         """
-        Returns the amplitude of the |1⟩ state.
+        Returns the amplitude of the :math:`|1⟩` state.
 
-        :return: The amplitude of the |1⟩ state (beta).
+        :return: The amplitude of the :math:`|1⟩` state (beta).
         :rtype: float
         """
         return self.__beta
     
     def get_rel_ph_zero(self):
         """
-        Returns the relative phase for the |0⟩ state.
+        Returns the relative phase for the :math:`|0⟩` state.
 
-        :return: The relative phase for the |0⟩ state (rel_ph_zero).
+        :return: The relative phase for the :math:`|0⟩` state (rel_ph_zero).
         :rtype: float
         """
         return self.__rel_ph_zero
     
     def get_rel_ph_one(self):
         """
-        Returns the relative phase for the |1⟩ state.
+        Returns the relative phase for the :math:`|1⟩` state.
 
-        :return: The relative phase for the |1⟩ state (rel_ph_one).
+        :return: The relative phase for the :math:`|1⟩` state (rel_ph_one).
         :rtype: float
         """
         return self.__rel_ph_one
@@ -126,9 +126,9 @@ class Qubit:
 
     def set_alpha(self, alpha):
         """
-        Sets the amplitude of the |0⟩ state.
+        Sets the amplitude of the :math:`|0⟩` state.
 
-        :param alpha: The amplitude of the |0⟩ state, must be between 0 and 1.
+        :param alpha: The amplitude of the :math:`|0⟩` state, must be between 0 and 1.
         :type alpha: float
         :raises ValueError: If the amplitude is not valid.
         """
@@ -139,9 +139,9 @@ class Qubit:
         
     def set_beta(self, beta):
         """
-        Sets the amplitude of the |1⟩ state.
+        Sets the amplitude of the :math:`|1⟩` state.
 
-        :param beta: The amplitude of the |1⟩ state, must be between 0 and 1.
+        :param beta: The amplitude of the :math:`|1⟩` state, must be between 0 and 1.
         :type beta: float
         :raises ValueError: If the amplitude is not valid.
         """
@@ -152,18 +152,18 @@ class Qubit:
 
     def set_rel_ph_zero(self, new_phase):
         """
-        Sets the relative phase for the |0⟩ state.
+        Sets the relative phase for the :math:`|0⟩` state.
 
-        :param new_phase: The new phase value for the |0⟩ state.
+        :param new_phase: The new phase value for the :math:`|0⟩` state.
         :type new_phase: float
         """
         self.__rel_ph_zero = new_phase
 
     def set_rel_ph_one(self, new_phase):
         """
-        Sets the relative phase for the |1⟩ state.
+        Sets the relative phase for the :math:`|1⟩` state.
 
-        :param new_phase: The new phase value for the |1⟩ state.
+        :param new_phase: The new phase value for the :math:`|1⟩` state.
         :type new_phase: float
         """
         self.__rel_ph_one = new_phase
@@ -171,13 +171,13 @@ class Qubit:
     def print_qubit(self):
         """
         Prints the qubit state in the form:
-        Qubit state is [phase term]α|0⟩ + [phase term]β|1⟩.
+        Qubit state is [phase term]α :math:`|0⟩` + [phase term]β :math:`|1⟩`.
 
         The phase terms are included only if their corresponding relative phases are non-zero.
         """
         alpha_term = f"exp(i{self.__rel_ph_zero}){self.__alpha:.2f}" if self.__rel_ph_zero != 0.0 else f"{self.__alpha:.2f}"
         beta_term = f"exp(i{self.__rel_ph_one}){self.__beta:.2f}" if self.__rel_ph_one != 0.0 else f"{self.__beta:.2f}"
-        print(f"Qubit state is {alpha_term}|0⟩ + {beta_term}|1⟩")
+        print(f"Qubit state is {alpha_term} :math:`|0⟩` + {beta_term} :math:`|1⟩`")
 
     def print_vector_form(self):
         """

@@ -70,7 +70,7 @@ class QubitTensor:
         Note
         ----
         The computation follows these steps:
-        1. Calculate the phases for |0⟩ and |1⟩ states
+        1. Calculate the phases for :math:`|0⟩` and :math:`|1⟩` states
         2. Get the amplitude coefficients (α and β)
         3. Perform the tensor product operation
         """
