@@ -3,7 +3,7 @@ Quantum Gates
 
 In quantum computing, gates manipulate qubits through various transformations. Here we describe some of the most commonly used gates in quantum circuits, including the X, Y, Z, Hadamard, Phase Shift, and Swap gates.
 
-Single Qubit Gates:
+Single Qubit Gates
 ------------------
 
 I Gate (The identity gate)
@@ -126,7 +126,7 @@ The Phase Shift gate introduces a phase shift of φ to the |1⟩ state while lea
 
 The Phase Shift gate is important in many quantum algorithms where phase manipulation is needed, such as in the Quantum Fourier Transform.
 
-Two Qubit Gates:
+Two Qubit Gates
 ---------------
 
 CNOT Gate
