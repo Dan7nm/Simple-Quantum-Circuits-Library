@@ -45,12 +45,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="gates.html">Quantum Gates</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-qubit">Qubit Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#qubit-class">Qubit Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#qubit.Qubit"><code class="docutils literal notranslate"><span class="pre">Qubit</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_alpha"><code class="docutils literal notranslate"><span class="pre">Qubit.get_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_beta"><code class="docutils literal notranslate"><span class="pre">Qubit.get_beta()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_rel_ph_one"><code class="docutils literal notranslate"><span class="pre">Qubit.get_rel_ph_one()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_rel_ph_zero"><code class="docutils literal notranslate"><span class="pre">Qubit.get_rel_ph_zero()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_vector"><code class="docutils literal notranslate"><span class="pre">Qubit.get_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_qubit"><code class="docutils literal notranslate"><span class="pre">Qubit.print_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_vector_form"><code class="docutils literal notranslate"><span class="pre">Qubit.print_vector_form()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_alpha"><code class="docutils literal notranslate"><span class="pre">Qubit.set_alpha()</span></code></a></li>
@@ -61,13 +62,22 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-qubit_tensor">Qubit Tensor Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#qubit-tensor-class">Qubit Tensor Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#qubit_tensor.QubitTensor"><code class="docutils literal notranslate"><span class="pre">QubitTensor</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.add_qubit"><code class="docutils literal notranslate"><span class="pre">QubitTensor.add_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.compute_tensor_vector"><code class="docutils literal notranslate"><span class="pre">QubitTensor.compute_tensor_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.get_number_of_qubits"><code class="docutils literal notranslate"><span class="pre">QubitTensor.get_number_of_qubits()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_tensor_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_tensor_form()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_vector_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_vector_form()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gate-class">Gate Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gate.SingleQubitGate"><code class="docutils literal notranslate"><span class="pre">SingleQubitGate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gate.SingleQubitGate.apply_matrix"><code class="docutils literal notranslate"><span class="pre">SingleQubitGate.apply_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.SingleQubitGate.get_matrix"><code class="docutils literal notranslate"><span class="pre">SingleQubitGate.get_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.SingleQubitGate.print_matrix"><code class="docutils literal notranslate"><span class="pre">SingleQubitGate.print_matrix()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -102,8 +112,8 @@
              
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
-<section id="module-qubit">
-<span id="qubit-module"></span><h2>Qubit Module<a class="headerlink" href="#module-qubit" title="Permalink to this heading"></a></h2>
+<section id="qubit-class">
+<h2>Qubit Class<a class="headerlink" href="#qubit-class" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="qubit.Qubit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_one</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
@@ -177,6 +187,20 @@ described by complex amplitudes alpha and beta.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="qubit.Qubit.get_vector">
+<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the qubit in vector form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The vector form of the qubit (__qubit_vector).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.print_qubit">
 <span class="sig-name descname"><span class="pre">print_qubit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.print_qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Prints the qubit state in the form:
@@ -244,8 +268,8 @@ Qubit state is [alpha,beta].</p>
 </dd></dl>
 
 </section>
-<section id="module-qubit_tensor">
-<span id="qubit-tensor-module"></span><h2>Qubit Tensor Module<a class="headerlink" href="#module-qubit_tensor" title="Permalink to this heading"></a></h2>
+<section id="qubit-tensor-class">
+<h2>Qubit Tensor Class<a class="headerlink" href="#qubit-tensor-class" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="qubit_tensor.QubitTensor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit_tensor.</span></span><span class="sig-name descname"><span class="pre">QubitTensor</span></span><a class="headerlink" href="#qubit_tensor.QubitTensor" title="Permalink to this definition"></a></dt>
@@ -396,6 +420,55 @@ basis as a list of complex numbers.</p>
 </dd></dl>
 
 </section>
+</dd></dl>
+
+</section>
+<section id="gate-class">
+<h2>Gate Class<a class="headerlink" href="#gate-class" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gate.SingleQubitGate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate.</span></span><span class="sig-name descname"><span class="pre">SingleQubitGate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gate.SingleQubitGate" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to represent single-qubit gates and apply them to qubits.
+It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.SingleQubitGate.apply_matrix">
+<span class="sig-name descname"><span class="pre">apply_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gate.SingleQubitGate.apply_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Apply the gate matrix to a qubit and return the resulting qubit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<a class="reference internal" href="#qubit.Qubit" title="qubit.Qubit"><em>Qubit</em></a>) – The input qubit</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resulting qubit after applying the gate</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubit.Qubit" title="qubit.Qubit">Qubit</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.SingleQubitGate.get_matrix">
+<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gate.SingleQubitGate.get_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Get the gate matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The matrix representation of the gate</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.SingleQubitGate.print_matrix">
+<span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gate.SingleQubitGate.print_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Print the gate matrix with proper formatting, removing apostrophes.
+The matrix is displayed with 2 decimal precision, and values close to zero are rounded.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
