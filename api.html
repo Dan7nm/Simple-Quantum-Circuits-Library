@@ -16,6 +16,7 @@
       <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
       <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -118,25 +119,25 @@
 <dt class="sig sig-object py" id="qubit.Qubit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_zero</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_ph_one</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class to represent a quantum bit (Qubit) with two possible states: <a href="#id1"><span class="problematic" id="id2">|</span></a>0⟩ and <a href="#id3"><span class="problematic" id="id4">|</span></a>1⟩,
+<p>A class to represent a quantum bit (Qubit) with two possible states: <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>,
 described by complex amplitudes alpha and beta.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>alpha</strong> (<em>float</em>) – The amplitude of the <a href="#id5"><span class="problematic" id="id6">|</span></a>0⟩ state, a value between 0 and 1.</p></li>
-<li><p><strong>beta</strong> (<em>float</em>) – The amplitude of the <a href="#id7"><span class="problematic" id="id8">|</span></a>1⟩ state, a value between 0 and 1.</p></li>
-<li><p><strong>rel_ph_zero</strong> (<em>float</em>) – The relative phase of the <a href="#id9"><span class="problematic" id="id10">|</span></a>0⟩ state is exp(rel_ph_zero*π*i). Default value is 0.0.</p></li>
-<li><p><strong>rel_ph_one</strong> (<em>float</em>) – The relative phase of the <a href="#id11"><span class="problematic" id="id12">|</span></a>1⟩ state is exp(rel_ph_one*π*i). Default value is 0.0.</p></li>
+<li><p><strong>alpha</strong> (<em>float</em>) – The amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, a value between 0 and 1.</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – The amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, a value between 0 and 1.</p></li>
+<li><p><strong>rel_ph_zero</strong> (<em>float</em>) – The relative phase of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state is <span class="math notranslate nohighlight">\(\exp(i\phi)\)</span>. Default value is 0.0.</p></li>
+<li><p><strong>rel_ph_one</strong> (<em>float</em>) – The relative phase of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state is <span class="math notranslate nohighlight">\(\exp(i\phi)\)</span>. Default value is 0.0.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_alpha">
 <span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_alpha" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the amplitude of the <a href="#id13"><span class="problematic" id="id14">|</span></a>0⟩ state.</p>
+<dd><p>Returns the amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The amplitude of the <a href="#id15"><span class="problematic" id="id16">|</span></a>0⟩ state (alpha).</p>
+<dd class="field-odd"><p>The amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state (alpha).</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -147,10 +148,10 @@ described by complex amplitudes alpha and beta.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_beta">
 <span class="sig-name descname"><span class="pre">get_beta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_beta" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the amplitude of the <a href="#id17"><span class="problematic" id="id18">|</span></a>1⟩ state.</p>
+<dd><p>Returns the amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The amplitude of the <a href="#id19"><span class="problematic" id="id20">|</span></a>1⟩ state (beta).</p>
+<dd class="field-odd"><p>The amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state (beta).</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -161,10 +162,10 @@ described by complex amplitudes alpha and beta.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_rel_ph_one">
 <span class="sig-name descname"><span class="pre">get_rel_ph_one</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_rel_ph_one" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the relative phase for the <a href="#id21"><span class="problematic" id="id22">|</span></a>1⟩ state.</p>
+<dd><p>Returns the relative phase for the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The relative phase for the <a href="#id23"><span class="problematic" id="id24">|</span></a>1⟩ state (rel_ph_one).</p>
+<dd class="field-odd"><p>The relative phase for the <span class="math notranslate nohighlight">\(|1⟩\)</span> state (rel_ph_one).</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -175,10 +176,10 @@ described by complex amplitudes alpha and beta.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_rel_ph_zero">
 <span class="sig-name descname"><span class="pre">get_rel_ph_zero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_rel_ph_zero" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the relative phase for the <a href="#id25"><span class="problematic" id="id26">|</span></a>0⟩ state.</p>
+<dd><p>Returns the relative phase for the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The relative phase for the <a href="#id27"><span class="problematic" id="id28">|</span></a>0⟩ state (rel_ph_zero).</p>
+<dd class="field-odd"><p>The relative phase for the <span class="math notranslate nohighlight">\(|0⟩\)</span> state (rel_ph_zero).</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>float</p>
@@ -204,7 +205,7 @@ described by complex amplitudes alpha and beta.</p>
 <dt class="sig sig-object py" id="qubit.Qubit.print_qubit">
 <span class="sig-name descname"><span class="pre">print_qubit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.print_qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Prints the qubit state in the form:
-Qubit state is [phase term]α|0⟩ + [phase term]β|1⟩.</p>
+Qubit state is [phase term]α <span class="math notranslate nohighlight">\(|0⟩\)</span> + [phase term]β <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p>
 <p>The phase terms are included only if their corresponding relative phases are non-zero.</p>
 </dd></dl>
 
@@ -218,10 +219,10 @@ Qubit state is [alpha,beta].</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.set_alpha">
 <span class="sig-name descname"><span class="pre">set_alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.set_alpha" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the amplitude of the <a href="#id29"><span class="problematic" id="id30">|</span></a>0⟩ state.</p>
+<dd><p>Sets the amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>alpha</strong> (<em>float</em>) – The amplitude of the <a href="#id31"><span class="problematic" id="id32">|</span></a>0⟩ state, must be between 0 and 1.</p>
+<dd class="field-odd"><p><strong>alpha</strong> (<em>float</em>) – The amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, must be between 0 and 1.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the amplitude is not valid.</p>
@@ -232,10 +233,10 @@ Qubit state is [alpha,beta].</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.set_beta">
 <span class="sig-name descname"><span class="pre">set_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.set_beta" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the amplitude of the <a href="#id33"><span class="problematic" id="id34">|</span></a>1⟩ state.</p>
+<dd><p>Sets the amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>beta</strong> (<em>float</em>) – The amplitude of the <a href="#id35"><span class="problematic" id="id36">|</span></a>1⟩ state, must be between 0 and 1.</p>
+<dd class="field-odd"><p><strong>beta</strong> (<em>float</em>) – The amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, must be between 0 and 1.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the amplitude is not valid.</p>
@@ -246,10 +247,10 @@ Qubit state is [alpha,beta].</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.set_rel_ph_one">
 <span class="sig-name descname"><span class="pre">set_rel_ph_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.set_rel_ph_one" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the relative phase for the <a href="#id37"><span class="problematic" id="id38">|</span></a>1⟩ state.</p>
+<dd><p>Sets the relative phase for the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>new_phase</strong> (<em>float</em>) – The new phase value for the <a href="#id39"><span class="problematic" id="id40">|</span></a>1⟩ state.</p>
+<dd class="field-odd"><p><strong>new_phase</strong> (<em>float</em>) – The new phase value for the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -257,10 +258,10 @@ Qubit state is [alpha,beta].</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.set_rel_ph_zero">
 <span class="sig-name descname"><span class="pre">set_rel_ph_zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_phase</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.set_rel_ph_zero" title="Permalink to this definition"></a></dt>
-<dd><p>Sets the relative phase for the <a href="#id41"><span class="problematic" id="id42">|</span></a>0⟩ state.</p>
+<dd><p>Sets the relative phase for the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>new_phase</strong> (<em>float</em>) – The new phase value for the <a href="#id43"><span class="problematic" id="id44">|</span></a>0⟩ state.</p>
+<dd class="field-odd"><p><strong>new_phase</strong> (<em>float</em>) – The new phase value for the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -311,8 +312,8 @@ product state vector accordingly.</p>
 <dd class="field-even"><p><strong>TypeError</strong> – If new_qubit is not a Qubit object</p>
 </dd>
 </dl>
-<section id="id45">
-<h4>Example<a class="headerlink" href="#id45" title="Permalink to this heading"></a></h4>
+<section id="id1">
+<h4>Example<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># |0⟩ state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -335,7 +336,7 @@ vector and the new qubit’s state vector.</p>
 <section id="note">
 <h4>Note<a class="headerlink" href="#note" title="Permalink to this heading"></a></h4>
 <p>The computation follows these steps:
-1. Calculate the phases for <a href="#id46"><span class="problematic" id="id47">|</span></a>0⟩ and <a href="#id48"><span class="problematic" id="id49">|</span></a>1⟩ states
+1. Calculate the phases for <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span> states
 2. Get the amplitude coefficients (α and β)
 3. Perform the tensor product operation</p>
 </section>
@@ -353,8 +354,8 @@ vector and the new qubit’s state vector.</p>
 <dd class="field-even"><p>int</p>
 </dd>
 </dl>
-<section id="id50">
-<h4>Example<a class="headerlink" href="#id50" title="Permalink to this heading"></a></h4>
+<section id="id2">
+<h4>Example<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
@@ -377,8 +378,8 @@ with their corresponding complex coefficients.</p>
 a|000⟩ + b|001⟩ + c|010⟩ + … + h|111⟩
 where a, b, c, …, h are complex coefficients</p>
 </section>
-<section id="id51">
-<h4>Note<a class="headerlink" href="#id51" title="Permalink to this heading"></a></h4>
+<section id="id3">
+<h4>Note<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
 <ul class="simple">
 <li><p>Terms with zero coefficients are omitted</p></li>
 <li><p>Complex coefficients are displayed in (a+bj) format</p></li>
@@ -386,8 +387,8 @@ where a, b, c, …, h are complex coefficients</p>
 <li><p>Coefficient 1 is omitted for clarity</p></li>
 </ul>
 </section>
-<section id="id52">
-<h4>Example<a class="headerlink" href="#id52" title="Permalink to this heading"></a></h4>
+<section id="id4">
+<h4>Example<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -407,8 +408,8 @@ where a, b, c, …, h are complex coefficients</p>
 <dd><p>Print the vector representation of the quantum state.</p>
 <p>Displays the coefficients of the quantum state in the computational
 basis as a list of complex numbers.</p>
-<section id="id53">
-<h4>Example<a class="headerlink" href="#id53" title="Permalink to this heading"></a></h4>
+<section id="id5">
+<h4>Example<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
