@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Simple Quantum Circuits Library
-=================================================
+===============================
 
 1. Introduction
 ===============
