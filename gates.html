@@ -114,13 +114,13 @@
 <section id="x-gate-pauli-x">
 <h3>X Gate (Pauli-X)<a class="headerlink" href="#x-gate-pauli-x" title="Permalink to this heading"></a></h3>
 <a class="reference internal image-reference" href="_images/Qcircuit_NOT.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_NOT.svg" width="250px" /></a>
-<p>The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from <a href="#id1"><span class="problematic" id="id2">|</span></a>0⟩ to <a href="#id3"><span class="problematic" id="id4">|</span></a>1⟩ or from <a href="#id5"><span class="problematic" id="id6">|</span></a>1⟩ to <a href="#id7"><span class="problematic" id="id8">|</span></a>0⟩.</p>
+<p>The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from <span class="math notranslate nohighlight">\(|0⟩\)</span> to <span class="math notranslate nohighlight">\(|1⟩\)</span> or from <span class="math notranslate nohighlight">\(|1⟩\)</span> to <span class="math notranslate nohighlight">\(|0⟩\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}X = \begin{pmatrix}
 0 &amp; 1 \\
 1 &amp; 0
 \end{pmatrix}\end{split}\]</div>
-<p>This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is <a href="#id9"><span class="problematic" id="id10">|</span></a>0⟩, applying an X gate transforms it to <a href="#id11"><span class="problematic" id="id12">|</span></a>1⟩, and vice versa.</p>
+<p>This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is <span class="math notranslate nohighlight">\(|0⟩\)</span>, applying an X gate transforms it to <span class="math notranslate nohighlight">\(|1⟩\)</span>, and vice versa.</p>
 </section>
 <section id="y-gate-pauli-y">
 <h3>Y Gate (Pauli-Y)<a class="headerlink" href="#y-gate-pauli-y" title="Permalink to this heading"></a></h3>
@@ -131,26 +131,26 @@
 0 &amp; -i \\
 i &amp; 0
 \end{pmatrix}\end{split}\]</div>
-<p>The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the <a href="#id13"><span class="problematic" id="id14">|</span></a>0⟩ state into i|1⟩ and the <a href="#id15"><span class="problematic" id="id16">|</span></a>1⟩ state into -i|0⟩.</p>
+<p>The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the <span class="math notranslate nohighlight">\(|0⟩\)</span> state into i:math:<cite>|1⟩</cite> and the <span class="math notranslate nohighlight">\(|1⟩\)</span> state into -i:math:<cite>|0⟩</cite>.</p>
 </section>
 <section id="z-gate-pauli-z">
 <h3>Z Gate (Pauli-Z)<a class="headerlink" href="#z-gate-pauli-z" title="Permalink to this heading"></a></h3>
 <a class="reference internal image-reference" href="_images/Qcircuit_Z.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_Z.svg" width="250px" /></a>
-<p>The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the <a href="#id17"><span class="problematic" id="id18">|</span></a>1⟩ state while leaving the <a href="#id19"><span class="problematic" id="id20">|</span></a>0⟩ state unchanged.</p>
+<p>The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state while leaving the <span class="math notranslate nohighlight">\(|0⟩\)</span> state unchanged.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}Z = \begin{pmatrix}
 1 &amp; 0 \\
 0 &amp; -1
 \end{pmatrix}\end{split}\]</div>
-<p>In effect, the Z gate flips the phase of the <a href="#id21"><span class="problematic" id="id22">|</span></a>1⟩ state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.</p>
+<p>In effect, the Z gate flips the phase of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.</p>
 </section>
 <section id="h-gate-hadamard-gate">
 <h3>H Gate (Hadamard Gate)<a class="headerlink" href="#h-gate-hadamard-gate" title="Permalink to this heading"></a></h3>
 <a class="reference internal image-reference" href="_images/Hadamard_gate.svg"><img alt="NOT Gate" class="align-center" src="_images/Hadamard_gate.svg" width="250px" /></a>
-<p>The Hadamard gate creates a superposition of the <a href="#id23"><span class="problematic" id="id24">|</span></a>0⟩ and <a href="#id25"><span class="problematic" id="id26">|</span></a>1⟩ states. When applied to a qubit in the <a href="#id27"><span class="problematic" id="id28">|</span></a>0⟩ state, it generates an equal superposition of <a href="#id29"><span class="problematic" id="id30">|</span></a>0⟩ and <a href="#id31"><span class="problematic" id="id32">|</span></a>1⟩, sometimes denoted as the plus state:</p>
+<p>The Hadamard gate creates a superposition of the <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span> states. When applied to a qubit in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, it generates an equal superposition of <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>, sometimes denoted as the plus state:</p>
 <div class="math notranslate nohighlight">
 \[|+⟩ = \frac{1}{\sqrt{2}}(|0⟩+|1⟩)\]</div>
-<p>And when applied on the <a href="#id33"><span class="problematic" id="id34">|</span></a>1⟩ state, it generates the minus state:</p>
+<p>And when applied on the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, it generates the minus state:</p>
 <div class="math notranslate nohighlight">
 \[|-⟩ = \frac{1}{\sqrt{2}}(|0⟩-|1⟩)\]</div>
 <p>The Hadamard gate matrix:</p>
@@ -163,7 +163,7 @@ i &amp; 0
 </section>
 <section id="r-gate-phase-shift-gate">
 <h3>R Gate (Phase Shift Gate)<a class="headerlink" href="#r-gate-phase-shift-gate" title="Permalink to this heading"></a></h3>
-<p>The Phase Shift gate introduces a phase shift of φ to the <a href="#id35"><span class="problematic" id="id36">|</span></a>1⟩ state while leaving the <a href="#id37"><span class="problematic" id="id38">|</span></a>0⟩ state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.</p>
+<p>The Phase Shift gate introduces a phase shift of φ to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state while leaving the <span class="math notranslate nohighlight">\(|0⟩\)</span> state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}R_\phi = \begin{pmatrix}
 1 &amp; 0 \\
@@ -176,7 +176,7 @@ i &amp; 0
 <h2>Two Qubit Gates<a class="headerlink" href="#two-qubit-gates" title="Permalink to this heading"></a></h2>
 <section id="cnot-gate">
 <h3>CNOT Gate<a class="headerlink" href="#cnot-gate" title="Permalink to this heading"></a></h3>
-<p>The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the <a href="#id39"><span class="problematic" id="id40">|</span></a>1⟩ state. If the control qubit is in the <a href="#id41"><span class="problematic" id="id42">|</span></a>0⟩ state, the target qubit remains unchanged.</p>
+<p>The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. If the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged.</p>
 <p>The matrix representation of the CNOT gate is:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\text{CNOT} = \begin{pmatrix}
@@ -215,7 +215,7 @@ i &amp; 0
 </section>
 <section id="controlled-z-gate">
 <h3>Controlled Z Gate<a class="headerlink" href="#controlled-z-gate" title="Permalink to this heading"></a></h3>
-<p>The CZ (Controlled-Z) gate is another two-qubit gate where the second qubit (target qubit) experiences a phase flip (Z gate) if the control qubit is in the <a href="#id43"><span class="problematic" id="id44">|</span></a>1⟩ state. Unlike the CNOT gate, the CZ gate does not flip the target qubit’s value, but applies a phase change (sign flip) to the target qubit when the control qubit is in the <a href="#id45"><span class="problematic" id="id46">|</span></a>1⟩ state.</p>
+<p>The CZ (Controlled-Z) gate is another two-qubit gate where the second qubit (target qubit) experiences a phase flip (Z gate) if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. Unlike the CNOT gate, the CZ gate does not flip the target qubit’s value, but applies a phase change (sign flip) to the target qubit when the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <p>The matrix representation of the CZ gate is:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\text{CZ} = \begin{pmatrix}
@@ -262,18 +262,21 @@ i &amp; 0
 0 &amp; 1 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 1
 \end{pmatrix}\end{split}\]</div>
-<p>It swaps the qubit states <a href="#id47"><span class="problematic" id="id48">|</span></a>01⟩ and <a href="#id49"><span class="problematic" id="id50">|</span></a>10⟩, leaving <a href="#id51"><span class="problematic" id="id52">|</span></a>00⟩ and <a href="#id53"><span class="problematic" id="id54">|</span></a>11⟩ unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.</p>
+<p>It swaps the qubit states <span class="math notranslate nohighlight">\(|01⟩\)</span> and <span class="math notranslate nohighlight">\(|10⟩\)</span>, leaving <span class="math notranslate nohighlight">\(|00⟩\)</span> and <span class="math notranslate nohighlight">\(|11⟩\)</span> unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.</p>
 </section>
 </section>
 <section id="gates-summary">
 <h2>Gates Summary<a class="headerlink" href="#gates-summary" title="Permalink to this heading"></a></h2>
 <p>Here’s a summary of how each gate operates on the standard computational basis:</p>
 <ul class="simple">
-<li><p><strong>X Gate</strong>: Flips <a href="#id55"><span class="problematic" id="id56">|</span></a>0⟩ to <a href="#id57"><span class="problematic" id="id58">|</span></a>1⟩ and <a href="#id59"><span class="problematic" id="id60">|</span></a>1⟩ to <a href="#id61"><span class="problematic" id="id62">|</span></a>0⟩.</p></li>
-<li><p><strong>Y Gate</strong>: Flips the state and adds a phase of π to the <a href="#id63"><span class="problematic" id="id64">|</span></a>1⟩ state.</p></li>
-<li><p><strong>Z Gate</strong>: Adds a phase of π to the <a href="#id65"><span class="problematic" id="id66">|</span></a>1⟩ state.</p></li>
-<li><p><strong>Hadamard Gate</strong>: Creates a superposition of <a href="#id67"><span class="problematic" id="id68">|</span></a>0⟩ and <a href="#id69"><span class="problematic" id="id70">|</span></a>1⟩.</p></li>
-<li><p><strong>Phase Shift Gate</strong>: Adds a phase of φ to the <a href="#id71"><span class="problematic" id="id72">|</span></a>1⟩ state.</p></li>
+<li><p><strong>I Gate</strong>: Doesn’t change the state</p></li>
+<li><p><strong>X Gate</strong>: Flips <span class="math notranslate nohighlight">\(|0⟩\)</span> to <span class="math notranslate nohighlight">\(|1⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span> to <span class="math notranslate nohighlight">\(|0⟩\)</span>.</p></li>
+<li><p><strong>Y Gate</strong>: Flips the state and adds a phase of π to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
+<li><p><strong>Z Gate</strong>: Adds a phase of π to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
+<li><p><strong>H Gate</strong>: Creates a superposition of <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
+<li><p><strong>R Gate</strong>: Adds a phase of φ to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
+<li><p><strong>CNOT Gate</strong>: Flips the target qubit state if the control qubit is <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
+<li><p><strong>CNOT Gate</strong>: Adds phase change target qubit state if the control qubit is <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
 <li><p><strong>Swap Gate</strong>: Exchanges the states of two qubits.</p></li>
 </ul>
 </section>

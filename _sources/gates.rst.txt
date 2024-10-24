@@ -7,7 +7,7 @@ Single Qubit Gates
 ------------------
 
 I Gate (The identity gate)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: ../../img/Qcircuit_I.svg
    :alt: I Gate
@@ -32,7 +32,7 @@ X Gate (Pauli-X)
    :width: 250px
    :align: center
 
-The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from |0⟩ to |1⟩ or from |1⟩ to |0⟩.
+The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from :math:`|0⟩` to :math:`|1⟩` or from :math:`|1⟩` to :math:`|0⟩`.
 
 .. math::
 
@@ -41,7 +41,7 @@ The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the st
    1 & 0
    \end{pmatrix}
 
-This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is |0⟩, applying an X gate transforms it to |1⟩, and vice versa.
+This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is :math:`|0⟩`, applying an X gate transforms it to :math:`|1⟩`, and vice versa.
 
 Y Gate (Pauli-Y)
 ~~~~~~~~~~~~~~~~
@@ -61,7 +61,7 @@ The Y gate, also known as the Pauli-Y gate, combines the flipping of the qubit�
    i & 0
    \end{pmatrix}
 
-The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the |0⟩ state into i|1⟩ and the |1⟩ state into -i|0⟩.
+The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the :math:`|0⟩` state into i:math:`|1⟩` and the :math:`|1⟩` state into -i:math:`|0⟩`.
 
 Z Gate (Pauli-Z)
 ~~~~~~~~~~~~~~~~
@@ -71,7 +71,7 @@ Z Gate (Pauli-Z)
    :width: 250px
    :align: center
 
-The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the |1⟩ state while leaving the |0⟩ state unchanged.
+The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the :math:`|1⟩` state while leaving the :math:`|0⟩` state unchanged.
 
 .. math::
 
@@ -80,23 +80,23 @@ The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians 
    0 & -1
    \end{pmatrix}
 
-In effect, the Z gate flips the phase of the |1⟩ state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.
+In effect, the Z gate flips the phase of the :math:`|1⟩` state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.
 
 H Gate (Hadamard Gate)
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: ../../img/Hadamard_gate.svg
    :alt: NOT Gate
    :width: 250px
    :align: center
 
-The Hadamard gate creates a superposition of the |0⟩ and |1⟩ states. When applied to a qubit in the |0⟩ state, it generates an equal superposition of |0⟩ and |1⟩, sometimes denoted as the plus state:
+The Hadamard gate creates a superposition of the :math:`|0⟩` and :math:`|1⟩` states. When applied to a qubit in the :math:`|0⟩` state, it generates an equal superposition of :math:`|0⟩` and :math:`|1⟩`, sometimes denoted as the plus state:
 
 .. math::
 
     |+⟩ = \frac{1}{\sqrt{2}}(|0⟩+|1⟩)
 
-And when applied on the |1⟩ state, it generates the minus state:
+And when applied on the :math:`|1⟩` state, it generates the minus state:
 
 .. math::
 
@@ -114,8 +114,8 @@ The Hadamard gate matrix:
 The Hadamard gate plays a crucial role in quantum algorithms such as QFT, creating superpositions and allowing interference patterns to emerge in quantum computations.
 
 R Gate (Phase Shift Gate)
-~~~~~~~~~~~~~~~~
-The Phase Shift gate introduces a phase shift of φ to the |1⟩ state while leaving the |0⟩ state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.
+~~~~~~~~~~~~~~~~~~~~~~~~~
+The Phase Shift gate introduces a phase shift of φ to the :math:`|1⟩` state while leaving the :math:`|0⟩` state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.
 
 .. math::
 
@@ -132,7 +132,7 @@ Two Qubit Gates
 CNOT Gate
 ~~~~~~~~~
 
-The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the |1⟩ state. If the control qubit is in the |0⟩ state, the target qubit remains unchanged.
+The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the :math:`|1⟩` state. If the control qubit is in the :math:`|0⟩` state, the target qubit remains unchanged.
 
 The matrix representation of the CNOT gate is:
 
@@ -169,7 +169,7 @@ The truth table for the CNOT gate is as follows:
 Controlled Z Gate
 ~~~~~~~~~~~~~~~~~
 
-The CZ (Controlled-Z) gate is another two-qubit gate where the second qubit (target qubit) experiences a phase flip (Z gate) if the control qubit is in the |1⟩ state. Unlike the CNOT gate, the CZ gate does not flip the target qubit's value, but applies a phase change (sign flip) to the target qubit when the control qubit is in the |1⟩ state.
+The CZ (Controlled-Z) gate is another two-qubit gate where the second qubit (target qubit) experiences a phase flip (Z gate) if the control qubit is in the :math:`|1⟩` state. Unlike the CNOT gate, the CZ gate does not flip the target qubit's value, but applies a phase change (sign flip) to the target qubit when the control qubit is in the :math:`|1⟩` state.
 
 The matrix representation of the CZ gate is:
 
@@ -217,16 +217,19 @@ The Swap gate exchanges the states of two qubits.
    0 & 0 & 0 & 1
    \end{pmatrix}
 
-It swaps the qubit states |01⟩ and |10⟩, leaving |00⟩ and |11⟩ unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.
+It swaps the qubit states :math:`|01⟩` and :math:`|10⟩`, leaving :math:`|00⟩` and :math:`|11⟩` unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.
 
 Gates Summary
-------------
+-------------
 Here’s a summary of how each gate operates on the standard computational basis:
 
-- **X Gate**: Flips |0⟩ to |1⟩ and |1⟩ to |0⟩.
-- **Y Gate**: Flips the state and adds a phase of π to the |1⟩ state.
-- **Z Gate**: Adds a phase of π to the |1⟩ state.
-- **Hadamard Gate**: Creates a superposition of |0⟩ and |1⟩.
-- **Phase Shift Gate**: Adds a phase of φ to the |1⟩ state.
+- **I Gate**: Doesn't change the state
+- **X Gate**: Flips :math:`|0⟩` to :math:`|1⟩` and :math:`|1⟩` to :math:`|0⟩`.
+- **Y Gate**: Flips the state and adds a phase of π to the :math:`|1⟩` state.
+- **Z Gate**: Adds a phase of π to the :math:`|1⟩` state.
+- **H Gate**: Creates a superposition of :math:`|0⟩` and :math:`|1⟩`.
+- **R Gate**: Adds a phase of φ to the :math:`|1⟩` state.
+- **CNOT Gate**: Flips the target qubit state if the control qubit is :math:`|1⟩`.
+- **CNOT Gate**: Adds phase change target qubit state if the control qubit is :math:`|1⟩`.
 - **Swap Gate**: Exchanges the states of two qubits.
 
