@@ -57,6 +57,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.add_qubit"><code class="docutils literal notranslate"><span class="pre">QubitTensor.add_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.compute_tensor_vector"><code class="docutils literal notranslate"><span class="pre">QubitTensor.compute_tensor_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.get_number_of_qubits"><code class="docutils literal notranslate"><span class="pre">QubitTensor.get_number_of_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.get_tensor_vector"><code class="docutils literal notranslate"><span class="pre">QubitTensor.get_tensor_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_tensor_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_tensor_form()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit_tensor.QubitTensor.print_vector_form"><code class="docutils literal notranslate"><span class="pre">QubitTensor.print_vector_form()</span></code></a></li>
 </ul>
@@ -98,7 +99,7 @@
 <h1>Qubit Tensor Class<a class="headerlink" href="#qubit-tensor-class" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="qubit_tensor.QubitTensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit_tensor.</span></span><span class="sig-name descname"><span class="pre">QubitTensor</span></span><a class="headerlink" href="#qubit_tensor.QubitTensor" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit_tensor.</span></span><span class="sig-name descname"><span class="pre">QubitTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit_tensor.QubitTensor" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class representing tensor products of quantum bits (qubits).</p>
 <p>This class implements the tensor product operation for quantum states,
@@ -107,9 +108,9 @@ It maintains both the vector representation and the quantum state notation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>__number_of_qubits</strong> – Number of qubits in the tensor product</p></li>
-<li><p><strong>__qubits</strong> – List storing the Qubit objects</p></li>
-<li><p><strong>__tensor_vector</strong> – Vector representation of the quantum state</p></li>
+<li><p><strong>__number_of_qubits</strong> – Number of qubits in the tensor product.</p></li>
+<li><p><strong>__qubits</strong> – List storing the Qubit objects.</p></li>
+<li><p><strong>__tensor_vector</strong> – Vector representation of the quantum state.</p></li>
 </ul>
 </dd>
 </dl>
@@ -189,6 +190,20 @@ vector and the new qubit’s state vector.</p>
 </pre></div>
 </div>
 </section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubit_tensor.QubitTensor.get_tensor_vector">
+<span class="sig-name descname"><span class="pre">get_tensor_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit_tensor.QubitTensor.get_tensor_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Get the tensor product vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor product vector</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
