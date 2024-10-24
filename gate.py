@@ -151,8 +151,3 @@ class SingleQubitGate:
         result_qubit = Qubit(alpha, beta, rel_ph_zero, rel_ph_one)
         return result_qubit
 
-
-class TwoQubitGate:
-
-    def __init__(self):
-        self.__gate_matrix = np.zeros(4,4)

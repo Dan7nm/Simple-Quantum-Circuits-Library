@@ -8,11 +8,11 @@ class QubitTensor:
     allowing for the construction and manipulation of multi-qubit systems.
     It maintains both the vector representation and the quantum state notation.
 
-    :ivar __number_of_qubits: Number of qubits in the tensor product
+    :ivar __number_of_qubits: Number of qubits in the tensor product.
     :type __number_of_qubits: int
-    :ivar __qubits: List storing the Qubit objects
+    :ivar __qubits: List storing the Qubit objects.
     :type __qubits: list[Qubit]
-    :ivar __tensor_vector: Vector representation of the quantum state
+    :ivar __tensor_vector: Vector representation of the quantum state.
     :type __tensor_vector: list[complex]
 
     Example
@@ -25,16 +25,16 @@ class QubitTensor:
     0.7071|0⟩ + 0.7071|1⟩
     """
 
-    def __init__(self):
+    def __init__(self, vector=[], number_of_qubits = 0):
         """
         Initialize an empty QubitTensor object.
 
         The tensor product starts with no qubits and an empty tensor vector.
         Qubits can be added using the add_qubit method.
         """
-        self.__number_of_qubits = 0
+        self.__number_of_qubits = number_of_qubits
         self.__qubits = []
-        self.__tensor_vector = []
+        self.__tensor_vector = vector
 
     def add_qubit(self, new_qubit):
         """
@@ -79,8 +79,8 @@ class QubitTensor:
 
         zero_state_phase = np.exp(1j * np.pi * new_qubit.get_rel_ph_zero())
         one_state_phase = np.exp(1j * np.pi * new_qubit.get_rel_ph_one())
-        first_elem = new_qubit.get_alpha() 
-        second_elem = new_qubit.get_beta()
+        first_elem = new_qubit.get_alpha() * zero_state_phase
+        second_elem = new_qubit.get_beta() * one_state_phase
 
         if(num_of_elements != 0):
             for i in range(num_of_elements):
@@ -90,7 +90,7 @@ class QubitTensor:
             new_tensor_vec.append(first_elem)
             new_tensor_vec.append(second_elem)
 
-        self.__tensor_vector = new_tensor_vec
+        self.__tensor_vector = np.array(new_tensor_vec)
 
     def print_vector_form(self):
         """
@@ -176,8 +176,7 @@ class QubitTensor:
         if not tensor_str:
             tensor_str = "0"
             
-        print("Tensor product in basis state form:")
-        print(tensor_str)
+        print("Tensor product in basis state form:", tensor_str)
     
     def get_number_of_qubits(self):
         """
@@ -195,3 +194,12 @@ class QubitTensor:
         1
         """
         return self.__number_of_qubits
+    
+    def get_tensor_vector(self):
+        """
+        Get the tensor product vector.
+
+        :return: Tensor product vector
+        :rtype: np.ndarray
+        """
+        return self.__tensor_vector
