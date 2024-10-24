@@ -23,7 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx_rtd_theme',
-    "sphinx_rtd_dark_mode"
+    "sphinx_rtd_dark_mode",
 ]
 
 templates_path = ['_templates']

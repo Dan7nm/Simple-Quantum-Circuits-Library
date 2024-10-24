@@ -1,27 +1,12 @@
 API Reference
 =============
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-Qubit Class
------------
+   api/qubit
+   api/qubit_tensor
+   api/gate
+   api/gate_tensor
 
-.. autoclass:: qubit.Qubit
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Qubit Tensor Class
-------------------
-
-.. autoclass:: qubit_tensor.QubitTensor
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Gate Class
-----------
-
-.. autoclass:: gate.SingleQubitGate
-   :members:
-   :undoc-members:
-   :show-inheritance:
