@@ -9,11 +9,11 @@ class QubitTensor:
     It maintains both the vector representation and the quantum state notation.
 
     :ivar __number_of_qubits: Number of qubits in the tensor product.
-    :type __number_of_qubits: int
+    :vartype __number_of_qubits: int
     :ivar __qubits: List storing the Qubit objects.
-    :type __qubits: list[Qubit]
+    :vartype __qubits: list[Qubit]
     :ivar __tensor_vector: Vector representation of the quantum state.
-    :type __tensor_vector: list[complex]
+    :vartype __tensor_vector: list[complex]
 
     Example
     -------
@@ -31,6 +31,13 @@ class QubitTensor:
 
         The tensor product starts with no qubits and an empty tensor vector.
         Qubits can be added using the add_qubit method.
+
+        :param __number_of_qubits: Number of qubits in the tensor product.
+        :type __number_of_qubits: int
+        :param __qubits: List storing the Qubit objects.
+        :type __qubits: list[Qubit]
+        :param __tensor_vector: Vector representation of the quantum state.
+        :type __tensor_vector: list[complex]
         """
         self.__number_of_qubits = number_of_qubits
         self.__qubits = []

@@ -8,6 +8,11 @@ class SingleQubitGate:
     """
     Class to represent single-qubit gates and apply them to qubits.
     It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.
+
+    :ivar gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'R')
+    :vartype gate_type: str
+    :ivar phi: Angle of rotation (only used for the 'R' gate)
+    :vartype phi: float
     """
 
     def __init__(self, gate_type='I', phi=0.0):

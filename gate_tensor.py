@@ -21,8 +21,10 @@ class GateTensor:
         """
         Initializes a GateTensor object with an identity tensor and zero qubits.
 
-        :ivar __operator_tensor: Initialized as a 1D NumPy array with a single element, `1`.
-        :ivar __number_of_compatible_qubits: Initialized to 0, indicating no qubits are currently compatible.
+        :param __operator_tensor: Initialized as a 1D NumPy array with a single element, `1`.
+        :type __operator_tensor: np.ndarray
+        :param __number_of_compatible_qubits: Initialized to 0, indicating no qubits are currently compatible.
+        :type __number_of_compatible_qubits: int
         """
         self.__operator_tensor = np.ones((1,), dtype=complex)
         self.__number_of_compatible_qubits = 0
