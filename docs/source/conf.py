@@ -23,11 +23,12 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx_rtd_theme',
+    "sphinx_rtd_dark_mode"
 ]
 
 templates_path = ['_templates']
 exclude_patterns = []
-
+default_dark_mode = True  # or False
 
 
 # -- Options for HTML output -------------------------------------------------

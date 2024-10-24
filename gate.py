@@ -10,6 +10,35 @@ class SingleQubitGate:
     It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.
     """
 
+    def __init__(self, gate_type='I', phi=0.0):
+        """
+        Initialize the SingleQubitGate object.
+
+        :param gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'R')
+        :type gate_type: str
+        :param phi: Angle of rotation (only used for the 'R' gate)
+        :type phi: float
+        :raises ValueError: If an invalid gate type is provided
+        """
+        # Initialize a two-dimensional matrix to represent each gate
+        self.__gate_matrix = np.zeros((2, 2), dtype=complex)
+        # Dictionary mapping each gate type to its corresponding method
+        matrix_type = {
+            "I": self.__set_I,
+            "X": self.__set_X,
+            "Y": self.__set_Y,
+            "Z": self.__set_Z,
+            "H": self.__set_H,
+            "R": self.__set_R
+        }
+        if gate_type in matrix_type:
+            if gate_type == "R":
+                matrix_type[gate_type](phi)
+            else:
+                matrix_type[gate_type]()
+        else:
+            raise ValueError(INV_GATE_TYP)
+
     def __complex_to_euler(self, z):
         """
         Convert a complex number to its Euler form, r * e^(iθ).
@@ -67,35 +96,6 @@ class SingleQubitGate:
         self.__gate_matrix[0][0] = 1
         self.__gate_matrix[1][1] = np.exp(1j * phi)
 
-    def __init__(self, gate_type='I', phi=0.0):
-        """
-        Initialize the SingleQubitGate object.
-
-        :param gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'R')
-        :type gate_type: str
-        :param phi: Angle of rotation (only used for the 'R' gate)
-        :type phi: float
-        :raises ValueError: If an invalid gate type is provided
-        """
-        # Initialize a two-dimensional matrix to represent each gate
-        self.__gate_matrix = np.zeros((2, 2), dtype=complex)
-        # Dictionary mapping each gate type to its corresponding method
-        matrix_type = {
-            "I": self.__set_I,
-            "X": self.__set_X,
-            "Y": self.__set_Y,
-            "Z": self.__set_Z,
-            "H": self.__set_H,
-            "R": self.__set_R
-        }
-        if gate_type in matrix_type:
-            if gate_type == "R":
-                matrix_type[gate_type](phi)
-            else:
-                matrix_type[gate_type]()
-        else:
-            raise ValueError(INV_GATE_TYP)
-
     def get_matrix(self):
         """
         Get the gate matrix.
@@ -150,3 +150,9 @@ class SingleQubitGate:
 
         result_qubit = Qubit(alpha, beta, rel_ph_zero, rel_ph_one)
         return result_qubit
+
+
+class TwoQubitGate:
+
+    def __init__(self):
+        self.__gate_matrix = np.zeros(4,4)
