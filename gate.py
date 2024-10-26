@@ -7,11 +7,11 @@ EPSILON = 1e-10
 class SingleQubitGate:
     """
     Class to represent single-qubit gates and apply them to qubits.
-    It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.
+    It provides initialization for common gates like I, X, Y, Z, H and rotation gates.
 
-    :ivar gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'R')
+    :ivar gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'P')
     :vartype gate_type: str
-    :ivar phi: Angle of rotation (only used for the 'R' gate)
+    :ivar phi: Angle of rotation (only used for the 'P' gate)
     :vartype phi: float
     """
 
@@ -19,9 +19,9 @@ class SingleQubitGate:
         """
         Initialize the SingleQubitGate object.
 
-        :param gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'R')
+        :param gate_type: Type of gate ('I', 'X', 'Y', 'Z', 'H', or 'P')
         :type gate_type: str
-        :param phi: Angle of rotation (only used for the 'R' gate)
+        :param phi: Angle of rotation (only used for the 'P' gate)
         :type phi: float
         :raises ValueError: If an invalid gate type is provided
         """
@@ -34,10 +34,10 @@ class SingleQubitGate:
             "Y": self.__set_Y,
             "Z": self.__set_Z,
             "H": self.__set_H,
-            "R": self.__set_R
+            "P": self.__set_P
         }
         if gate_type in matrix_type:
-            if gate_type == "R":
+            if gate_type == "P":
                 matrix_type[gate_type](phi)
             else:
                 matrix_type[gate_type]()
@@ -91,7 +91,7 @@ class SingleQubitGate:
         self.__gate_matrix[1][1] = -1
         self.__gate_matrix *= (1 / np.sqrt(2))
 
-    def __set_R(self, phi):
+    def __set_P(self, phi):
         """
         Set the gate matrix to a rotation gate with angle phi.
 
@@ -156,3 +156,39 @@ class SingleQubitGate:
         result_qubit = Qubit(alpha, beta, rel_ph_zero, rel_ph_one)
         return result_qubit
 
+# class TwoQubitGate:
+#     """
+#     Class to represent two-qubit gates and apply them to qubits.
+#     It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.
+
+#     :ivar gate_type: Type of gate ('CP', 'CX', 'CZ')
+#     :vartype gate_type: str
+#     :ivar phi: Angle of rotation (only used for the 'CP' gate)
+#     :vartype phi: float
+#     """
+
+#     def __init__(self, gate_type='I', phi=0.0):
+#         """
+#         Initialize the SingleQubitGate object.
+
+#         :param gate_type: Type of gate ('CP', 'CX', 'CZ')
+#         :type gate_type: str
+#         :param phi: Angle of rotation (only used for the 'CP' gate)
+#         :type phi: float
+#         :raises ValueError: If an invalid gate type is provided
+#         """
+#         # Initialize a four-dimensional matrix to represent each gate
+#         self.__gate_matrix = np.zeros((4, 4), dtype=complex)
+#         # Dictionary mapping each gate type to its corresponding method
+#         matrix_type = {
+#             "CP": self.__set_CP,
+#             "CX": self.__set_CX,
+#             "CZ": self.__set_CZ,
+#         }
+#         if gate_type in matrix_type:
+#             if gate_type == "CP":
+#                 matrix_type[gate_type](phi)
+#             else:
+#                 matrix_type[gate_type]()
+#         else:
+#             raise ValueError(INV_GATE_TYP)
