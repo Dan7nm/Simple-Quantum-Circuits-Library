@@ -11,6 +11,9 @@ Introduction
 
 This small library implements the basic quantum gates in quantum computing. The library allows to build simple quantum circuits and provides a built curcuits in the form of quantum fourier transform.
 
+Link to the project repository:
+`Github Repository <https://github.com/Dan7nm/Simple-Quantum-Circuits-Library>`_
+
 
 .. toctree::
    :maxdepth: 2
