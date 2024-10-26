@@ -28,7 +28,7 @@ extensions = [
 
 templates_path = ['_templates']
 exclude_patterns = []
-default_dark_mode = True  # or False
+default_dark_mode = False  # or False
 
 
 # -- Options for HTML output -------------------------------------------------
