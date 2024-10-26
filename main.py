@@ -2,6 +2,7 @@ from qubit import Qubit
 from qubit_tensor import QubitTensor
 from gate import SingleQubitGate
 from gate_tensor import GateTensor
+from qft import QFT
 import numpy as np
 
 def main():
@@ -11,10 +12,16 @@ def main():
     t = QubitTensor()
     t.add_qubit(q1)
     t.add_qubit(q1)
-    gate = SingleQubitGate("P",np.pi)
-    gt = GateTensor()
-    gt.add_controlled_gate(0,1,t,gate)
-    gt.print_matrix()
+    t.add_qubit(q2)
+
+    t.print_tensor_form()
+
+    qft = QFT(t)
+
+    # qft.print_operator()
+    result_tensor = qft.get_result()
+    result_tensor.print_tensor_form()
+    result_tensor.print_vector_form()
 
 if __name__ == "__main__":
     main()

@@ -146,6 +146,15 @@ class GateTensor:
             else:
                 target_matrix = np.kron(target_matrix,identity_matrix)
 
-
+        self.__number_of_compatible_qubits = num_of_qubits
         self.__operator_tensor = control_matrix + target_matrix
 
+    def get_matrix(self):
+        """
+        Get the matrix of all gate tensor products.
+
+        :return: The matrix representation of the final operator.
+        :rtype: numpy.ndarray
+        """
+
+        return self.__operator_tensor

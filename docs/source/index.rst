@@ -6,15 +6,16 @@
 Simple Quantum Circuits Library
 ===============================
 
-1. Introduction
-===============
+Introduction
+============
 
-The **Quantum Fourier Transform (QFT)** is a fundamental operation in quantum computing that serves as the quantum analogue of the classical discrete Fourier transform (DFT). It plays a crucial role in many quantum algorithms, including Shor's algorithm for factoring large numbers, which has profound implications for cryptography. In this simulation, we explore the implementation and behavior of the Quantum Fourier Transform, demonstrating how quantum states are transformed in a superposition of basis states. By leveraging the power of quantum parallelism, this simulation provides insight into how QFT can efficiently process information in ways that are exponentially faster than classical methods for certain tasks. Through step-by-step visualization and quantum circuit manipulation, this simulation aims to deepen the understanding of QFT's mechanics and its potential applications in real-world quantum algorithms.
+This small library implements the basic quantum gates in quantum computing. The library allows to build simple quantum circuits and provides a built curcuits in the form of quantum fourier transform.
 
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   quickstart
    gates
    api

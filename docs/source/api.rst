@@ -9,4 +9,5 @@ API Reference
    api/qubit_tensor
    api/gate
    api/gate_tensor
+   api/qft
 
