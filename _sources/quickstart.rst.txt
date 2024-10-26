@@ -15,6 +15,12 @@ First, ensure you have NumPy installed::
 
     pip install numpy
 
+Second, clone the repository using git::
+
+    git clone https://github.com/Dan7nm/Simple-Quantum-Circuits-Library.git 
+
+Or you can go to the project link in on the homepage.
+
 Basic Usage
 -----------
 
