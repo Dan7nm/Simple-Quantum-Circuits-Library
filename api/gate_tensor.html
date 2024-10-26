@@ -18,6 +18,7 @@
       <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script src="../_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
       <script src="../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
     <script src="../_static/js/theme.js"></script>
@@ -54,6 +55,7 @@
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Tensor Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#gate_tensor.GateTensor"><code class="docutils literal notranslate"><span class="pre">GateTensor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gate_tensor.GateTensor.add_controlled_gate"><code class="docutils literal notranslate"><span class="pre">GateTensor.add_controlled_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate_tensor.GateTensor.add_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">GateTensor.add_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate_tensor.GateTensor.apply_operator"><code class="docutils literal notranslate"><span class="pre">GateTensor.apply_operator()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate_tensor.GateTensor.print_matrix"><code class="docutils literal notranslate"><span class="pre">GateTensor.print_matrix()</span></code></a></li>
@@ -96,18 +98,56 @@
 <dt class="sig sig-object py" id="gate_tensor.GateTensor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate_tensor.</span></span><span class="sig-name descname"><span class="pre">GateTensor</span></span><a class="headerlink" href="#gate_tensor.GateTensor" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class to represent a gate operator for qubits in tensor form.</p>
+<p>A class to represent an operator on multiple qubits in tensor form.</p>
 <p>The GateTensor class allows for adding single qubit gates and applying the 
 gate operator on qubit tensors. The operator is stored as a tensor product 
 of individual gate matrices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>__operator_tensor</strong> (<em>np.array</em>) – The operator tensor for the gate, represented as a NumPy array.</p></li>
+<li><p><strong>__operator_tensor</strong> (<em>np.ndarray</em>) – The matrix representing all the gates applied in a specific iteration, represented as a NumPy array.</p></li>
 <li><p><strong>__number_of_compatible_qubits</strong> (<em>int</em>) – The number of qubits this gate operator is compatible with.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gate_tensor.GateTensor.add_controlled_gate">
+<span class="sig-name descname"><span class="pre">add_controlled_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gate_tensor.GateTensor.add_controlled_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a controlled-U gate to the tensor operator based on the specified control and target qubits.</p>
+<p>The controlled-U gate, denoted as ‘CU’, is a general construction that applies the
+single-qubit unitary transformation U on the target qubit only if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. 
+Mathematically, this operation can be represented as:</p>
+<div class="math notranslate nohighlight">
+\[CU = |0⟩⟨0| \otimes I + |1⟩⟨1| \otimes U\]</div>
+<p>where ‘I’ is the identity matrix. This means that if the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, 
+the target qubit remains unchanged, while if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, 
+the transformation ‘U’ is applied to the target qubit.</p>
+<p>Example matrix representation for a controlled-U gate:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}CU = \begin{pmatrix}
+        1 &amp; 0 &amp; 0 &amp; 0 \\
+        0 &amp; 1 &amp; 0 &amp; 0 \\
+        0 &amp; 0 &amp; u_{00} &amp; u_{01} \\
+        0 &amp; 0 &amp; u_{10} &amp; u_{11}
+\end{pmatrix}\end{split}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>control_qubit</strong> (<em>int</em>) – The index of the control qubit.</p></li>
+<li><p><strong>target_qubit</strong> (<em>int</em>) – The index of the target qubit where the gate will be applied if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
+<li><p><strong>qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The qubit tensor to which the controlled gate will be added.</p></li>
+<li><p><strong>gate</strong> (<a class="reference internal" href="gate.html#gate.SingleQubitGate" title="gate.SingleQubitGate"><em>SingleQubitGate</em></a>) – The single qubit gate to be conditionally applied to the target qubit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the control or target qubit indices are invalid.</p>
+</dd>
+</dl>
+<p>This method constructs a controlled gate by using projection matrices on the control qubit. The resulting
+operator tensor will represent the control and target qubits, allowing the gate operation to be applied 
+conditionally based on the control qubit’s state.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="gate_tensor.GateTensor.add_single_qubit_gate">
 <span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gate_tensor.GateTensor.add_single_qubit_gate" title="Permalink to this definition"></a></dt>
@@ -127,8 +167,7 @@ of individual gate matrices.</p>
 <dt class="sig sig-object py" id="gate_tensor.GateTensor.apply_operator">
 <span class="sig-name descname"><span class="pre">apply_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gate_tensor.GateTensor.apply_operator" title="Permalink to this definition"></a></dt>
 <dd><p>Applies the gate operator (stored in the tensor) to the given qubit tensor.</p>
-<p>The gate operator is applied to the input qubit tensor, and the result is returned
-as a new qubit tensor.</p>
+<p>The gate operator is applied to the input qubit tensor, and the result is returned as a new qubit tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The qubit tensor to apply the operator on.</p>
