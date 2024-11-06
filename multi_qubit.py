@@ -1,8 +1,10 @@
 import numpy as np
+from qubit import Qubit
 
-class QubitTensor:
+EPSILON = 1e-10
+class MultiQubit:
     """
-    A class representing tensor products of quantum bits (qubits).
+    A class representing tensor products of many quantum bits (qubits).
 
     This class implements the tensor product operation for quantum states,
     allowing for the construction and manipulation of multi-qubit systems.
@@ -10,19 +12,18 @@ class QubitTensor:
 
     :ivar __number_of_qubits: Number of qubits in the tensor product.
     :vartype __number_of_qubits: int
-    :ivar __qubits: List storing the Qubit objects.
-    :vartype __qubits: list[Qubit]
     :ivar __tensor_vector: Vector representation of the quantum state.
     :vartype __tensor_vector: list[complex]
 
     Example
     -------
-    >>> qt = QubitTensor()
-    >>> q1 = Qubit(1/np.sqrt(2), 1/np.sqrt(2), 0, 0)  # |+⟩ state
-    >>> qt.add_qubit(q1)
-    >>> qt.print_tensor_form()
-    Tensor product in basis state form:
-    0.7071|0⟩ + 0.7071|1⟩
+    >>> mt = MultiQubit()
+    >>> q0 = Qubit(1,0)
+    >>> q1 = Qubit(0,1)
+    >>> mt.add_qubit(q0)
+    >>> mt.add_qubit(q1)
+    >>> mt.print_tensor_form()
+    Tensor product in basis state form: |01⟩
     """
 
     def __init__(self, vector=[], number_of_qubits = 0):
@@ -34,13 +35,10 @@ class QubitTensor:
 
         :param __number_of_qubits: Number of qubits in the tensor product.
         :type __number_of_qubits: int
-        :param __qubits: List storing the Qubit objects.
-        :type __qubits: list[Qubit]
         :param __tensor_vector: Vector representation of the quantum state.
         :type __tensor_vector: list[complex]
         """
         self.__number_of_qubits = number_of_qubits
-        self.__qubits = []
         self.__tensor_vector = vector
 
     def add_qubit(self, new_qubit):
@@ -56,15 +54,14 @@ class QubitTensor:
         
         Example
         -------
-        >>> qt = QubitTensor()
-        >>> q1 = Qubit(1, 0, 0, 0)  # |0⟩ state
-        >>> qt.add_qubit(q1)
+        >>> mt = MultiQubit()
+        >>> q0 = Qubit(1,0)  # |0⟩ state
+        >>> mt.add_qubit(q0)
         """
-        self.__qubits.append(new_qubit)
-        self.compute_tensor_vector(new_qubit)
+        self.__compute_tensor_vector(new_qubit)
         self.__number_of_qubits += 1
 
-    def compute_tensor_vector(self, new_qubit):
+    def __compute_tensor_vector(self, new_qubit):
         """
         Compute the new tensor product vector after adding a qubit.
 
@@ -84,20 +81,8 @@ class QubitTensor:
         new_tensor_vec = []
         num_of_elements = self.__number_of_qubits * 2 
 
-        zero_state_phase = np.exp(1j * np.pi * new_qubit.get_rel_ph_zero())
-        one_state_phase = np.exp(1j * np.pi * new_qubit.get_rel_ph_one())
-        first_elem = new_qubit.get_alpha() * zero_state_phase
-        second_elem = new_qubit.get_beta() * one_state_phase
-
-        if(num_of_elements != 0):
-            for i in range(num_of_elements):
-                new_tensor_vec.append(self.__tensor_vector[i] * first_elem)
-                new_tensor_vec.append(self.__tensor_vector[i] * second_elem)
-        else:
-            new_tensor_vec.append(first_elem)
-            new_tensor_vec.append(second_elem)
-
-        self.__tensor_vector = np.array(new_tensor_vec)
+        new_qubit_vector = new_qubit.get_vector()
+        self.__tensor_vector = self.__tensor_product(self.__tensor_vector,new_qubit_vector,num_of_elements)
 
     def print_vector_form(self):
         """
@@ -105,14 +90,6 @@ class QubitTensor:
 
         Displays the coefficients of the quantum state in the computational
         basis as a list of complex numbers.
-
-        Example
-        -------
-        >>> qt = QubitTensor()
-        >>> q1 = Qubit(1/np.sqrt(2), 1/np.sqrt(2), 0, 0)
-        >>> qt.add_qubit(q1)
-        >>> qt.print_vector_form()
-        The vector of the tensor product is: [0.7071+0j, 0.7071+0j]
         """
         print("The vector of the tensor product is:", self.__tensor_vector)
 
@@ -122,30 +99,6 @@ class QubitTensor:
 
         Displays the quantum state as a sum of computational basis states
         with their corresponding complex coefficients.
-
-        Format
-        ------
-        The output follows the form:
-        a|000⟩ + b|001⟩ + c|010⟩ + ... + h|111⟩
-        where a, b, c, ..., h are complex coefficients
-
-        Note
-        ----
-        - Terms with zero coefficients are omitted
-        - Complex coefficients are displayed in (a+bj) format
-        - Real coefficients are displayed without parentheses
-        - Coefficient 1 is omitted for clarity
-
-        Example
-        -------
-        >>> qt = QubitTensor()
-        >>> q1 = Qubit(1/np.sqrt(2), 1/np.sqrt(2), 0, 0)
-        >>> q2 = Qubit(1, 0, 0, 0)
-        >>> qt.add_qubit(q1)
-        >>> qt.add_qubit(q2)
-        >>> qt.print_tensor_form()
-        Tensor product in basis state form:
-        0.7071|00⟩ + 0.7071|10⟩
         """
         if self.__number_of_qubits == 0:
             print("Empty tensor product")
@@ -157,7 +110,7 @@ class QubitTensor:
         for i in range(num_states):
             coeff = self.__tensor_vector[i]
             
-            if abs(coeff) < 1e-10:
+            if abs(coeff) < EPSILON:
                 continue
                 
             if tensor_str and coeff.real >= 0:
@@ -168,14 +121,14 @@ class QubitTensor:
                 
             basis_state = format(i, f'0{self.__number_of_qubits}b')
             
-            if abs(coeff.imag) < 1e-10:
+            if abs(coeff.imag) < EPSILON:
                 coeff_str = f"{coeff.real:.4g}"
-            elif abs(coeff.real) < 1e-10:
+            elif abs(coeff.real) < EPSILON:
                 coeff_str = f"{coeff.imag:.4g}j"
             else:
                 coeff_str = f"({coeff.real:.4g}{coeff.imag:+.4g}j)"
                 
-            if abs(coeff - 1) < 1e-10:
+            if abs(coeff - 1) < EPSILON:
                 tensor_str += f"|{basis_state}⟩"
             else:
                 tensor_str += f"{coeff_str}|{basis_state}⟩"
@@ -191,14 +144,6 @@ class QubitTensor:
 
         :return: The number of qubits in the system
         :rtype: int
-
-        Example
-        -------
-        >>> qt = QubitTensor()
-        >>> q1 = Qubit(1, 0, 0, 0)
-        >>> qt.add_qubit(q1)
-        >>> print(qt.get_number_of_qubits())
-        1
         """
         return self.__number_of_qubits
     
@@ -210,3 +155,29 @@ class QubitTensor:
         :rtype: np.ndarray
         """
         return self.__tensor_vector
+    
+    def __tensor_product(self,vec1,vec2,num_of_elems):
+        """
+        Compute the tensor product of two vectors.
+
+        This method calculates the tensor product between `vec1` and `vec2`. We assume that vec is of dimension of 2.
+
+        :param vec1: The first vector to use in the tensor product calculation.
+        :type vec1: np.ndarray
+        :param vec2: The second vector to use in the tensor product calculation. It should contain exactly two elements.
+        :type vec2: np.ndarray
+        :param num_of_elems: The number of elements from `vec1` to use in the tensor product calculation. If zero, only `vec2` is used.
+        :type num_of_elems: int
+        :return: Tensor product vector
+        :rtype: np.ndarray
+        """
+        new_tensor_vec = []
+        if(num_of_elems != 0):
+            for i in range(num_of_elems):
+                new_tensor_vec.append(vec1[i] * vec2[0])
+                new_tensor_vec.append(vec1[i] * vec2[1])
+        else:
+            new_tensor_vec.append(vec2[0])
+            new_tensor_vec.append(vec2[1])
+
+        return np.array(new_tensor_vec)

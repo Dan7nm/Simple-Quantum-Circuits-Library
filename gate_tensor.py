@@ -1,5 +1,5 @@
 import numpy as np
-from qubit_tensor import QubitTensor
+from multi_qubit import MultiQubit
 from gate import SingleQubitGate
 
 INV_DIM = "This operator is incompatible with the given qubit tensor."
