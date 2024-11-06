@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../gates.html">Quantum Gates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="qubit.html">Qubit Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qubit_tensor.html">Qubit Tensor Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate_tensor.html">Gate Tensor Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">QFT Class</a><ul>
@@ -105,10 +105,10 @@ algorithms including Shor’s factoring algorithm and quantum phase estimation.<
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>__qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The input quantum state to transform</p></li>
+<li><p><strong>__qubit_tensor</strong> (<em>QubitTensor</em>) – The input quantum state to transform</p></li>
 <li><p><strong>__number_of_qubits</strong> (<em>int</em>) – Number of qubits in the system</p></li>
 <li><p><strong>__matrix</strong> (<em>numpy.ndarray</em>) – The full QFT transformation matrix</p></li>
-<li><p><strong>__result_qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The result of applying QFT to the input state</p></li>
+<li><p><strong>__result_qubit_tensor</strong> (<em>QubitTensor</em>) – The result of applying QFT to the input state</p></li>
 </ul>
 </dd>
 </dl>
@@ -121,7 +121,7 @@ algorithms including Shor’s factoring algorithm and quantum phase estimation.<
 <dd class="field-odd"><p>The quantum state after applying QFT</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor">QubitTensor</a></p>
+<dd class="field-even"><p>QubitTensor</p>
 </dd>
 </dl>
 <section id="example">

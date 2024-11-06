@@ -49,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../gates.html">Quantum Gates</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="qubit.html">Qubit Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qubit_tensor.html">Qubit Tensor Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Tensor Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#gate_tensor.GateTensor"><code class="docutils literal notranslate"><span class="pre">GateTensor</span></code></a><ul>
@@ -135,7 +135,7 @@ the transformation ‘U’ is applied to the target qubit.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>control_qubit</strong> (<em>int</em>) – The index of the control qubit.</p></li>
 <li><p><strong>target_qubit</strong> (<em>int</em>) – The index of the target qubit where the gate will be applied if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
-<li><p><strong>qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The qubit tensor to which the controlled gate will be added.</p></li>
+<li><p><strong>qubit_tensor</strong> (<em>QubitTensor</em>) – The qubit tensor to which the controlled gate will be added.</p></li>
 <li><p><strong>gate</strong> (<a class="reference internal" href="gate.html#gate.SingleQubitGate" title="gate.SingleQubitGate"><em>SingleQubitGate</em></a>) – The single qubit gate to be conditionally applied to the target qubit.</p></li>
 </ul>
 </dd>
@@ -170,13 +170,13 @@ conditionally based on the control qubit’s state.</p>
 <p>The gate operator is applied to the input qubit tensor, and the result is returned as a new qubit tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>qubit_tensor</strong> (<a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor"><em>QubitTensor</em></a>) – The qubit tensor to apply the operator on.</p>
+<dd class="field-odd"><p><strong>qubit_tensor</strong> (<em>QubitTensor</em>) – The qubit tensor to apply the operator on.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A new QubitTensor that results from applying the operator to the input tensor.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="qubit_tensor.html#qubit_tensor.QubitTensor" title="qubit_tensor.QubitTensor">QubitTensor</a></p>
+<dd class="field-odd"><p>QubitTensor</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If the number of qubits in the qubit tensor does not match 

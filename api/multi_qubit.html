@@ -1,0 +1,227 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi Qubit Class &mdash; Simple Quantum Circuits Library  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../_static/doctools.js?v=888ff710"></script>
+      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Gate Class" href="gate.html" />
+    <link rel="prev" title="Qubit Class" href="qubit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Simple Quantum Circuits Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gates.html">Quantum Gates</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="qubit.html">Qubit Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Multi Qubit Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multi_qubit.MultiQubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.add_qubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit.add_qubit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_number_of_qubits"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_number_of_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_tensor_vector"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_tensor_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.print_tensor_form"><code class="docutils literal notranslate"><span class="pre">MultiQubit.print_tensor_form()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.print_vector_form"><code class="docutils literal notranslate"><span class="pre">MultiQubit.print_vector_form()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gate_tensor.html">Gate Tensor Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Simple Quantum Circuits Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Multi Qubit Class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/multi_qubit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multi-qubit-class">
+<h1>Multi Qubit Class<a class="headerlink" href="#multi-qubit-class" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multi_qubit.</span></span><span class="sig-name descname"><span class="pre">MultiQubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing tensor products of many quantum bits (qubits).</p>
+<p>This class implements the tensor product operation for quantum states,
+allowing for the construction and manipulation of multi-qubit systems.
+It maintains both the vector representation and the quantum state notation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>__number_of_qubits</strong> (<em>int</em>) – Number of qubits in the tensor product.</p></li>
+<li><p><strong>__tensor_vector</strong> (<em>list</em><em>[</em><em>complex</em><em>]</em>) – Vector representation of the quantum state.</p></li>
+</ul>
+</dd>
+</dl>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="go">Tensor product in basis state form: |01⟩</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.add_qubit">
+<span class="sig-name descname"><span class="pre">add_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_qubit</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit.add_qubit" title="Permalink to this definition"></a></dt>
+<dd><p>Add a new qubit to the tensor product and update the state vector.</p>
+<p>This method adds a new qubit to the system and updates the tensor
+product state vector accordingly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new_qubit</strong> (<a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><em>Qubit</em></a>) – The qubit to be added to the tensor product</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>TypeError</strong> – If new_qubit is not a Qubit object</p>
+</dd>
+</dl>
+<section id="id1">
+<h3>Example<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># |0⟩ state</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.get_number_of_qubits">
+<span class="sig-name descname"><span class="pre">get_number_of_qubits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit.get_number_of_qubits" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of qubits in the tensor product.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The number of qubits in the system</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.get_tensor_vector">
+<span class="sig-name descname"><span class="pre">get_tensor_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit.get_tensor_vector" title="Permalink to this definition"></a></dt>
+<dd><p>Get the tensor product vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tensor product vector</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.print_tensor_form">
+<span class="sig-name descname"><span class="pre">print_tensor_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit.print_tensor_form" title="Permalink to this definition"></a></dt>
+<dd><p>Print the quantum state in Dirac notation.</p>
+<p>Displays the quantum state as a sum of computational basis states
+with their corresponding complex coefficients.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.print_vector_form">
+<span class="sig-name descname"><span class="pre">print_vector_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit.print_vector_form" title="Permalink to this definition"></a></dt>
+<dd><p>Print the vector representation of the quantum state.</p>
+<p>Displays the coefficients of the quantum state in the computational
+basis as a list of complex numbers.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="qubit.html" class="btn btn-neutral float-left" title="Qubit Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gate.html" class="btn btn-neutral float-right" title="Gate Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Dan Nemirovski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -6,7 +6,7 @@ API Reference
    :caption: Contents:
 
    api/qubit
-   api/qubit_tensor
+   api/multi_qubit
    api/gate
    api/gate_tensor
    api/qft
