@@ -10,7 +10,7 @@ def main():
     q2 = Qubit(0,1)
 
     t = QubitTensor()
-    t.add_qubit(q1)
+    t.add_qubit(q2)
     t.add_qubit(q1)
     t.add_qubit(q2)
 
@@ -21,7 +21,6 @@ def main():
     # qft.print_operator()
     result_tensor = qft.get_result()
     result_tensor.print_tensor_form()
-    result_tensor.print_vector_form()
 
 if __name__ == "__main__":
     main()
