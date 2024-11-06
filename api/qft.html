@@ -100,16 +100,48 @@ version of the discrete Fourier transform. The QFT is a crucial component in man
 algorithms including Shor’s factoring algorithm and quantum phase estimation.</p>
 <p>The QFT transform is defined as:</p>
 <div class="math notranslate nohighlight">
-\[|j⟩ → \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{\frac{2\pi i jk}{N}} |k⟩\]</div>
+\[|j⟩ → \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{i\frac{2\pi jk}{N}} |k⟩\]</div>
 <p>where N = 2^n for n qubits.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit</span> <span class="kn">import</span> <span class="n">Qubit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit_tensor</span> <span class="kn">import</span> <span class="n">MultiQubit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a 2-qubit state |00⟩</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply QFT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qft</span> <span class="o">=</span> <span class="n">QFT</span><span class="p">(</span><span class="n">qt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">qft</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>__qubit_tensor</strong> (<em>QubitTensor</em>) – The input quantum state to transform</p></li>
-<li><p><strong>__number_of_qubits</strong> (<em>int</em>) – Number of qubits in the system</p></li>
-<li><p><strong>__matrix</strong> (<em>numpy.ndarray</em>) – The full QFT transformation matrix</p></li>
-<li><p><strong>__result_qubit_tensor</strong> (<em>QubitTensor</em>) – The result of applying QFT to the input state</p></li>
-</ul>
+<dt class="field-odd">ivar __qubit_tensor<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The input quantum state to transform</p>
+</dd>
+<dt class="field-even">vartype __qubit_tensor<span class="colon">:</span></dt>
+<dd class="field-even"><p>MultiQubit</p>
+</dd>
+<dt class="field-odd">ivar __number_of_qubits<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Number of qubits in the system</p>
+</dd>
+<dt class="field-even">vartype __number_of_qubits<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">ivar __matrix<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The full QFT transformation matrix</p>
+</dd>
+<dt class="field-even">vartype __matrix<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+<dt class="field-odd">ivar __result_qubit_tensor<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The result of applying QFT to the input state</p>
+</dd>
+<dt class="field-even">vartype __result_qubit_tensor<span class="colon">:</span></dt>
+<dd class="field-even"><p>MultiQubit</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -124,23 +156,6 @@ algorithms including Shor’s factoring algorithm and quantum phase estimation.<
 <dd class="field-even"><p>QubitTensor</p>
 </dd>
 </dl>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit</span> <span class="kn">import</span> <span class="n">Qubit</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit_tensor</span> <span class="kn">import</span> <span class="n">QubitTensor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a 2-qubit state |00⟩</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply QFT</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qft</span> <span class="o">=</span> <span class="n">QFT</span><span class="p">(</span><span class="n">qt</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">qft</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
-</pre></div>
-</div>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -150,19 +165,9 @@ algorithms including Shor’s factoring algorithm and quantum phase estimation.<
 <p>This method prints the matrix representation of the entire QFT operation,
 which is the product of all Hadamard and controlled phase rotation gates
 applied during the transform.</p>
-<section id="id1">
-<h2>Example<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qft</span> <span class="o">=</span> <span class="n">QFT</span><span class="p">(</span><span class="n">qubit_tensor</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qft</span><span class="o">.</span><span class="n">print_operator</span><span class="p">()</span>
-<span class="go">[[1+0j, 1+0j, 1+0j, 1+0j],</span>
-<span class="go"> [1+0j, 0+1j, -1+0j, 0-1j],</span>
-<span class="go"> [1+0j, -1+0j, 1+0j, -1+0j],</span>
-<span class="go"> [1+0j, 0-1j, -1+0j, 0+1j]]</span>
-</pre></div>
-</div>
-</section>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 </section>
