@@ -44,25 +44,6 @@ class SingleQubitGate:
         else:
             raise ValueError(INV_GATE_TYP)
 
-    def __complex_to_euler(self, z):
-        """
-        Convert a complex number to its Euler form, r * e^(iθ).
-        
-        :param z: Complex number to convert
-        :type z: complex
-        :return: Magnitude and phase (r, theta)
-        :rtype: tuple
-        """
-        r = abs(z)
-        theta = np.angle(z)
-
-        # If the number is really small, round the value
-        if r < EPSILON:
-            r = 0
-        if theta < EPSILON:
-            theta = 0
-        return r, theta
-
     def __set_I(self):
         """Set the gate matrix to the identity matrix (I)."""
         self.__gate_matrix[0][0] = 1
@@ -147,48 +128,8 @@ class SingleQubitGate:
         """
         qubit_vector = qubit.get_vector()
         result_vector = np.dot(self.__gate_matrix, qubit_vector)
-        first_elem = result_vector[0]
-        second_elem = result_vector[1]
+        alpha = result_vector[0]
+        beta = result_vector[1]
 
-        alpha, rel_ph_zero = self.__complex_to_euler(first_elem)
-        beta, rel_ph_one = self.__complex_to_euler(second_elem)
-
-        result_qubit = Qubit(alpha, beta, rel_ph_zero, rel_ph_one)
+        result_qubit = Qubit(alpha, beta)
         return result_qubit
-
-# class TwoQubitGate:
-#     """
-#     Class to represent two-qubit gates and apply them to qubits.
-#     It provides initialization for common gates like I, X, Y, Z, H, and rotation gates.
-
-#     :ivar gate_type: Type of gate ('CP', 'CX', 'CZ')
-#     :vartype gate_type: str
-#     :ivar phi: Angle of rotation (only used for the 'CP' gate)
-#     :vartype phi: float
-#     """
-
-#     def __init__(self, gate_type='I', phi=0.0):
-#         """
-#         Initialize the SingleQubitGate object.
-
-#         :param gate_type: Type of gate ('CP', 'CX', 'CZ')
-#         :type gate_type: str
-#         :param phi: Angle of rotation (only used for the 'CP' gate)
-#         :type phi: float
-#         :raises ValueError: If an invalid gate type is provided
-#         """
-#         # Initialize a four-dimensional matrix to represent each gate
-#         self.__gate_matrix = np.zeros((4, 4), dtype=complex)
-#         # Dictionary mapping each gate type to its corresponding method
-#         matrix_type = {
-#             "CP": self.__set_CP,
-#             "CX": self.__set_CX,
-#             "CZ": self.__set_CZ,
-#         }
-#         if gate_type in matrix_type:
-#             if gate_type == "CP":
-#                 matrix_type[gate_type](phi)
-#             else:
-#                 matrix_type[gate_type]()
-#         else:
-#             raise ValueError(INV_GATE_TYP)
