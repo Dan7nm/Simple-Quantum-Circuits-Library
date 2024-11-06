@@ -11,10 +11,15 @@ def main():
 
     mt = MultiQubit()
     mt.add_qubit(q0)
+    mt.add_qubit(q0)
     mt.add_qubit(q1)
 
     mt.print_tensor_form()
-    mt.print_vector_form()
+
+    qft = QFT(mt)
+    result = qft.get_result()
+    result.print_tensor_form()
+    result.print_vector_form()
 
 if __name__ == "__main__":
     main()

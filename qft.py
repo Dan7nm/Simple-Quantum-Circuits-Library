@@ -13,18 +13,33 @@ class QFT:
     The QFT transform is defined as:
 
     .. math::
-        |j⟩ → \\frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{\\frac{2\pi i jk}{N}} |k⟩
+        |j⟩ → \\frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{i\\frac{2\pi jk}{N}} |k⟩
 
     where N = 2^n for n qubits.
 
+    Example
+    -------
+    >>> from qubit import Qubit
+    >>> from qubit_tensor import MultiQubit
+    >>> # Create a 2-qubit state |00⟩
+    >>> q1 = Qubit(1, 0)
+    >>> q2 = Qubit(1, 0)
+    >>> qt = MultiQubit()
+    >>> qt.add_qubit(q1)
+    >>> qt.add_qubit(q2)
+    >>> # Apply QFT
+    >>> qft = QFT(qt)
+    >>> result = qft.get_result()
+    >>> result.print_tensor_form()
+
     :ivar __qubit_tensor: The input quantum state to transform
-    :vartype __qubit_tensor: QubitTensor
+    :vartype __qubit_tensor: MultiQubit
     :ivar __number_of_qubits: Number of qubits in the system
     :vartype __number_of_qubits: int
     :ivar __matrix: The full QFT transformation matrix
     :vartype __matrix: numpy.ndarray
     :ivar __result_qubit_tensor: The result of applying QFT to the input state
-    :vartype __result_qubit_tensor: QubitTensor
+    :vartype __result_qubit_tensor: MultiQubit
     """
 
     def __init__(self, qubit_tensor):
@@ -32,7 +47,7 @@ class QFT:
         Initialize the QFT transform with an input quantum state.
 
         :param qubit_tensor: The quantum state to transform
-        :type qubit_tensor: QubitTensor
+        :type qubit_tensor: MultiQubit
         """
         self.__qubit_tensor = qubit_tensor
         self.__number_of_qubits = qubit_tensor.get_number_of_qubits()
@@ -54,7 +69,7 @@ class QFT:
         - The phase for CP gates is calculated as 2π/2^k where k is the distance between qubits
 
         :return: The quantum state after applying QFT
-        :rtype: QubitTensor
+        :rtype: MultiQubit
         """
         HGate = SingleQubitGate('H')
         IGate = SingleQubitGate('I')
@@ -87,21 +102,6 @@ class QFT:
 
         :return: The quantum state after applying QFT
         :rtype: QubitTensor
-
-        Example
-        -------
-        >>> from qubit import Qubit
-        >>> from qubit_tensor import QubitTensor
-        >>> # Create a 2-qubit state |00⟩
-        >>> q1 = Qubit(1, 0)
-        >>> q2 = Qubit(1, 0)
-        >>> qt = QubitTensor()
-        >>> qt.add_qubit(q1)
-        >>> qt.add_qubit(q2)
-        >>> # Apply QFT
-        >>> qft = QFT(qt)
-        >>> result = qft.get_result()
-        >>> result.print_tensor_form()
         """
         return self.__result_qubit_tensor
 
@@ -113,13 +113,5 @@ class QFT:
         which is the product of all Hadamard and controlled phase rotation gates
         applied during the transform.
 
-        Example
-        -------
-        >>> qft = QFT(qubit_tensor)
-        >>> qft.print_operator()
-        [[1+0j, 1+0j, 1+0j, 1+0j],
-         [1+0j, 0+1j, -1+0j, 0-1j],
-         [1+0j, -1+0j, 1+0j, -1+0j],
-         [1+0j, 0-1j, -1+0j, 0+1j]]
         """
         print(self.__matrix)

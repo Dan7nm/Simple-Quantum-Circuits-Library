@@ -3,8 +3,8 @@ from multi_qubit import MultiQubit
 from gate import SingleQubitGate
 
 INV_DIM = "This operator is incompatible with the given qubit tensor."
-INV_CTRL = "The given control qubit is invalid. The control qubit should be between 0 and number of qubits - 1."
-INV_TAR = "The given target qubit is invalid. The target qubit should be between 0 and number of qubits - 1."
+INV_CTRL = "The given control qubit is invalid. The control qubit should be between 0 and number of qubits -1."
+INV_TAR = "The given target qubit is invalid. The target qubit should be between 0 and number of qubits -1."
 
 class GateTensor:
     """
@@ -60,35 +60,31 @@ class GateTensor:
         The gate operator is applied to the input qubit tensor, and the result is returned as a new qubit tensor.
 
         :param qubit_tensor: The qubit tensor to apply the operator on.
-        :type qubit_tensor: QubitTensor
-        :return: A new QubitTensor that results from applying the operator to the input tensor.
-        :rtype: QubitTensor
-        :raises ValueError: If the number of qubits in the qubit tensor does not match 
-                            the number of qubits the gate operator is compatible with.
+        :type qubit_tensor: MultiQubit
+        :return: A new MultiQubit that results from applying the operator to the input tensor.
+        :rtype: MultiQubit
+        :raises ValueError: If the number of qubits in the qubit tensor does not match the number of qubits the gate operator is compatible with.
         """
         number_of_qubits = qubit_tensor.get_number_of_qubits()
         if number_of_qubits != self.__number_of_compatible_qubits:
             raise ValueError(INV_DIM)
         qubit_tensor_vector = qubit_tensor.get_tensor_vector()
         result_vector = np.dot(self.__operator_tensor, qubit_tensor_vector)
-        result_qubit_tensor = QubitTensor(result_vector, number_of_qubits)
+        result_qubit_tensor = MultiQubit(result_vector, number_of_qubits)
         return result_qubit_tensor
 
     def add_controlled_gate(self, control_qubit, target_qubit, qubit_tensor,gate):
         """
         Adds a controlled-U gate to the tensor operator based on the specified control and target qubits.
 
-        The controlled-U gate, denoted as 'CU', is a general construction that applies the
-        single-qubit unitary transformation U on the target qubit only if the control qubit is in the :math:`|1⟩` state. 
+        The controlled-U gate, denoted as 'CU', is a general construction that applies the single-qubit unitary transformation U on the target qubit only if the control qubit is in the :math:`|1⟩` state. 
         Mathematically, this operation can be represented as:
         
         .. math::
 
             CU = |0⟩⟨0| \otimes I + |1⟩⟨1| \otimes U
         
-        where 'I' is the identity matrix. This means that if the control qubit is in the :math:`|0⟩` state, 
-        the target qubit remains unchanged, while if the control qubit is in the :math:`|1⟩` state, 
-        the transformation 'U' is applied to the target qubit.
+        where 'I' is the identity matrix. This means that if the control qubit is in the :math:`|0⟩` state, the target qubit remains unchanged, while if the control qubit is in the :math:`|1⟩` state, the transformation 'U' is applied to the target qubit.
 
         Example matrix representation for a controlled-U gate:
         
