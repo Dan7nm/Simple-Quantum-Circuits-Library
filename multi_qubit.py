@@ -1,5 +1,6 @@
 import numpy as np
 from qubit import Qubit
+from typing import List
 
 EPSILON = 1e-10
 class MultiQubit:
@@ -26,7 +27,7 @@ class MultiQubit:
     Tensor product in basis state form: |01⟩
     """
 
-    def __init__(self, vector=[], number_of_qubits = 0):
+    def __init__(self, vector: List[complex]=[], number_of_qubits: int = 0) -> None:
         """
         Initialize an empty QubitTensor object.
 
@@ -41,7 +42,7 @@ class MultiQubit:
         self.__number_of_qubits = number_of_qubits
         self.__tensor_vector = vector
 
-    def add_qubit(self, new_qubit):
+    def add_qubit(self, new_qubit: Qubit) -> None:
         """
         Add a new qubit to the tensor product and update the state vector.
 
@@ -61,7 +62,7 @@ class MultiQubit:
         self.__compute_tensor_vector(new_qubit)
         self.__number_of_qubits += 1
 
-    def __compute_tensor_vector(self, new_qubit):
+    def __compute_tensor_vector(self, new_qubit: Qubit) -> None:
         """
         Compute the new tensor product vector after adding a qubit.
 
@@ -84,7 +85,7 @@ class MultiQubit:
         new_qubit_vector = new_qubit.get_vector()
         self.__tensor_vector = self.__tensor_product(self.__tensor_vector,new_qubit_vector,num_of_elements)
 
-    def print_vector_form(self):
+    def print_vector_form(self) -> None:
         """
         Print the vector representation of the quantum state.
 
@@ -93,7 +94,7 @@ class MultiQubit:
         """
         print("The vector of the tensor product is:", self.__tensor_vector)
 
-    def print_tensor_form(self):
+    def print_tensor_form(self) -> None:
         """
         Print the quantum state in Dirac notation.
 
@@ -138,7 +139,7 @@ class MultiQubit:
             
         print("Tensor product in basis state form:", tensor_str)
     
-    def get_number_of_qubits(self):
+    def get_number_of_qubits(self) -> int:
         """
         Get the number of qubits in the tensor product.
 
@@ -147,7 +148,7 @@ class MultiQubit:
         """
         return self.__number_of_qubits
     
-    def get_tensor_vector(self):
+    def get_tensor_vector(self) -> np.ndarray:
         """
         Get the tensor product vector.
 
@@ -156,7 +157,7 @@ class MultiQubit:
         """
         return self.__tensor_vector
     
-    def __tensor_product(self,vec1,vec2,num_of_elems):
+    def __tensor_product(self,vec1: np.ndarray,vec2: np.ndarray,num_of_elems: int) -> np.ndarray:
         """
         Compute the tensor product of two vectors.
 

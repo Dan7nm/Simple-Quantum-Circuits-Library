@@ -1,4 +1,5 @@
 import numpy as np
+from typing import Tuple
 
 EPSILON = 1e-10
 
@@ -15,7 +16,7 @@ class Qubit:
     :vartype beta: complex
     """
 
-    def __init__(self, alpha, beta):
+    def __init__(self, alpha: complex, beta: complex) -> None:
         """
         Constructs all the necessary attributes for the qubit object.
 
@@ -32,7 +33,7 @@ class Qubit:
         else:
             raise ValueError(INV_AMP)
 
-    def __complex_to_euler(self, z):
+    def __complex_to_euler(self, z: complex) -> Tuple[float]:
         """
         Convert a complex number to its Euler form, r * e^(iθ).
         
@@ -52,7 +53,7 @@ class Qubit:
         return r, theta
 
 
-    def _is_valid_amplitudes(self, alpha, beta):
+    def _is_valid_amplitudes(self, alpha: complex, beta: complex) -> bool:
         """
         Checks if the given amplitudes are valid and satisfy the normalization condition.
 
@@ -68,7 +69,7 @@ class Qubit:
         return (0<= r_0 <= 1 and 0<= r_1 <= 1 and ((r_0**2 + r_1**2) - 1 <= EPSILON))
         
 
-    def get_alpha(self):
+    def get_alpha(self) -> complex:
         """
         Returns the amplitude of the :math:`|0⟩` state.
 
@@ -77,7 +78,7 @@ class Qubit:
         """
         return self.__alpha
 
-    def get_beta(self):
+    def get_beta(self) -> complex:
         """
         Returns the amplitude of the :math:`|1⟩` state.
 
@@ -86,7 +87,7 @@ class Qubit:
         """
         return self.__beta
     
-    def get_vector(self):
+    def get_vector(self) -> np.ndarray:
         """
         Returns the qubit in vector form.
 
@@ -95,7 +96,7 @@ class Qubit:
         """
         return self.__qubit_vector
 
-    def set_amplitudes(self, alpha, beta):
+    def set_amplitudes(self, alpha: complex, beta: complex) -> None:
         """
         Sets the amplitude of the :math:`|0⟩` state and :math:`|1⟩` state.
 
@@ -112,7 +113,7 @@ class Qubit:
         else:
             raise ValueError(INV_AMP)
 
-    def print_qubit(self):
+    def print_qubit(self) -> None:
         """
         Prints the qubit state in the form:
         Qubit state is :math:`α\exp{i\phi_{0}}|0⟩` + :math:`β\exp{i\phi_{1}}|1⟩`.
@@ -130,7 +131,7 @@ class Qubit:
         else:
             print(f"Qubit state is {alpha_term}|0⟩ + {beta_term}|1⟩")
 
-    def print_vector_form(self):
+    def print_vector_form(self) -> None:
         """
         Prints the qubit state in the vector form:
         Qubit state is [alpha,beta].
