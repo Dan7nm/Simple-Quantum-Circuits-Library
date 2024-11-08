@@ -97,7 +97,7 @@
 <h1>Qubit Class<a class="headerlink" href="#qubit-class" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="qubit.Qubit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A class to represent a quantum bit (Qubit) with two possible states: <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>,
 described by complex amplitudes alpha and beta.</p>
@@ -111,7 +111,7 @@ described by complex amplitudes alpha and beta.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_alpha">
-<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_alpha" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="headerlink" href="#qubit.Qubit.get_alpha" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -125,7 +125,7 @@ described by complex amplitudes alpha and beta.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_beta">
-<span class="sig-name descname"><span class="pre">get_beta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_beta" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_beta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="headerlink" href="#qubit.Qubit.get_beta" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the amplitude of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -139,7 +139,7 @@ described by complex amplitudes alpha and beta.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_vector">
-<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.get_vector" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_vector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#qubit.Qubit.get_vector" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the qubit in vector form.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -153,7 +153,7 @@ described by complex amplitudes alpha and beta.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.print_qubit">
-<span class="sig-name descname"><span class="pre">print_qubit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.print_qubit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_qubit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#qubit.Qubit.print_qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Prints the qubit state in the form:
 Qubit state is <span class="math notranslate nohighlight">\(α\exp{i\phi_{0}}|0⟩\)</span> + <span class="math notranslate nohighlight">\(β\exp{i\phi_{1}}|1⟩\)</span>.</p>
 <p>The phase terms are included only if their corresponding relative phases are non-zero.</p>
@@ -161,14 +161,14 @@ Qubit state is <span class="math notranslate nohighlight">\(α\exp{i\phi_{0}}|0�
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.print_vector_form">
-<span class="sig-name descname"><span class="pre">print_vector_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.print_vector_form" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_vector_form</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#qubit.Qubit.print_vector_form" title="Permalink to this definition"></a></dt>
 <dd><p>Prints the qubit state in the vector form:
 Qubit state is [alpha,beta].</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.set_amplitudes">
-<span class="sig-name descname"><span class="pre">set_amplitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit.set_amplitudes" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_amplitudes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#qubit.Qubit.set_amplitudes" title="Permalink to this definition"></a></dt>
 <dd><p>Sets the amplitude of the <span class="math notranslate nohighlight">\(|0⟩\)</span> state and <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
