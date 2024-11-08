@@ -60,7 +60,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_tensor.html">Gate Tensor Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
 </ul>
 </li>
@@ -97,10 +97,6 @@
 <dt class="sig sig-object py" id="multi_qubit.MultiQubit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multi_qubit.</span></span><span class="sig-name descname"><span class="pre">MultiQubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">complex</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multi_qubit.MultiQubit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class representing tensor products of many quantum bits (qubits).</p>
-<p>This class implements the tensor product operation for quantum states,
-allowing for the construction and manipulation of multi-qubit systems.
-It maintains both the vector representation and the quantum state notation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -109,6 +105,10 @@ It maintains both the vector representation and the quantum state notation.</p>
 </ul>
 </dd>
 </dl>
+<p>A class representing tensor products of many quantum bits (qubits).</p>
+<p>This class implements the tensor product operation for quantum states,
+allowing for the construction and manipulation of multi-qubit systems.
+It maintains both the vector representation and the quantum state notation.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>

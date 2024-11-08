@@ -62,7 +62,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gate_tensor.html">Gate Tensor Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
 </ul>
 </li>
@@ -99,8 +99,6 @@
 <dt class="sig sig-object py" id="qubit.Qubit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qubit.</span></span><span class="sig-name descname"><span class="pre">Qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">complex</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qubit.Qubit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>A class to represent a quantum bit (Qubit) with two possible states: <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>,
-described by complex amplitudes alpha and beta.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -109,6 +107,8 @@ described by complex amplitudes alpha and beta.</p>
 </ul>
 </dd>
 </dl>
+<p>A class to represent a quantum bit (Qubit) with two possible states: <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>,
+described by complex amplitudes alpha and beta.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="qubit.Qubit.get_alpha">
 <span class="sig-name descname"><span class="pre">get_alpha</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">complex</span></span></span><a class="headerlink" href="#qubit.Qubit.get_alpha" title="Permalink to this definition"></a></dt>

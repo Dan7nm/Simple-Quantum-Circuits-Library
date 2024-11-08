@@ -1,13 +1,14 @@
 API Reference
 =============
+This page lists all the classes used in this library.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    api/qubit
    api/multi_qubit
    api/gate
-   api/gate_tensor
+   api/circuit
    api/qft
 
