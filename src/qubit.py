@@ -7,13 +7,13 @@ INV_AMP = "Amplitude is invalid. The given amplitude needs to be between 0 and 1
 
 class Qubit:
     """
-    A class to represent a quantum bit (Qubit) with two possible states: :math:`|0⟩` and :math:`|1⟩`,
-    described by complex amplitudes alpha and beta.
-
     :ivar alpha: The amplitude of the :math:`|0⟩` state, a value between 0 and 1.
     :vartype alpha: complex
     :ivar beta: The amplitude of the :math:`|1⟩` state, a value between 0 and 1.
     :vartype beta: complex
+    
+    A class to represent a quantum bit (Qubit) with two possible states: :math:`|0⟩` and :math:`|1⟩`,
+    described by complex amplitudes alpha and beta.
     """
 
     def __init__(self, alpha: complex, beta: complex) -> None:

@@ -1,9 +1,18 @@
 import numpy as np
 from gate import SingleQubitGate
-from gate_tensor import GateTensor
+from circuit import Circuit
 
 class QFT:
     """
+    :ivar __qubit_tensor: The input quantum state to transform
+    :vartype __qubit_tensor: MultiQubit
+    :ivar __number_of_qubits: Number of qubits in the system
+    :vartype __number_of_qubits: int
+    :ivar __matrix: The full QFT transformation matrix
+    :vartype __matrix: numpy.ndarray
+    :ivar __result_qubit_tensor: The result of applying QFT to the input state
+    :vartype __result_qubit_tensor: MultiQubit
+    
     Quantum Fourier Transform implementation.
     
     This class implements the Quantum Fourier Transform (QFT) algorithm, which is a quantum
@@ -32,14 +41,7 @@ class QFT:
     >>> result = qft.get_result()
     >>> result.print_tensor_form()
 
-    :ivar __qubit_tensor: The input quantum state to transform
-    :vartype __qubit_tensor: MultiQubit
-    :ivar __number_of_qubits: Number of qubits in the system
-    :vartype __number_of_qubits: int
-    :ivar __matrix: The full QFT transformation matrix
-    :vartype __matrix: numpy.ndarray
-    :ivar __result_qubit_tensor: The result of applying QFT to the input state
-    :vartype __result_qubit_tensor: MultiQubit
+    
     """
 
     def __init__(self, qubit_tensor):
@@ -101,7 +103,7 @@ class QFT:
         Get the result of the QFT computation.
 
         :return: The quantum state after applying QFT
-        :rtype: QubitTensor
+        :rtype: MultiQubit
         """
         return self.__result_qubit_tensor
 

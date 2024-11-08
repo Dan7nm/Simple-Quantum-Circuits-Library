@@ -5,16 +5,16 @@ from typing import List
 EPSILON = 1e-10
 class MultiQubit:
     """
+    :ivar __number_of_qubits: Number of qubits in the tensor product.
+    :vartype __number_of_qubits: int
+    :ivar __tensor_vector: Vector representation of the quantum state.
+    :vartype __tensor_vector: list[complex]
+    
     A class representing tensor products of many quantum bits (qubits).
 
     This class implements the tensor product operation for quantum states,
     allowing for the construction and manipulation of multi-qubit systems.
     It maintains both the vector representation and the quantum state notation.
-
-    :ivar __number_of_qubits: Number of qubits in the tensor product.
-    :vartype __number_of_qubits: int
-    :ivar __tensor_vector: Vector representation of the quantum state.
-    :vartype __tensor_vector: list[complex]
 
     Example
     -------
