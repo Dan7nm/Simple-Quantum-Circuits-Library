@@ -102,6 +102,17 @@
 <dt class="sig sig-object py" id="gate.Gate">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate.</span></span><span class="sig-name descname"><span class="pre">Gate</span></span><a class="headerlink" href="#gate.Gate" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gate_matrix</strong> (<em>np.ndarray</em>) – A two by two matrix representing the gate operation.</p></li>
+<li><p><strong>target_qubit</strong> (<em>int</em>) – The index of a target qubit in case of a controlled gate.</p></li>
+<li><p><strong>control_qubit</strong> (<em>int</em>) – The index of a control qubit in case of a controlled gate.</p></li>
+<li><p><strong>is_control_gate</strong> (<em>bool</em>) – Variable that stores a bolean value if the gate is a controlled gate or not.</p></li>
+<li><p><strong>is_swap_gate</strong> (<em>bool</em>) – Variable that stores a bolean value if the gate is a swap gate or not.</p></li>
+</ul>
+</dd>
+</dl>
 <p>A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.</p>
 <p>The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H), a controlled qubit gate, 
 or a swap gate, allowing for versatile operations on qubits in a quantum system.</p>
