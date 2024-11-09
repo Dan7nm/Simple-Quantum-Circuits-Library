@@ -3,14 +3,16 @@ from qubit import Qubit
 from numpy.typing import NDArray
 
 INV_SINGLE_GATE_TYP = "Invalid single qubit gate type. Must be one of: "
+INV_INDEX = "Control and target qubit index should be non negative."
 EPSILON = 1e-10
 
 class Gate:
     """
     Class to represent quantum gate. The user can choose a single qubit gate or a controlled qubit gate
     """
+
     # Define gate matrices as class constants
-    GATE_MATRICES = {
+    __GATE_MATRICES = {
         'I': np.array([[1, 0], [0, 1]], dtype=complex),
         'X': np.array([[0, 1], [1, 0]], dtype=complex),
         'Y': np.array([[0, -1j], [1j, 0]], dtype=complex),
@@ -29,6 +31,7 @@ class Gate:
         self.__target_qubit = None
         self.__control_qubit = None
         self.__is_control_gate = False
+        self.is_swap_gate = False
         
         
     def set_single_qubit_gate(self, gate_type: str ='I', phi: float = 0.0) -> None:
@@ -36,15 +39,16 @@ class Gate:
         Set the quantum gate matrix based on the specified gate type.
         
         """
-        if gate_type not in self.GATE_MATRICES and gate_type != 'P':
-            valid_gates = list(self.GATE_MATRICES.keys()) + ['P']
+        # Check for valid gate type given
+        if gate_type not in self.__GATE_MATRICES and gate_type != 'P':
+            valid_gates = list(self.__GATE_MATRICES.keys()) + ['P']
             raise ValueError( f"{INV_SINGLE_GATE_TYP} {', '.join(valid_gates)}")
         if gate_type == 'P':
-            self._set_phase_gate(phi)
+            self.__set_phase_gate(phi)
         else:
-            self.__gate_matrix = self.GATE_MATRICES[gate_type].copy()
+            self.__gate_matrix = self.__GATE_MATRICES[gate_type].copy()
             
-    def _set_phase_gate(self, phi: float) -> None:
+    def __set_phase_gate(self, phi: float) -> None:
         """
         Set the phase gate matrix with the given rotation angle.
         
@@ -55,6 +59,34 @@ class Gate:
             [1, 0],
             [0, np.exp(1j * phi)]
         ], dtype=complex)
+
+    def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str ='I', phi: float = 0.0) -> None:
+        # Check for valid gate type given
+        if gate_type not in self.__GATE_MATRICES and gate_type != 'P':
+            valid_gates = list(self.__GATE_MATRICES.keys()) + ['P']
+            raise ValueError( f"{INV_SINGLE_GATE_TYP} {', '.join(valid_gates)}")
+        # Set the target and control qubit:
+        if control_qubit < 0 or target_qubit < 0:
+            raise ValueError(INV_INDEX)
+        else:
+            self.__control_qubit = control_qubit
+            self.__target_qubit = target_qubit
+            self.__is_control_gate = True
+        # Set the correct matrix to apply
+        if gate_type == 'P':
+            self.__set_phase_gate(phi)
+        else:
+            self.__gate_matrix = self.__GATE_MATRICES[gate_type].copy()
+    
+    def set_swap_gate(self, control_qubit: int, target_qubit: int) -> None:
+        # Set the target and control qubit:
+        if control_qubit < 0 or target_qubit < 0:
+            raise ValueError(INV_INDEX)
+        else:
+            self.__control_qubit = control_qubit
+            self.__target_qubit = target_qubit
+            self.__is_control_gate = True
+
         
     def get_matrix(self) -> NDArray[np.complex128]:
         """
@@ -65,7 +97,7 @@ class Gate:
         """
         return self.__gate_matrix
 
-    def print_matrix(self):
+    def print_matrix(self) -> None:
         """
         Print the gate matrix with proper formatting, removing apostrophes.
         The matrix is displayed with 2 decimal precision, and values close to zero are rounded.
@@ -91,7 +123,7 @@ class Gate:
             # Join the formatted row and print without apostrophes
             print(" ".join(formatted_row))
 
-    def apply_matrix(self, qubit):
+    def apply_matrix(self, qubit: Qubit) -> Qubit:
         """
         Apply the gate matrix to a qubit and return the resulting qubit.
 
