@@ -7,8 +7,7 @@ def main():
     gate.print_matrix()
     print(gate.get_control_index())
     print(gate.get_target_index())
-
-
+    print(gate.is_control_gate())
 
 if __name__ == "__main__":
     main()

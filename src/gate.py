@@ -14,6 +14,22 @@ class Gate:
     
     The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
+
+    Example:
+    --------
+
+        >>> gate = Gate()
+        >>> gate.set_controlled_qubit_gate(1,2,"P",np.pi/2)
+        >>> gate.print_matrix()
+        >>> print(gate.get_control_index())
+        >>> print(gate.get_target_index())
+        >>> print(gate.is_control_gate())
+        Output:
+        [ 1.00 0.00 ]
+        [ 0.00 0.00+1.00j ]
+        1
+        2
+        True
     """
 
     # Define gate matrices as class constants
@@ -174,3 +190,21 @@ class Gate:
         """
         if control_qubit < 0 or target_qubit < 0:
             raise ValueError(INV_INDEX)
+
+    def is_control_gate(self) -> bool:
+        """
+        Returns true or false if the gate is a control gate.
+
+        :return: Boolean value if the gate is a control gate or not.
+        :rtype: Bool
+        """
+        return self.__is_control_gate
+    
+    def is_swap_gate(self) -> bool:
+        """
+        Returns true or false if the gate is a swap gate.
+
+        :return: Boolean value if the gate is a swap gate or not.
+        :rtype: Bool
+        """
+        return self.__is_swap_gate
