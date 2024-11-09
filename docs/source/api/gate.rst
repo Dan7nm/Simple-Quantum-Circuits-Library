@@ -4,7 +4,7 @@ Gate Class
 ----------
 
 
-.. autoclass:: gate.Gate
+.. automodule:: gate
    :members:
    :undoc-members:
    :show-inheritance:

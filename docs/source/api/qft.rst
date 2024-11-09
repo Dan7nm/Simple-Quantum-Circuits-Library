@@ -3,7 +3,7 @@ QFT Class
 ---------
 
 
-.. autoclass:: qft.QFT
+.. automodule:: qft
    :members:
    :undoc-members:
    :show-inheritance:

@@ -4,7 +4,7 @@ Multi Qubit Class
 -----------------
 
 
-.. autoclass:: multi_qubit.MultiQubit
+.. automodule:: multi_qubit
    :members:
    :undoc-members:
    :show-inheritance:

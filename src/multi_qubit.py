@@ -1,6 +1,7 @@
 import numpy as np
 from qubit import Qubit
 from typing import List
+from numpy.typing import NDArray
 
 EPSILON = 1e-10
 class MultiQubit:
@@ -148,7 +149,7 @@ class MultiQubit:
         """
         return self.__number_of_qubits
     
-    def get_tensor_vector(self) -> np.ndarray:
+    def get_tensor_vector(self) -> NDArray[np.complex128]:
         """
         Get the tensor product vector.
 
@@ -157,7 +158,7 @@ class MultiQubit:
         """
         return self.__tensor_vector
     
-    def __tensor_product(self,vec1: np.ndarray,vec2: np.ndarray,num_of_elems: int) -> np.ndarray:
+    def __tensor_product(self,vec1: NDArray[np.complex128],vec2: NDArray[np.complex128],num_of_elems: int) -> NDArray[np.complex128]:
         """
         Compute the tensor product of two vectors.
 

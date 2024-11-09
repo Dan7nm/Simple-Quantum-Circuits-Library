@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Tuple
+from numpy.typing import NDArray
 
 EPSILON = 1e-10
 
@@ -87,7 +88,7 @@ class Qubit:
         """
         return self.__beta
     
-    def get_vector(self) -> np.ndarray:
+    def get_vector(self) -> NDArray[np.complex128]:
         """
         Returns the qubit in vector form.
 

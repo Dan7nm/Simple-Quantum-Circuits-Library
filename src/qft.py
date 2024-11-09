@@ -1,5 +1,5 @@
 import numpy as np
-from gate import SingleQubitGate
+from gate import Gate
 from circuit import Circuit
 
 class QFT:
@@ -73,12 +73,12 @@ class QFT:
         :return: The quantum state after applying QFT
         :rtype: MultiQubit
         """
-        HGate = SingleQubitGate('H')
-        IGate = SingleQubitGate('I')
+        HGate = Gate('H')
+        IGate = Gate('I')
 
         current_qubit_tensor = self.__qubit_tensor
         for qubit_index in range(self.__number_of_qubits):
-            gate_tensor = GateTensor()
+            gate_tensor = Circuit()
             for index in range(self.__number_of_qubits):
                 if index == qubit_index:
                     # Apply the hadamard gate:
@@ -88,10 +88,10 @@ class QFT:
                     gate_tensor.add_single_qubit_gate(IGate)
             current_qubit_tensor = gate_tensor.apply_operator(current_qubit_tensor)
             self.__matrix = np.matmul(self.__matrix, gate_tensor.get_matrix())
-            gate_tensor = GateTensor()
+            gate_tensor = Circuit()
             for gate_index in range(2, self.__number_of_qubits + 1 - qubit_index):
                 phase = 2 * np.pi / (2**gate_index)
-                PGate = SingleQubitGate('P', phase)
+                PGate = Gate('P', phase)
                 gate_tensor.add_controlled_gate(gate_index - 1, qubit_index, current_qubit_tensor, PGate)
                 current_qubit_tensor = gate_tensor.apply_operator(current_qubit_tensor)
                 self.__matrix = np.matmul(self.__matrix, gate_tensor.get_matrix())

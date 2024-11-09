@@ -4,7 +4,7 @@ Circuit Class
 -------------
 
 
-.. autoclass:: circuit.Circuit
+.. automodule:: circuit
    :members:
    :undoc-members:
    :show-inheritance:
