@@ -10,6 +10,17 @@ EPSILON = 1e-10
 
 class Gate:
     """
+    :ivar gate_matrix: A two by two matrix representing the gate operation.
+    :vartype gate_matrix: np.ndarray
+    :ivar target_qubit: The index of a target qubit in case of a controlled gate.
+    :vartype target_qubit: int
+    :ivar control_qubit: The index of a control qubit in case of a controlled gate.
+    :vartype control_qubit: int
+    :ivar is_control_gate: Variable that stores a bolean value if the gate is a controlled gate or not.
+    :vartype is_control_gate: bool
+    :ivar is_swap_gate: Variable that stores a bolean value if the gate is a swap gate or not.
+    :vartype is_swap_gate: bool
+
     A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.
     
     The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H), a controlled qubit gate, 
