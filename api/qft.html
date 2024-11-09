@@ -16,6 +16,7 @@
       <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,7 +51,14 @@
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">QFT Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">QFT Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#qft.QFT"><code class="docutils literal notranslate"><span class="pre">QFT</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#qft.QFT.get_result"><code class="docutils literal notranslate"><span class="pre">QFT.get_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qft.QFT.print_operator"><code class="docutils literal notranslate"><span class="pre">QFT.print_operator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -80,8 +88,72 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="qft-class">
-<h1>QFT Class<a class="headerlink" href="#qft-class" title="Permalink to this heading"></a></h1>
+  <section id="module-qft">
+<span id="qft-class"></span><h1>QFT Class<a class="headerlink" href="#module-qft" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="qft.QFT">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">qft.</span></span><span class="sig-name descname"><span class="pre">QFT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#qft.QFT" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>__qubit_tensor</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – The input quantum state to transform</p></li>
+<li><p><strong>__number_of_qubits</strong> (<em>int</em>) – Number of qubits in the system</p></li>
+<li><p><strong>__matrix</strong> (<em>numpy.ndarray</em>) – The full QFT transformation matrix</p></li>
+<li><p><strong>__result_qubit_tensor</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – The result of applying QFT to the input state</p></li>
+</ul>
+</dd>
+</dl>
+<p>Quantum Fourier Transform implementation.</p>
+<p>This class implements the Quantum Fourier Transform (QFT) algorithm, which is a quantum
+version of the discrete Fourier transform. The QFT is a crucial component in many quantum
+algorithms including Shor’s factoring algorithm and quantum phase estimation.</p>
+<p>The QFT transform is defined as:</p>
+<div class="math notranslate nohighlight">
+\[|j⟩ → \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{i\frac{2\pi jk}{N}} |k⟩\]</div>
+<p>where N = 2^n for n qubits.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit</span> <span class="kn">import</span> <span class="n">Qubit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubit_tensor</span> <span class="kn">import</span> <span class="n">MultiQubit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create a 2-qubit state |00⟩</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Apply QFT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qft</span> <span class="o">=</span> <span class="n">QFT</span><span class="p">(</span><span class="n">qt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">qft</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="qft.QFT.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qft.QFT.get_result" title="Permalink to this definition"></a></dt>
+<dd><p>Get the result of the QFT computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The quantum state after applying QFT</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qft.QFT.print_operator">
+<span class="sig-name descname"><span class="pre">print_operator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#qft.QFT.print_operator" title="Permalink to this definition"></a></dt>
+<dd><p>Print the complete QFT operator matrix.</p>
+<p>This method prints the matrix representation of the entire QFT operation,
+which is the product of all Hadamard and controlled phase rotation gates
+applied during the transform.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
 </section>
 
 
