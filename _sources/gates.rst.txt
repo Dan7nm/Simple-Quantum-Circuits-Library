@@ -129,8 +129,39 @@ The Phase Shift gate is important in many quantum algorithms where phase manipul
 Two Qubit Gates
 ---------------
 
-CNOT Gate
-~~~~~~~~~
+The controlled-U gate, denoted as 'CU', is a general construction that applies the single-qubit unitary transformation U on the target qubit only if the control qubit is in the :math:`|1⟩` state. 
+
+In a two qubit system where the first qubit is the control qubit and the second qubit is the target qubit, the dirac notation will be as follows:
+
+.. math::
+
+   CU = |0⟩⟨0| \otimes I + |1⟩⟨1| \otimes U
+
+Where 'I' is the identity matrix. This means that if the control qubit is in the :math:`|0⟩` state, the target qubit remains unchanged, while if the control qubit is in the :math:`|1⟩` state, the transformation 'U' is applied to the target qubit.
+
+In a general case where the control qubit is the i-th qubit and the target is the j qubit, the dirac notation will be as follows:
+
+.. math::
+
+   CU = I ^{\otimes i-1} \otimes |0⟩⟨0| \otimes I ^{\otimes l} \otimes I \otimes I ^{\otimes m}  +   I ^{\otimes i-1} \otimes |1⟩⟨1| \otimes I ^{\otimes l} \otimes U \otimes I ^{\otimes m} 
+
+Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit.
+
+The projection matrix :math:`|0⟩⟨0|` is applied on the i-th qubit in this tensor product and the identity matrix is applied on the j-th qubit. If the control qubit is in :math:`|0⟩` state than j-th qubit is unchanged. However, if the control qubit is in :math:`|1⟩` state then the projection matrix is applied :math:`|1⟩⟨1|` thus unitary Matrix U is applied on the j-th qubit.
+
+Matrix representation for a controlled-U gate:
+
+.. math::
+
+   CU = \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 \\
+            0 & 0 & u_{00} & u_{01} \\
+            0 & 0 & u_{10} & u_{11}
+   \end{pmatrix}
+
+CNOT Gate (Controlled X Gate)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the :math:`|1⟩` state. If the control qubit is in the :math:`|0⟩` state, the target qubit remains unchanged.
 
@@ -208,6 +239,8 @@ Swap Gate
 ~~~~~~~~~
 The Swap gate exchanges the states of two qubits.
 
+The matrix representation for a two qubit system is as follows:
+
 .. math::
 
    SWAP = \begin{pmatrix}
@@ -219,6 +252,13 @@ The Swap gate exchanges the states of two qubits.
 
 It swaps the qubit states :math:`|01⟩` and :math:`|10⟩`, leaving :math:`|00⟩` and :math:`|11⟩` unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.
 
+In a general case for n qubit system, the dirac notation for a swap operation is as follows:
+
+.. math::
+
+   SWAP_{i,j} = \sum_{x_1, x_2, \dots, x_n \in \{0,1\}} | x_1 \dots x_j \dots x_i \dots x_n \rangle \langle x_1 \dots x_i \dots x_j \dots x_n |
+   
+
 Gates Summary
 -------------
 Here’s a summary of how each gate operates on the standard computational basis:
@@ -229,6 +269,7 @@ Here’s a summary of how each gate operates on the standard computational basis
 - **Z Gate**: Adds a phase of π to the :math:`|1⟩` state.
 - **H Gate**: Creates a superposition of :math:`|0⟩` and :math:`|1⟩`.
 - **R Gate**: Adds a phase of φ to the :math:`|1⟩` state.
+- **Controlled U Gate**: Applies the unitary matrix U on the target qubit state if the control qubit is :math:`|1⟩`.
 - **CNOT Gate**: Flips the target qubit state if the control qubit is :math:`|1⟩`.
 - **CNOT Gate**: Adds phase change target qubit state if the control qubit is :math:`|1⟩`.
 - **Swap Gate**: Exchanges the states of two qubits.

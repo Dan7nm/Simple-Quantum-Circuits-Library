@@ -57,7 +57,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#two-qubit-gates">Two Qubit Gates</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cnot-gate">CNOT Gate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cnot-gate-controlled-x-gate">CNOT Gate (Controlled X Gate)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#controlled-z-gate">Controlled Z Gate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#swap-gate">Swap Gate</a></li>
 </ul>
@@ -171,8 +171,26 @@ i &amp; 0
 </section>
 <section id="two-qubit-gates">
 <h2>Two Qubit Gates<a class="headerlink" href="#two-qubit-gates" title="Permalink to this heading"></a></h2>
-<section id="cnot-gate">
-<h3>CNOT Gate<a class="headerlink" href="#cnot-gate" title="Permalink to this heading"></a></h3>
+<p>The controlled-U gate, denoted as ‘CU’, is a general construction that applies the single-qubit unitary transformation U on the target qubit only if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
+<p>In a two qubit system where the first qubit is the control qubit and the second qubit is the target qubit, the dirac notation will be as follows:</p>
+<div class="math notranslate nohighlight">
+\[CU = |0⟩⟨0| \otimes I + |1⟩⟨1| \otimes U\]</div>
+<p>Where ‘I’ is the identity matrix. This means that if the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged, while if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, the transformation ‘U’ is applied to the target qubit.</p>
+<p>In a general case where the control qubit is the i-th qubit and the target is the j qubit, the dirac notation will be as follows:</p>
+<div class="math notranslate nohighlight">
+\[CU = I ^{\otimes i-1} \otimes |0⟩⟨0| \otimes I ^{\otimes l} \otimes I \otimes I ^{\otimes m}  +   I ^{\otimes i-1} \otimes |1⟩⟨1| \otimes I ^{\otimes l} \otimes U \otimes I ^{\otimes m}\]</div>
+<p>Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit.</p>
+<p>The projection matrix <span class="math notranslate nohighlight">\(|0⟩⟨0|\)</span> is applied on the i-th qubit in this tensor product and the identity matrix is applied on the j-th qubit. If the control qubit is in <span class="math notranslate nohighlight">\(|0⟩\)</span> state than j-th qubit is unchanged. However, if the control qubit is in <span class="math notranslate nohighlight">\(|1⟩\)</span> state then the projection matrix is applied <span class="math notranslate nohighlight">\(|1⟩⟨1|\)</span> thus unitary Matrix U is applied on the j-th qubit.</p>
+<p>Matrix representation for a controlled-U gate:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}CU = \begin{pmatrix}
+         1 &amp; 0 &amp; 0 &amp; 0 \\
+         0 &amp; 1 &amp; 0 &amp; 0 \\
+         0 &amp; 0 &amp; u_{00} &amp; u_{01} \\
+         0 &amp; 0 &amp; u_{10} &amp; u_{11}
+\end{pmatrix}\end{split}\]</div>
+<section id="cnot-gate-controlled-x-gate">
+<h3>CNOT Gate (Controlled X Gate)<a class="headerlink" href="#cnot-gate-controlled-x-gate" title="Permalink to this heading"></a></h3>
 <p>The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. If the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged.</p>
 <p>The matrix representation of the CNOT gate is:</p>
 <div class="math notranslate nohighlight">
@@ -252,6 +270,7 @@ i &amp; 0
 <section id="swap-gate">
 <h3>Swap Gate<a class="headerlink" href="#swap-gate" title="Permalink to this heading"></a></h3>
 <p>The Swap gate exchanges the states of two qubits.</p>
+<p>The matrix representation for a two qubit system is as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}SWAP = \begin{pmatrix}
 1 &amp; 0 &amp; 0 &amp; 0 \\
@@ -260,6 +279,9 @@ i &amp; 0
 0 &amp; 0 &amp; 0 &amp; 1
 \end{pmatrix}\end{split}\]</div>
 <p>It swaps the qubit states <span class="math notranslate nohighlight">\(|01⟩\)</span> and <span class="math notranslate nohighlight">\(|10⟩\)</span>, leaving <span class="math notranslate nohighlight">\(|00⟩\)</span> and <span class="math notranslate nohighlight">\(|11⟩\)</span> unchanged. The Swap gate is useful for rearranging qubits within quantum circuits.</p>
+<p>In a general case for n qubit system, the dirac notation for a swap operation is as follows:</p>
+<div class="math notranslate nohighlight">
+\[SWAP_{i,j} = \sum_{x_1, x_2, \dots, x_n \in \{0,1\}} | x_1 \dots x_j \dots x_i \dots x_n \rangle \langle x_1 \dots x_i \dots x_j \dots x_n |\]</div>
 </section>
 </section>
 <section id="gates-summary">
@@ -272,6 +294,7 @@ i &amp; 0
 <li><p><strong>Z Gate</strong>: Adds a phase of π to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
 <li><p><strong>H Gate</strong>: Creates a superposition of <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
 <li><p><strong>R Gate</strong>: Adds a phase of φ to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
+<li><p><strong>Controlled U Gate</strong>: Applies the unitary matrix U on the target qubit state if the control qubit is <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
 <li><p><strong>CNOT Gate</strong>: Flips the target qubit state if the control qubit is <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
 <li><p><strong>CNOT Gate</strong>: Adds phase change target qubit state if the control qubit is <span class="math notranslate nohighlight">\(|1⟩\)</span>.</p></li>
 <li><p><strong>Swap Gate</strong>: Exchanges the states of two qubits.</p></li>

@@ -49,7 +49,18 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="qubit.html">Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Gate Class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#gate.Gate"><code class="docutils literal notranslate"><span class="pre">Gate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.apply_matrix"><code class="docutils literal notranslate"><span class="pre">Gate.apply_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.get_matrix"><code class="docutils literal notranslate"><span class="pre">Gate.get_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.print_matrix"><code class="docutils literal notranslate"><span class="pre">Gate.print_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.set_controlled_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Gate.set_controlled_qubit_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.set_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Gate.set_single_qubit_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.set_swap_gate"><code class="docutils literal notranslate"><span class="pre">Gate.set_swap_gate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
 </ul>
@@ -83,6 +94,67 @@
              
   <section id="gate-class">
 <h1>Gate Class<a class="headerlink" href="#gate-class" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gate.Gate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate.</span></span><span class="sig-name descname"><span class="pre">Gate</span></span><a class="headerlink" href="#gate.Gate" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to represent quantum gate. The user can choose a single qubit gate or a controlled qubit gate</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.apply_matrix">
+<span class="sig-name descname"><span class="pre">apply_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></span><a class="headerlink" href="#gate.Gate.apply_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Apply the gate matrix to a qubit and return the resulting qubit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit</strong> (<a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><em>Qubit</em></a>) – The input qubit</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The resulting qubit after applying the gate</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit">Qubit</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.get_matrix">
+<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gate.Gate.get_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Get the gate matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The matrix representation of the gate</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.print_matrix">
+<span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.print_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Print the gate matrix with proper formatting, removing apostrophes.
+The matrix is displayed with 2 decimal precision, and values close to zero are rounded.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.set_controlled_qubit_gate">
+<span class="sig-name descname"><span class="pre">set_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_controlled_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.set_single_qubit_gate">
+<span class="sig-name descname"><span class="pre">set_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Set the quantum gate matrix based on the specified gate type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.set_swap_gate">
+<span class="sig-name descname"><span class="pre">set_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_swap_gate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 
 

@@ -4,7 +4,7 @@ Gate Class
 ----------
 
 
-.. autoclass:: gate.SingleQubitGate
+.. autoclass:: gate.Gate
    :members:
    :undoc-members:
    :show-inheritance:
