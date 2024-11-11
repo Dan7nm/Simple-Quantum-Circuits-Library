@@ -53,6 +53,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#gate.Gate"><code class="docutils literal notranslate"><span class="pre">Gate</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#gate.Gate.apply_matrix"><code class="docutils literal notranslate"><span class="pre">Gate.apply_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate.Gate.get_control_index"><code class="docutils literal notranslate"><span class="pre">Gate.get_control_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gate.Gate.get_gate_type"><code class="docutils literal notranslate"><span class="pre">Gate.get_gate_type()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate.Gate.get_matrix"><code class="docutils literal notranslate"><span class="pre">Gate.get_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate.Gate.get_target_index"><code class="docutils literal notranslate"><span class="pre">Gate.get_target_index()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#gate.Gate.is_control_gate"><code class="docutils literal notranslate"><span class="pre">Gate.is_control_gate()</span></code></a></li>
@@ -66,7 +67,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
 </ul>
 </li>
 </ul>
@@ -106,15 +106,19 @@
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gate_matrix</strong> (<em>np.ndarray</em>) – A two by two matrix representing the gate operation.</p></li>
+<li><p><strong>gate_type</strong> – The gate type of this gate (e.g., I, X, Y, Z, H, SWAP)</p></li>
 <li><p><strong>target_qubit</strong> (<em>int</em>) – The index of a target qubit in case of a controlled gate.</p></li>
 <li><p><strong>control_qubit</strong> (<em>int</em>) – The index of a control qubit in case of a controlled gate.</p></li>
 <li><p><strong>is_control_gate</strong> (<em>bool</em>) – Variable that stores a bolean value if the gate is a controlled gate or not.</p></li>
 <li><p><strong>is_swap_gate</strong> (<em>bool</em>) – Variable that stores a bolean value if the gate is a swap gate or not.</p></li>
 </ul>
 </dd>
+<dt class="field-even">Vartype<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
 </dl>
 <p>A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.</p>
-<p>The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H), a controlled qubit gate, 
+<p>The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
 or a swap gate, allowing for versatile operations on qubits in a quantum system.</p>
 <section id="example">
 <h2>Example:<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
@@ -164,6 +168,14 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 <dd class="field-odd"><p><strong>ValueError</strong> – If the gate is not a control or swap gate.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gate.Gate.get_gate_type">
+<span class="sig-name descname"><span class="pre">get_gate_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gate.Gate.get_gate_type" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the gate type of this gate (e.g., I, X, Y, Z, H, SWAP)
+:return: The gate type
+:rtype: str</p>
 </dd></dl>
 
 <dl class="py method">
@@ -270,13 +282,13 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.set_swap_gate">
-<span class="sig-name descname"><span class="pre">set_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_swap_gate" title="Permalink to this definition"></a></dt>
-<dd><p>Configure a swap gate with the specified control and target qubits.</p>
+<span class="sig-name descname"><span class="pre">set_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_swap_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Configure a swap gate with the specified first and second qubits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>control_qubit</strong> (<em>int</em>) – Index of the control qubit.</p></li>
-<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the target qubit.</p></li>
+<li><p><strong>first_qubit</strong> (<em>int</em>) – Index of the first qubit to swap with.</p></li>
+<li><p><strong>second_qubit</strong> (<em>int</em>) – Index of the second qubit to swap with.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>

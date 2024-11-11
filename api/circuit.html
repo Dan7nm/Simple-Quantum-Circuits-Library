@@ -16,11 +16,9 @@
       <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
       <script src="../_static/doctools.js?v=888ff710"></script>
       <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="QFT Class" href="qft.html" />
     <link rel="prev" title="Gate Class" href="gate.html" /> 
 </head>
 
@@ -53,16 +51,25 @@
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Circuit Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#circuit.Circuit"><code class="docutils literal notranslate"><span class="pre">Circuit</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.add_controlled_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.add_controlled_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.add_controlled_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.add_controlled_qubit_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.add_layer"><code class="docutils literal notranslate"><span class="pre">Circuit.add_layer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.add_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.add_single_qubit_gate()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.apply_operator"><code class="docutils literal notranslate"><span class="pre">Circuit.apply_operator()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.get_matrix"><code class="docutils literal notranslate"><span class="pre">Circuit.get_matrix()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.print_matrix"><code class="docutils literal notranslate"><span class="pre">Circuit.print_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.add_swap_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.add_swap_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">Circuit.apply_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.compute_circuit"><code class="docutils literal notranslate"><span class="pre">Circuit.compute_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">Circuit.load_qft_preset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.print_array"><code class="docutils literal notranslate"><span class="pre">Circuit.print_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.print_circuit"><code class="docutils literal notranslate"><span class="pre">Circuit.print_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.print_operator_matrix"><code class="docutils literal notranslate"><span class="pre">Circuit.print_operator_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.remove_last_layer"><code class="docutils literal notranslate"><span class="pre">Circuit.remove_last_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.remove_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.remove_single_qubit_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.remove_two_qubit_gate"><code class="docutils literal notranslate"><span class="pre">Circuit.remove_two_qubit_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.reset_circuit"><code class="docutils literal notranslate"><span class="pre">Circuit.reset_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.Circuit.update_multi_qubit"><code class="docutils literal notranslate"><span class="pre">Circuit.update_multi_qubit()</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="qft.html">QFT Class</a></li>
 </ul>
 </li>
 </ul>
@@ -98,15 +105,6 @@
 <dt class="sig sig-object py" id="circuit.Circuit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">Circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>__number_of_compatible_qubits</strong> (<em>int</em>) – The number of qubits this gate operator is compatible with.</p></li>
-<li><p><strong>__number_of_layers</strong> (<em>int</em>) – The number of layers/iterations in this circuit.</p></li>
-<li><p><strong>__circuit</strong> (<em>numpy.ndarray</em>) – Initializes numpy array of dimension 1 by number of qubits and initializes all values to “I”. This represents one layer without any gates.</p></li>
-</ul>
-</dd>
-</dl>
 <p>A class to represent a quantum circuit using quantum gates.</p>
 <p>The Circuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.</p>
 <section id="steps-for-circuit-building">
@@ -117,95 +115,216 @@
 <li><p>Move to the next layer and repeat step 2.</p></li>
 <li><p>After finishing designing the whole circuit we compute the final matrix. This is done by computing the Krorecker product in each layer and multiplying all the matrices of all layers.</p></li>
 </ol>
+</section>
+<section id="example-usage">
+<h2>Example Usage:<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span> <span class="o">=</span> <span class="n">Circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_controlled_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_layer</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_swap_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">compute_circuit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">print_circuit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">apply_circuit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="go">Tensor product in basis state form: |11100⟩</span>
+<span class="go">Circuit Diagram:</span>
+<span class="go">q0: ─[CX]──[X]──</span>
+<span class="go">q1: ──●0────────</span>
+<span class="go">q2: ──⨉─────────</span>
+<span class="go">q3: ───────[X]──</span>
+<span class="go">q4: ──⨉─────────</span>
+<span class="go">Tensor product in basis state form: |11011⟩</span>
+</pre></div>
+</div>
 <dl class="py method">
-<dt class="sig sig-object py" id="circuit.Circuit.add_controlled_gate">
-<span class="sig-name descname"><span class="pre">add_controlled_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qubit_tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.add_controlled_gate" title="Permalink to this definition"></a></dt>
-<dd><p>Adds a controlled-U gate to the tensor operator based on the specified control and target qubits.</p>
-<p>The controlled-U gate, denoted as ‘CU’, is a general construction that applies the single-qubit unitary transformation U on the target qubit only if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. 
-Mathematically, this operation can be represented as:</p>
-<div class="math notranslate nohighlight">
-\[CU = |0⟩⟨0| \otimes I + |1⟩⟨1| \otimes U\]</div>
-<p>where ‘I’ is the identity matrix. This means that if the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged, while if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, the transformation ‘U’ is applied to the target qubit.</p>
-<p>Example matrix representation for a controlled-U gate:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}CU = \begin{pmatrix}
-        1 &amp; 0 &amp; 0 &amp; 0 \\
-        0 &amp; 1 &amp; 0 &amp; 0 \\
-        0 &amp; 0 &amp; u_{00} &amp; u_{01} \\
-        0 &amp; 0 &amp; u_{10} &amp; u_{11}
-\end{pmatrix}\end{split}\]</div>
+<dt class="sig sig-object py" id="circuit.Circuit.add_controlled_qubit_gate">
+<span class="sig-name descname"><span class="pre">add_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.add_controlled_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Add a controlled quantum gate to the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>control_qubit</strong> (<em>int</em>) – The index of the control qubit.</p></li>
-<li><p><strong>target_qubit</strong> (<em>int</em>) – The index of the target qubit where the gate will be applied if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p></li>
-<li><p><strong>qubit_tensor</strong> (<em>QubitTensor</em>) – The qubit tensor to which the controlled gate will be added.</p></li>
-<li><p><strong>gate</strong> (<em>SingleQubitGate</em>) – The single qubit gate to be conditionally applied to the target qubit.</p></li>
+<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the target qubit</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be added</p></li>
+<li><p><strong>control_qubit</strong> (<em>int</em>) – Index of the control qubit</p></li>
+<li><p><strong>gate_type</strong> (<em>str</em>) – Type of quantum gate (‘X’, ‘Y’, ‘Z’, ‘H’, ‘P’)</p></li>
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase angle for phase gates (default: 0.0)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the control or target qubit indices are invalid.</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit indices or layer index is invalid, or if cells are occupied</p>
 </dd>
 </dl>
-<p>This method constructs a controlled gate by using projection matrices on the control qubit. The resulting
-operator tensor will represent the control and target qubits, allowing the gate operation to be applied 
-conditionally based on the control qubit’s state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.add_layer">
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.add_layer" title="Permalink to this definition"></a></dt>
+<dd><p>Add a new empty layer to the circuit.</p>
+<p>The new layer is initialized with None values, representing identity gates.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.Circuit.add_single_qubit_gate">
-<span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.add_single_qubit_gate" title="Permalink to this definition"></a></dt>
-<dd><p>Adds a single qubit gate to a specified qubit in the current layer.</p>
+<span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.add_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Add a single qubit gate to the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gate</strong> (<em>SingleQubitGate</em>) – A single qubit gate to be added. Represented as a string: (‘I’, ‘X’, ‘Y’, ‘Z’, ‘H’, or ‘P’)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the qubit to apply the gate to</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be added</p></li>
+<li><p><strong>gate_type</strong> (<em>str</em>) – Type of quantum gate (‘X’, ‘Y’, ‘Z’, ‘H’, ‘P’)</p></li>
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase angle for phase gates (default: 0.0)</p></li>
+</ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the gate matrix is incompatible with the current operator tensor.</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit index or layer index is invalid, or if cell is occupied</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="circuit.Circuit.apply_operator">
-<span class="sig-name descname"><span class="pre">apply_operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_tensor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.apply_operator" title="Permalink to this definition"></a></dt>
-<dd><p>Applies the gate operator (stored in the tensor) to the given qubit tensor.</p>
-<p>The gate operator is applied to the input qubit tensor, and the result is returned as a new qubit tensor.</p>
+<dt class="sig sig-object py" id="circuit.Circuit.add_swap_gate">
+<span class="sig-name descname"><span class="pre">add_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.add_swap_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Add a SWAP gate between two qubits in the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>qubit_tensor</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – The qubit tensor to apply the operator on.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A new MultiQubit that results from applying the operator to the input tensor.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>first_qubit</strong> (<em>int</em>) – Index of the first qubit to swap</p></li>
+<li><p><strong>second_qubit</strong> (<em>int</em>) – Index of the second qubit to swap</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be added</p></li>
+</ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the number of qubits in the qubit tensor does not match the number of qubits the gate operator is compatible with.</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit indices or layer index is invalid, or if cells are occupied</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="circuit.Circuit.get_matrix">
-<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.get_matrix" title="Permalink to this definition"></a></dt>
-<dd><p>Get the matrix of all gate tensor products.</p>
+<dt class="sig sig-object py" id="circuit.Circuit.apply_circuit">
+<span class="sig-name descname"><span class="pre">apply_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></span><a class="headerlink" href="#circuit.Circuit.apply_circuit" title="Permalink to this definition"></a></dt>
+<dd><p>Apply the circuit operator to the input quantum state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The matrix representation of the final operator.</p>
+<dd class="field-odd"><p>Resulting quantum state after applying the circuit</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>numpy.ndarray</p>
+<dd class="field-even"><p><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="circuit.Circuit.print_matrix">
-<span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.print_matrix" title="Permalink to this definition"></a></dt>
-<dd><p>Prints the current operator tensor matrix to the console.</p>
-<p>This function is useful for debugging and visualizing the gate operator.</p>
+<dt class="sig sig-object py" id="circuit.Circuit.compute_circuit">
+<span class="sig-name descname"><span class="pre">compute_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.compute_circuit" title="Permalink to this definition"></a></dt>
+<dd><p>Compute the final unitary matrix representing the entire circuit.</p>
+<p>This method:
+1. Fills empty cells with identity gates
+2. Computes the matrix for each layer
+3. Multiplies all layer matrices to get the final circuit operator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.load_qft_preset">
+<span class="sig-name descname"><span class="pre">load_qft_preset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.load_qft_preset" title="Permalink to this definition"></a></dt>
+<dd><p>This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.print_array">
+<span class="sig-name descname"><span class="pre">print_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.print_array" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.print_circuit">
+<span class="sig-name descname"><span class="pre">print_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.print_circuit" title="Permalink to this definition"></a></dt>
+<dd><p>Print a text-based visualization of the quantum circuit.</p>
+<p>The visualization includes:
+- Horizontal lines (─) representing qubit wires
+- Single qubit gates with their type (H, X, Y, Z, P)
+- Control points (●) for controlled gates
+- Target points (⊕ for X gates, ◯ for others)
+- Swap gates (⨉)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.print_operator_matrix">
+<span class="sig-name descname"><span class="pre">print_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.print_operator_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Print the final matrix that is applid on the state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.remove_last_layer">
+<span class="sig-name descname"><span class="pre">remove_last_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.remove_last_layer" title="Permalink to this definition"></a></dt>
+<dd><p>Remove the last layer from the circuit.</p>
+<p>Reduces the number of layers by one and removes all gates in the last layer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.remove_single_qubit_gate">
+<span class="sig-name descname"><span class="pre">remove_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.remove_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Remove a single qubit gate from the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit_index</strong> (<em>int</em>) – Index of the qubit to remove the gate from</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be removed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit index or layer index is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.remove_two_qubit_gate">
+<span class="sig-name descname"><span class="pre">remove_two_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.remove_two_qubit_gate" title="Permalink to this definition"></a></dt>
+<dd><p>Remove a two-qubit gate (controlled or SWAP) from the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the target qubit</p></li>
+<li><p><strong>control_qubit</strong> (<em>int</em>) – Index of the control qubit</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be removed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit indices or layer index is invalid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.reset_circuit">
+<span class="sig-name descname"><span class="pre">reset_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.reset_circuit" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the circuit to its initial empty state.</p>
+<p>Clears all gates and returns to a single empty layer with identity gates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.update_multi_qubit">
+<span class="sig-name descname"><span class="pre">update_multi_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.Circuit.update_multi_qubit" title="Permalink to this definition"></a></dt>
+<dd><p>Update the input state of the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>multi_qubit</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – New quantum state to use as input</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the new state has a different number of qubits</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -218,7 +337,6 @@ conditionally based on the control qubit’s state.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="gate.html" class="btn btn-neutral float-left" title="Gate Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="qft.html" class="btn btn-neutral float-right" title="QFT Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

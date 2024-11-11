@@ -77,16 +77,21 @@
  | <a href="#C"><strong>C</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/circuit.html#circuit.Circuit.add_controlled_gate">add_controlled_gate() (circuit.Circuit method)</a>
+      <li><a href="api/circuit.html#circuit.Circuit.add_controlled_qubit_gate">add_controlled_qubit_gate() (circuit.Circuit method)</a>
+</li>
+      <li><a href="api/circuit.html#circuit.Circuit.add_layer">add_layer() (circuit.Circuit method)</a>
 </li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.add_qubit">add_qubit() (multi_qubit.MultiQubit method)</a>
 </li>
@@ -94,9 +99,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/circuit.html#circuit.Circuit.add_single_qubit_gate">add_single_qubit_gate() (circuit.Circuit method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.apply_matrix">apply_matrix() (gate.Gate method)</a>
+      <li><a href="api/circuit.html#circuit.Circuit.add_swap_gate">add_swap_gate() (circuit.Circuit method)</a>
 </li>
-      <li><a href="api/circuit.html#circuit.Circuit.apply_operator">apply_operator() (circuit.Circuit method)</a>
+      <li><a href="api/circuit.html#circuit.Circuit.apply_circuit">apply_circuit() (circuit.Circuit method)</a>
+</li>
+      <li><a href="api/gate.html#gate.Gate.apply_matrix">apply_matrix() (gate.Gate method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -114,6 +121,8 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/circuit.html#circuit.Circuit">Circuit (class in circuit)</a>
+</li>
+      <li><a href="api/circuit.html#circuit.Circuit.compute_circuit">compute_circuit() (circuit.Circuit method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -138,15 +147,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/circuit.html#circuit.Circuit.get_matrix">get_matrix() (circuit.Circuit method)</a>
-
-      <ul>
-        <li><a href="api/gate.html#gate.Gate.get_matrix">(gate.Gate method)</a>
+      <li><a href="api/gate.html#gate.Gate.get_gate_type">get_gate_type() (gate.Gate method)</a>
 </li>
-      </ul></li>
+      <li><a href="api/gate.html#gate.Gate.get_matrix">get_matrix() (gate.Gate method)</a>
+</li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.get_number_of_qubits">get_number_of_qubits() (multi_qubit.MultiQubit method)</a>
-</li>
-      <li><a href="api/qft.html#qft.QFT.get_result">get_result() (qft.QFT method)</a>
 </li>
       <li><a href="api/gate.html#gate.Gate.get_target_index">get_target_index() (gate.Gate method)</a>
 </li>
@@ -169,6 +174,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/circuit.html#circuit.Circuit.load_qft_preset">load_qft_preset() (circuit.Circuit method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -181,8 +194,6 @@
         <li><a href="api/gate.html#module-gate">gate</a>
 </li>
         <li><a href="api/multi_qubit.html#module-multi_qubit">multi_qubit</a>
-</li>
-        <li><a href="api/qft.html#module-qft">qft</a>
 </li>
         <li><a href="api/qubit.html#module-qubit">qubit</a>
 </li>
@@ -204,13 +215,13 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/circuit.html#circuit.Circuit.print_matrix">print_matrix() (circuit.Circuit method)</a>
-
-      <ul>
-        <li><a href="api/gate.html#gate.Gate.print_matrix">(gate.Gate method)</a>
+      <li><a href="api/circuit.html#circuit.Circuit.print_array">print_array() (circuit.Circuit method)</a>
 </li>
-      </ul></li>
-      <li><a href="api/qft.html#qft.QFT.print_operator">print_operator() (qft.QFT method)</a>
+      <li><a href="api/circuit.html#circuit.Circuit.print_circuit">print_circuit() (circuit.Circuit method)</a>
+</li>
+      <li><a href="api/gate.html#gate.Gate.print_matrix">print_matrix() (gate.Gate method)</a>
+</li>
+      <li><a href="api/circuit.html#circuit.Circuit.print_operator_matrix">print_operator_matrix() (circuit.Circuit method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -231,24 +242,31 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    qft
-
-      <ul>
-        <li><a href="api/qft.html#module-qft">module</a>
-</li>
-      </ul></li>
-      <li><a href="api/qft.html#qft.QFT">QFT (class in qft)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
     qubit
 
       <ul>
         <li><a href="api/qubit.html#module-qubit">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/qubit.html#qubit.Qubit">Qubit (class in qubit)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/circuit.html#circuit.Circuit.remove_last_layer">remove_last_layer() (circuit.Circuit method)</a>
+</li>
+      <li><a href="api/circuit.html#circuit.Circuit.remove_single_qubit_gate">remove_single_qubit_gate() (circuit.Circuit method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/circuit.html#circuit.Circuit.remove_two_qubit_gate">remove_two_qubit_gate() (circuit.Circuit method)</a>
+</li>
+      <li><a href="api/circuit.html#circuit.Circuit.reset_circuit">reset_circuit() (circuit.Circuit method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -265,6 +283,14 @@
       <li><a href="api/gate.html#gate.Gate.set_single_qubit_gate">set_single_qubit_gate() (gate.Gate method)</a>
 </li>
       <li><a href="api/gate.html#gate.Gate.set_swap_gate">set_swap_gate() (gate.Gate method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/circuit.html#circuit.Circuit.update_multi_qubit">update_multi_qubit() (circuit.Circuit method)</a>
 </li>
   </ul></td>
 </tr></table>
