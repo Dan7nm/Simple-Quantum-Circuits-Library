@@ -12,6 +12,8 @@ class Gate:
     """
     :ivar gate_matrix: A two by two matrix representing the gate operation.
     :vartype gate_matrix: np.ndarray
+    :ivar gate_type: The gate type of this gate (e.g., I, X, Y, Z, H, SWAP)
+    :vartype: str
     :ivar target_qubit: The index of a target qubit in case of a controlled gate.
     :vartype target_qubit: int
     :ivar control_qubit: The index of a control qubit in case of a controlled gate.
@@ -23,7 +25,7 @@ class Gate:
 
     A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.
     
-    The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H), a controlled qubit gate, 
+    The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
     Example:
@@ -59,6 +61,7 @@ class Gate:
         The initial configuration represents the identity gate, with no control or target qubits set.
         """
         self.__gate_matrix = np.identity(2, dtype=complex)
+        self.__gate_type = "I"
         self.__target_qubit = None
         self.__control_qubit = None
         self.__is_control_gate = False
@@ -75,6 +78,7 @@ class Gate:
         :raises ValueError: If the gate type is invalid.
         """
         self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__gate_type = gate_type
 
     def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -94,20 +98,22 @@ class Gate:
         self.__control_qubit, self.__target_qubit = control_qubit, target_qubit
         self.__is_control_gate = True
         self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__gate_type = gate_type
 
-    def set_swap_gate(self, control_qubit: int, target_qubit: int) -> None:
+    def set_swap_gate(self, first_qubit: int, second_qubit: int) -> None:
         """
-        Configure a swap gate with the specified control and target qubits.
+        Configure a swap gate with the specified first and second qubits.
 
-        :param control_qubit: Index of the control qubit.
-        :type control_qubit: int
-        :param target_qubit: Index of the target qubit.
-        :type target_qubit: int
+        :param first_qubit: Index of the first qubit to swap with.
+        :type first_qubit: int
+        :param second_qubit: Index of the second qubit to swap with.
+        :type second_qubit: int
         :raises ValueError: If indices are negative.
         """
-        self.__validate_indices(control_qubit, target_qubit)
-        self.__control_qubit, self.__target_qubit = control_qubit, target_qubit
+        self.__validate_indices(first_qubit, second_qubit)
+        self.__control_qubit, self.__target_qubit = first_qubit, second_qubit
         self.__is_swap_gate = True
+        self.__gate_type = "SWAP"
 
     def get_matrix(self) -> NDArray[np.complex128]:
         """
@@ -219,3 +225,11 @@ class Gate:
         :rtype: Bool
         """
         return self.__is_swap_gate
+    
+    def get_gate_type(self) -> str:
+        """
+        This function returns the gate type of this gate (e.g., I, X, Y, Z, H, SWAP)
+        :return: The gate type
+        :rtype: str
+        """
+        return self.__gate_type

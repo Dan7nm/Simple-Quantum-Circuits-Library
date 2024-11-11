@@ -10,5 +10,4 @@ This page lists all the classes used in this library.
    api/multi_qubit
    api/gate
    api/circuit
-   api/qft
 

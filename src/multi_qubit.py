@@ -80,8 +80,7 @@ class MultiQubit:
         2. Get the amplitude coefficients (α and β)
         3. Perform the tensor product operation
         """
-        new_tensor_vec = []
-        num_of_elements = self.__number_of_qubits * 2 
+        num_of_elements = len(self.__tensor_vector)
 
         new_qubit_vector = new_qubit.get_vector()
         self.__tensor_vector = self.__tensor_product(self.__tensor_vector,new_qubit_vector,num_of_elements)
