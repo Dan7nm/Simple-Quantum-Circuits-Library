@@ -56,7 +56,7 @@ class Gate:
 
     def __init__(self) -> None:
         """
-        Initialize the Gate object with an identity matrix.
+        Initialize the Gate object with an identity gate.
         
         The initial configuration represents the identity gate, with no control or target qubits set.
         """
@@ -233,3 +233,15 @@ class Gate:
         :rtype: str
         """
         return self.__gate_type
+    
+    def is_single_qubit_gate(self) -> bool:
+        """
+        This method returns if the gate is a single qubit gate or not.
+
+        :return: Returns boolean value if the gate is a single qubit gate.
+        :rtype: bool
+        """
+        if not self.__is_control_gate and not self.__is_swap_gate:
+            return True
+        else:
+            return False

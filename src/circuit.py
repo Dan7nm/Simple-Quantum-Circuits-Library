@@ -8,6 +8,8 @@ INV_LAYER_INDEX = "The layer index is invalid. The layer index should be between
 CELL_TAKEN = "This cell already has a gate assigned to it. Use the remove gate method to remove a gate."
 INV_INPUT = "The input state has a different number of qubits to that of this quantum circuit."
 COMP_CIRCUIT = "The circuit was not computed. Before applying a state you should compute the circuit and after every update to a gate."
+INV_NUM_QUBITS = "The number of qubits should be atleast 1."
+INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
 
 class Circuit:
     """
@@ -58,6 +60,8 @@ class Circuit:
     Tensor product in basis state form: |11011⟩
     """
     def __init__(self,number_of_qubits: int) -> None:
+        if number_of_qubits < 1:
+            raise ValueError(INV_NUM_QUBITS)
         self.__number_of_compatible_qubits = number_of_qubits
         self.__number_of_layers = 1
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
@@ -107,6 +111,9 @@ class Circuit:
         :type phi: float, optional
         :raises ValueError: If qubit indices or layer index is invalid, or if cells are occupied
         """
+        # Check that the control qubit and target qubits are different:
+        if target_qubit == control_qubit:
+            raise ValueError(INV_CTRL_TARG)
         # Check if layer and qubit indexes are valid and the cell is empty
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(target_qubit, layer_index)
@@ -132,6 +139,9 @@ class Circuit:
         :type layer_index: int
         :raises ValueError: If qubit indices or layer index is invalid, or if cells are occupied
         """
+        # Check that the first qubit and second qubits are different:
+        if first_qubit == second_qubit:
+            raise ValueError(INV_CTRL_TARG)
         # Check if layer and qubit indexes are valid and the cell is empty.
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(first_qubit, layer_index)
@@ -174,6 +184,9 @@ class Circuit:
         :type layer_index: int
         :raises ValueError: If qubit indices or layer index is invalid
         """
+        # Check that the control qubit and target qubits are different:
+        if target_qubit == control_qubit:
+            raise ValueError(INV_CTRL_TARG)
         # Check if layer and qubit indexes are valid and the cell is empty. 
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(target_qubit,layer_index, adding_gate = False)
@@ -251,6 +264,77 @@ class Circuit:
                     identity_gate.set_single_qubit_gate("I")
                     self.__circuit[layer_index][qubit_index] = identity_gate
 
+    def __compute_single_qubit_gates(self, layer_gates: NDArray) -> NDArray:
+        """
+        This function  computes all single qubit gates in one layer.
+
+        :param layer_gates: An array of all gates in the layer we want to compute.
+        :type layer_gates: NDArray
+        :return: The function returns the unitary matrix of that layer
+        :rtype: NDArray
+        """
+        result_matrix = np.ones((1,),dtype=complex)
+        identity_matrix = np.identity(2)
+
+        for gate in layer_gates:
+            # Check if current gate is a single qubit gate.
+            if gate.is_single_qubit_gate():
+                gate_matrix = gate.get_matrix()
+                # Compute the kronecker product of all single qubit gates
+                result_matrix = np.kron(result_matrix,gate_matrix)
+            else:
+                # If the gate is not a single qubit gate we compute the kronecker product with the identity matrix.
+                result_matrix = np.kron(result_matrix,identity_matrix)
+        
+        return result_matrix
+
+    def __compute_swap_gates(self,layer_gates: NDArray) -> NDArray:
+        """
+        This method  computes all swap gates in one layer.
+
+        :param layer_gates: An array of all gates in the layer we want to compute.
+        :type layer_gates: NDArray
+        :return: The function returns the unitary matrix of that layer
+        :rtype: NDArray
+        """
+
+
+
+    def __compute_controlled_gates(self,layer_gates: NDArray) -> NDArray:
+        """
+        This method  computes all controlled gates in one layer.
+
+        :param layer_gates: An array of all gates in the layer we want to compute.
+        :type layer_gates: NDArray
+        :return: The function returns the unitary matrix of that layer
+        :rtype: NDArray
+        """
+        proj_00_matrix = np.array([[1,0],[0,0]], dtype=complex)
+        proj_11_matrix = np.array([[0,0],[0,1]], dtype=complex)
+        identity_matrix = np.identity(2)
+
+        empty_array = np.ones((1,),dtype=complex)
+        list_of_matrices = np.array([empty_array])
+
+        for qubit_index,gate in enumerate(layer_gates):
+            gate_matrix = gate.get_matrix()
+            if gate.is_control_gate():
+                if qubit_index == gate.get_target_index():
+                    for matrix_index,matrix in enumerate(list_of_matrices):
+                        list_of_matrices[matrix_index] = np.kron()
+                        
+            # If not a control gate then we just compute the kronecker product with an identity matrix
+            else:
+                for matrix_index,matrix in enumerate(list_of_matrices):
+                        list_of_matrices[matrix_index] = np.kron(matrix,identity_matrix)
+
+        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits)
+        # Sum all matrices
+        for matrix in list_of_matrices:
+            result_matrix += matrix
+
+        return result_matrix
+
 
     def __compute_layer(self, layer_index: int) -> NDArray[np.complex128]:
         """
@@ -262,99 +346,20 @@ class Circuit:
         :rtype: NDArray[np.complex128]
         """
         # Get all gates in the current layer
-        layer = self.__circuit[layer_index]
-        processed_qubits = set()
-        matrices_to_multiply = []
+        layer_gates = self.__circuit[layer_index]
+
+        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits, dtype= complex)
         
-        # Process each gate in the layer
-        for qubit_index, gate in enumerate(layer):
-            # Skip if this qubit has already been processed (happens with controlled gates)
-            if qubit_index in processed_qubits:
-                continue
-                
-            if gate.is_control_gate():
-                # For controlled gates, create a controlled operation matrix
-                control_idx = gate.get_control_index()
-                target_idx = gate.get_target_index()
-                # Mark both qubits as processed
-                processed_qubits.add(control_idx)
-                processed_qubits.add(target_idx)
-                
-                # Create controlled gate matrix
-                n = 2 ** self.__number_of_compatible_qubits
-                controlled_matrix = np.identity(n, dtype=complex)
-                gate_matrix = gate.get_matrix()
-                
-                # Calculate positions where control qubit is 1
-                for i in range(n):
-                    # Convert to binary and check if control qubit is 1
-                    binary = format(i, f'0{self.__number_of_compatible_qubits}b')
-                    if binary[control_idx] == '1':
-                        # Apply gate to target qubit
-                        new_state = list(binary)
-                        if binary[target_idx] == '0':
-                            # Apply first column of gate matrix
-                            controlled_matrix[i, i] = gate_matrix[0, 0]
-                            new_state[target_idx] = '1'
-                            j = int(''.join(new_state), 2)
-                            controlled_matrix[i, j] = gate_matrix[0, 1]
-                        else:
-                            # Apply second column of gate matrix
-                            new_state[target_idx] = '0'
-                            j = int(''.join(new_state), 2)
-                            controlled_matrix[i, j] = gate_matrix[1, 0]
-                            controlled_matrix[i, i] = gate_matrix[1, 1]
-                
-                matrices_to_multiply.append(controlled_matrix)
-                
-            elif gate.is_swap_gate():
-                # For swap gates, create a swap operation matrix
-                first_idx = gate.get_control_index()
-                second_idx = gate.get_target_index()
-                # Mark both qubits as processed
-                processed_qubits.add(first_idx)
-                processed_qubits.add(second_idx)
-                
-                # Create swap matrix
-                n = 2 ** self.__number_of_compatible_qubits
-                swap_matrix = np.zeros((n, n), dtype=complex)
-                
-                # Fill swap matrix
-                for i in range(n):
-                    binary = list(format(i, f'0{self.__number_of_compatible_qubits}b'))
-                    # Swap the bits at the specified positions
-                    binary[first_idx], binary[second_idx] = binary[second_idx], binary[first_idx]
-                    j = int(''.join(binary), 2)
-                    swap_matrix[i, j] = 1
-                    
-                matrices_to_multiply.append(swap_matrix)
-                
-            else:
-                # For single qubit gates, compute the matrix using tensor product
-                processed_qubits.add(qubit_index)
-                
-                # Initialize identity matrices for qubits before the current one
-                if qubit_index > 0:
-                    before_matrix = np.identity(2 ** qubit_index, dtype=complex)
-                else:
-                    before_matrix = np.array([[1]], dtype=complex)
-                    
-                # Initialize identity matrices for qubits after the current one
-                remaining_qubits = self.__number_of_compatible_qubits - qubit_index - 1
-                if remaining_qubits > 0:
-                    after_matrix = np.identity(2 ** remaining_qubits, dtype=complex)
-                else:
-                    after_matrix = np.array([[1]], dtype=complex)
-                    
-                # Compute the final matrix for this gate using tensor products
-                gate_matrix = gate.get_matrix()
-                final_matrix = np.kron(np.kron(before_matrix, gate_matrix), after_matrix)
-                matrices_to_multiply.append(final_matrix)
-        
-        # Multiply all matrices together
-        result_matrix = np.eye(2 ** self.__number_of_compatible_qubits, dtype=complex)
-        for matrix in matrices_to_multiply:
-            result_matrix = np.matmul(matrix, result_matrix)
+        # Compute all single qubit matrices:
+        single_qubit_gates_matrix = self.__compute_single_qubit_gates(layer_gates)
+
+        # Compute all controlled gates:
+        controlled_gates_matrix = self.__compute_controlled_gates(layer_gates)
+
+        # Multtiply all computed matrices
+        result_matrix = np.matmul(result_matrix,single_qubit_gates_matrix)
+        result_matrix = np.matmul(result_matrix,controlled_gates_matrix)
+         
             
         return result_matrix
         
@@ -404,7 +409,7 @@ class Circuit:
         # Check that the circuit was computed before applying a state if not than we compute the circuit:
         if not self.__circuit_is_computed:
             self.compute_circuit()
-            
+
         qubit_tensor_vector = input_state.get_tensor_vector()
         result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
         result_qubit_tensor = MultiQubit(result_vector, self.__number_of_compatible_qubits)
