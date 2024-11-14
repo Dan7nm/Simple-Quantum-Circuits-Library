@@ -6,10 +6,14 @@ from numpy.typing import NDArray
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
 INV_LAYER_INDEX = "The layer index is invalid. The layer index should be between 0 and number of layers - 1"
 CELL_TAKEN = "This cell already has a gate assigned to it. Use the remove gate method to remove a gate."
-INV_STATE = "The given state has a different number of qubits to the original the original circuit."
+INV_INPUT = "The input state has a different number of qubits to that of this quantum circuit."
+COMP_CIRCUIT = "The circuit was not computed. Before applying a state you should compute the circuit and after every update to a gate."
 
 class Circuit:
     """
+    :ivar number_of_compatible_qubits: Number of qubits in this circuit.
+    :vartype number_of_compatible_qubits: int
+
     A class to represent a quantum circuit using quantum gates.
 
     The Circuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.
@@ -53,13 +57,15 @@ class Circuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,multi_qubit: MultiQubit) -> None:
-        self.__multi_qubit = multi_qubit
-        self.__number_of_compatible_qubits = multi_qubit.get_number_of_qubits()
+    def __init__(self,number_of_qubits: int) -> None:
+        self.__number_of_compatible_qubits = number_of_qubits
         self.__number_of_layers = 1
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
         self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
         self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits)
+
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
     
     def add_single_qubit_gate(self, target_qubit: int, layer_index: int, gate_type: str, phi: float = 0.0) -> None:
         """
@@ -81,6 +87,9 @@ class Circuit:
         gate = Gate()
         gate.set_single_qubit_gate(gate_type,phi)
         self.__circuit[layer_index][target_qubit] = gate
+
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
 
     def add_controlled_qubit_gate(self, target_qubit: int, layer_index: int,  control_qubit: int, gate_type: str, phi: float = 0.0) -> None:
         """
@@ -107,6 +116,10 @@ class Circuit:
         self.__circuit[layer_index][target_qubit] = gate
         self.__circuit[layer_index][control_qubit] = gate
 
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
+
+
     def add_swap_gate(self,first_qubit: int, second_qubit: int ,layer_index: int) -> None:
         """
         Add a SWAP gate between two qubits in the circuit.
@@ -128,6 +141,9 @@ class Circuit:
         self.__circuit[layer_index][first_qubit] = gate
         self.__circuit[layer_index][second_qubit] = gate
 
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
+
     def remove_single_qubit_gate(self, qubit_index: int, layer_index: int) -> None:
         """
         Remove a single qubit gate from the circuit.
@@ -142,6 +158,9 @@ class Circuit:
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(qubit_index,layer_index, adding_gate = False)
         self.__circuit[layer_index][qubit_index] = None
+
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
 
     def remove_two_qubit_gate(self, target_qubit: int, control_qubit: int, layer_index: int) -> None:
         """
@@ -163,6 +182,9 @@ class Circuit:
         self.__circuit[layer_index][target_qubit] = None
         self.__circuit[layer_index][control_qubit] = None
 
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
+
     def add_layer(self) -> None:
         """
         Add a new empty layer to the circuit.
@@ -174,6 +196,9 @@ class Circuit:
         new_row = np.full((1, self.__number_of_compatible_qubits), None)
         self.__circuit = np.vstack((self.__circuit, new_row))
 
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
+
     def remove_last_layer(self) -> None:
         """
         Remove the last layer from the circuit.
@@ -182,6 +207,9 @@ class Circuit:
         """
         self.__circuit = self.__circuit[:-1]
         self.__number_of_compatible_qubits -= 1
+
+        # The circuit was updated show it should be computed to avoid getting a wrong state.
+        self.__circuit_is_computed = False
 
     def __valid_qubit_index(self,qubit_index: int,layer_index: int, adding_gate: bool = True) -> None:
         """
@@ -346,17 +374,8 @@ class Circuit:
             layer_matrix = self.__compute_layer(layer_index)
             self.__circuit_operator = np.matmul(self.__circuit_operator,layer_matrix)
 
-    def update_multi_qubit(self ,multi_qubit: MultiQubit) -> None:
-        """
-        Update the input state of the circuit.
-
-        :param multi_qubit: New quantum state to use as input
-        :type multi_qubit: MultiQubit
-        :raises ValueError: If the new state has a different number of qubits
-        """
-        if multi_qubit.get_number_of_qubits() != self.__number_of_compatible_qubits:
-            raise ValueError(INV_STATE)
-        self.__multi_qubit = multi_qubit
+        # Update that the circuit was computed
+        self.__circuit_is_computed = True
 
     def reset_circuit(self) -> None:
         """
@@ -369,14 +388,24 @@ class Circuit:
         self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
         self.__circuit_operator = np.identity(self.__number_of_compatible_qubits)
 
-    def apply_circuit(self) -> MultiQubit:
+    def apply_circuit(self, input_state: MultiQubit) -> MultiQubit:
         """
         Apply the circuit operator to the input quantum state.
 
-        :return: Resulting quantum state after applying the circuit
+        :param input_state: New quantum state to use as input.
+        :type input_state: MultiQubit
+        :return: Resulting quantum state after applying the circuit.
         :rtype: MultiQubit
+        :raises ValueError: If the input state has a different number of qubits
         """
-        qubit_tensor_vector = self.__multi_qubit.get_tensor_vector()
+        # Check that the number of qubits is correct.
+        if input_state.get_number_of_qubits() != self.__number_of_compatible_qubits:
+            raise ValueError(INV_INPUT)
+        # Check that the circuit was computed before applying a state if not than we compute the circuit:
+        if not self.__circuit_is_computed:
+            self.compute_circuit()
+            
+        qubit_tensor_vector = input_state.get_tensor_vector()
         result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
         result_qubit_tensor = MultiQubit(result_vector, self.__number_of_compatible_qubits)
         return result_qubit_tensor
@@ -471,6 +500,14 @@ class Circuit:
         Print the final matrix that is applid on the state.
         """
         print(self.__circuit_operator)
+
+    def get_circuit_operator_matrix(self) -> NDArray[np.complex128]:
+        """
+        This function returns the final computed matrix of the entire circuit:
+        :return: Matrix representing the entire circuit.
+        :rtype: NDArray 
+        """
+        return self.__circuit_operator
 
     def print_array(self) -> None:
         print(self.__circuit)

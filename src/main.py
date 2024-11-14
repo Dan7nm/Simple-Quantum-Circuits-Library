@@ -29,7 +29,8 @@ def main():
     mt = MultiQubit()
     mt.add_qubit(q0)    
     mt.add_qubit(q0)    
-    # mt.add_qubit(q0)    
+    mt.add_qubit(q0)
+    
     mt.print_tensor_form()
     circuit = Circuit(mt)
     circuit.load_qft_preset()
