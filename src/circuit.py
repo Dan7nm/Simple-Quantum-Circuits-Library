@@ -289,6 +289,41 @@ class QuantumCircuit:
         
         return result_matrix
 
+    def __swap_gate_matrix(self,first_index: int, second_index: int) -> NDArray:
+        """
+        Generate the matrix representation of a SWAP gate between first_index and second qubit index in an n-qubit system.
+        
+        :param first_index: Index of the first qubit (0-based indexing)
+        :type first_index: int
+        :param second_index: Index of the second qubit (0-based indexing)
+        :type second_index: int
+
+        :return: 2^n x 2^n matrix representing the SWAP operation
+        :rtype: NDArray
+        """
+        # Calculate matrix dimension
+        dim = 2 ** self.__number_of_compatible_qubits
+        
+        # Initialize the matrix with zeros
+        swap_matrix = np.zeros((dim, dim))
+        
+        # Generate all possible basis states
+        for state in range(dim):
+            # Convert state to binary representation
+            binary = format(state, f'0{self.__number_of_compatible_qubits}b')
+            bits = list(binary)
+            
+            # Swap the bits at positions i and j
+            bits[first_index], bits[second_index] = bits[second_index], bits[first_index]
+            
+            # Convert back to decimal
+            new_state = int(''.join(bits), 2)
+            
+            # Set the matrix element
+            swap_matrix[new_state, state] = 1
+            
+        return swap_matrix
+
     def __compute_swap_gates(self,layer_gates: NDArray) -> NDArray:
         """
         This method  computes all swap gates in one layer.
@@ -298,6 +333,25 @@ class QuantumCircuit:
         :return: The function returns the unitary matrix of that layer
         :rtype: NDArray
         """
+        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits)
+
+        processed_qubits = set()
+
+        for qubit_index,gate in enumerate(layer_gates):
+            # Check if we already processed this qubits:
+            if qubit_index in processed_qubits:
+                continue
+            # IF the gate is a control gate we compute the swap matrix and multiplt with result matrix
+            if gate.is_swap_gate():
+                first_index = gate.get_control_index()
+                second_index = gate.get_target_index()
+                processed_qubits.update({first_index,second_index})
+
+                swap_matrix = self.__swap_gate_matrix(first_index=first_index,second_index=second_index)
+
+                result_matrix = result_matrix @ swap_matrix
+        
+        return result_matrix
 
     def __create_controlled_operation(
         self,
@@ -404,11 +458,12 @@ class QuantumCircuit:
         # Compute all controlled gates:
         controlled_gates_matrix = self.__compute_controlled_gates(layer_gates)
 
+        # Compute all swap gates in this layer:
+        swap_gates_matrices = self.__compute_swap_gates(layer_gates=layer_gates)
+
         # Multtiply all computed matrices
-        result_matrix = np.matmul(result_matrix,single_qubit_gates_matrix)
-        result_matrix = np.matmul(result_matrix,controlled_gates_matrix)
-         
-            
+        result_matrix = result_matrix @ single_qubit_gates_matrix @ controlled_gates_matrix @ swap_gates_matrices
+             
         return result_matrix
         
     def compute_circuit(self) -> None:

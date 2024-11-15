@@ -8,15 +8,19 @@ def main():
     q1 = Qubit(0,1)
     mt = MultiQubit()
     mt.add_qubit(q1)
+    mt.add_qubit(q0)
+    mt.add_qubit(q0)
     mt.add_qubit(q1)
-    mt.add_qubit(q1)
+    mt.print_tensor_form()
 
-    circuit = QuantumCircuit(3)
-    circuit.add_controlled_qubit_gate(1,0,0,"X")
+    circuit = QuantumCircuit(4)
+    circuit.add_swap_gate(0,2,0)
+    circuit.add_layer()
+    circuit.add_swap_gate(1,3,1)
 
     circuit.compute_circuit()
     circuit.print_circuit()
-    circuit.print_operator_matrix()
+    # circuit.print_operator_matrix()
     result = circuit.apply_circuit(mt)
 
     result.print_tensor_form()
