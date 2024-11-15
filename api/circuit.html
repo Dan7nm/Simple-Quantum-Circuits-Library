@@ -56,7 +56,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_swap_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_swap_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.compute_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.compute_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_circuit_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_circuit_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.load_qft_preset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_array()</span></code></a></li>
@@ -234,16 +233,6 @@
 <dd class="field-even"><p><strong>ValueError</strong> – If the input state has a different number of qubits</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="circuit.QuantumCircuit.compute_circuit">
-<span class="sig-name descname"><span class="pre">compute_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.compute_circuit" title="Permalink to this definition"></a></dt>
-<dd><p>Compute the final unitary matrix representing the entire circuit.</p>
-<p>This method:
-1. Fills empty cells with identity gates
-2. Computes the matrix for each layer
-3. Multiplies all layer matrices to get the final circuit operator</p>
 </dd></dl>
 
 <dl class="py method">
