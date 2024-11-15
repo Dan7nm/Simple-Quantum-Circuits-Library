@@ -143,9 +143,9 @@ In a general case where the control qubit is the i-th qubit and the target is th
 
 .. math::
 
-   CU = I ^{\otimes i-1} \otimes |0⟩⟨0| \otimes I ^{\otimes l} \otimes I \otimes I ^{\otimes m}  +   I ^{\otimes i-1} \otimes |1⟩⟨1| \otimes I ^{\otimes l} \otimes U \otimes I ^{\otimes m} 
+   CU = I ^{\otimes i-1}\otimes (|0⟩⟨0| \otimes I ^{\otimes l} \otimes I + |1⟩⟨1| \otimes I ^{\otimes l} \otimes U )\otimes I^{\otimes m} 
 
-Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit.
+Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit. This library computes controlled gates based on this notation.
 
 The projection matrix :math:`|0⟩⟨0|` is applied on the i-th qubit in this tensor product and the identity matrix is applied on the j-th qubit. If the control qubit is in :math:`|0⟩` state than j-th qubit is unchanged. However, if the control qubit is in :math:`|1⟩` state then the projection matrix is applied :math:`|1⟩⟨1|` thus unitary Matrix U is applied on the j-th qubit.
 

@@ -178,8 +178,8 @@ i &amp; 0
 <p>Where ‘I’ is the identity matrix. This means that if the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged, while if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state, the transformation ‘U’ is applied to the target qubit.</p>
 <p>In a general case where the control qubit is the i-th qubit and the target is the j qubit, the dirac notation will be as follows:</p>
 <div class="math notranslate nohighlight">
-\[CU = I ^{\otimes i-1} \otimes |0⟩⟨0| \otimes I ^{\otimes l} \otimes I \otimes I ^{\otimes m}  +   I ^{\otimes i-1} \otimes |1⟩⟨1| \otimes I ^{\otimes l} \otimes U \otimes I ^{\otimes m}\]</div>
-<p>Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit.</p>
+\[CU = I ^{\otimes i-1}\otimes (|0⟩⟨0| \otimes I ^{\otimes l} \otimes I + |1⟩⟨1| \otimes I ^{\otimes l} \otimes U )\otimes I^{\otimes m}\]</div>
+<p>Where r is the number of qubits between i and j and m is the number of qubits after the j-th qubit. This library computes controlled gates based on this notation.</p>
 <p>The projection matrix <span class="math notranslate nohighlight">\(|0⟩⟨0|\)</span> is applied on the i-th qubit in this tensor product and the identity matrix is applied on the j-th qubit. If the control qubit is in <span class="math notranslate nohighlight">\(|0⟩\)</span> state than j-th qubit is unchanged. However, if the control qubit is in <span class="math notranslate nohighlight">\(|1⟩\)</span> state then the projection matrix is applied <span class="math notranslate nohighlight">\(|1⟩⟨1|\)</span> thus unitary Matrix U is applied on the j-th qubit.</p>
 <p>Matrix representation for a controlled-U gate:</p>
 <div class="math notranslate nohighlight">
