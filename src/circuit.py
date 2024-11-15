@@ -220,7 +220,7 @@ class QuantumCircuit:
         Reduces the number of layers by one and removes all gates in the last layer.
         """
         self.__circuit = self.__circuit[:-1]
-        self.__number_of_compatible_qubits -= 1
+        self.__number_of_layers -= 1
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
@@ -466,7 +466,7 @@ class QuantumCircuit:
              
         return result_matrix
         
-    def compute_circuit(self) -> None:
+    def __compute_circuit(self) -> None:
         """
         Compute the final unitary matrix representing the entire circuit.
 
@@ -494,7 +494,7 @@ class QuantumCircuit:
         self.__number_of_layers = 1
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
         self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
-        self.__circuit_operator = np.identity(self.__number_of_compatible_qubits)
+        self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits)
 
     def apply_circuit(self, input_state: MultiQubit) -> MultiQubit:
         """
@@ -511,7 +511,8 @@ class QuantumCircuit:
             raise ValueError(INV_INPUT)
         # Check that the circuit was computed before applying a state if not than we compute the circuit:
         if not self.__circuit_is_computed:
-            self.compute_circuit()
+            self.__compute_circuit()
+            self.__circuit_is_computed = True
 
         qubit_tensor_vector = input_state.get_tensor_vector()
         result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
@@ -607,6 +608,11 @@ class QuantumCircuit:
         """
         Print the final matrix that is applid on the state.
         """
+        # Check that the circuit was computed before applying a state if not than we compute the circuit:
+        if not self.__circuit_is_computed:
+            self.__compute_circuit()
+            self.__circuit_is_computed = True
+
         print(self.__circuit_operator)
 
     def get_circuit_operator_matrix(self) -> NDArray[np.complex128]:
@@ -615,6 +621,11 @@ class QuantumCircuit:
         :return: Matrix representing the entire circuit.
         :rtype: NDArray 
         """
+        # Check that the circuit was computed before applying a state if not than we compute the circuit:
+        if not self.__circuit_is_computed:
+            self.__compute_circuit()
+            self.__circuit_is_computed = True
+
         return self.__circuit_operator
 
     def print_array(self) -> None:
