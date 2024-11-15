@@ -2,6 +2,7 @@ from gate import Gate
 from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
+from typing import List,Tuple,Set
 
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
 INV_LAYER_INDEX = "The layer index is invalid. The layer index should be between 0 and number of layers - 1"
@@ -11,14 +12,14 @@ COMP_CIRCUIT = "The circuit was not computed. Before applying a state you should
 INV_NUM_QUBITS = "The number of qubits should be atleast 1."
 INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
 
-class Circuit:
+class QuantumCircuit:
     """
     :ivar number_of_compatible_qubits: Number of qubits in this circuit.
     :vartype number_of_compatible_qubits: int
 
     A class to represent a quantum circuit using quantum gates.
 
-    The Circuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.
+    The QuantumCircuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.
 
     Steps for circuit building:
     ---------------------------
@@ -298,43 +299,90 @@ class Circuit:
         :rtype: NDArray
         """
 
-
-
-    def __compute_controlled_gates(self,layer_gates: NDArray) -> NDArray:
+    def __create_controlled_operation(
+        self,
+        gate: Gate,
+        control_index: int,
+        target_index: int
+    ) -> NDArray:
         """
-        This method  computes all controlled gates in one layer.
-
-        :param layer_gates: An array of all gates in the layer we want to compute.
-        :type layer_gates: NDArray
-        :return: The function returns the unitary matrix of that layer
-        :rtype: NDArray
+        Create a controlled operation matrix for the given gate.
+        
+        Args:
+            gate: The controlled gate to process
+            is_control_first: Whether the control qubit comes before the target
+            
+        Returns:
+            The resulting controlled operation matrix
         """
+        index_diff = abs(control_index - target_index) - 1
+        identity_mid = np.identity(2 ** index_diff)
         proj_00_matrix = np.array([[1,0],[0,0]], dtype=complex)
         proj_11_matrix = np.array([[0,0],[0,1]], dtype=complex)
-        identity_matrix = np.identity(2)
+        gate_matrix = gate.get_matrix()
+        
+        # Check if control index is before target index
+        if control_index < target_index:
+            first_term = np.kron(np.kron(proj_00_matrix, identity_mid), np.identity(2))
+            second_term = np.kron(np.kron(proj_11_matrix, identity_mid), gate_matrix)
+        else:
+            first_term = np.kron(np.kron(np.identity(2), identity_mid), proj_00_matrix)
+            second_term = np.kron(np.kron(gate_matrix, identity_mid),proj_11_matrix)
+            
+        return first_term + second_term
 
-        empty_array = np.ones((1,),dtype=complex)
-        list_of_matrices = np.array([empty_array])
+    def __embed_in_circuit(self, gate: Gate, operation: NDArray, control_index: int, target_index: int) -> NDArray:
+        """
+        Embed the controlled operation in the full circuit space.
+        
+        Args:
+            gate: The controlled gate being processed
+            operation: The controlled operation matrix to embed
+            
+        Returns:
+            The embedded operation matrix
+        """
+        lower_idx = min(control_index, target_index)
+        higher_idx = max(control_index, target_index)
+        
+        # Create identity matrices for unused qubits
+        identity_prev = np.identity(2 ** lower_idx)
+        identity_after = np.identity(2 ** (self.__number_of_compatible_qubits - higher_idx - 1))
+        
+        # Embed the operation in the full circuit space
+        return np.kron(np.kron(identity_prev, operation), identity_after)
 
-        for qubit_index,gate in enumerate(layer_gates):
-            gate_matrix = gate.get_matrix()
-            if gate.is_control_gate():
-                if qubit_index == gate.get_target_index():
-                    for matrix_index,matrix in enumerate(list_of_matrices):
-                        list_of_matrices[matrix_index] = np.kron()
-                        
-            # If not a control gate then we just compute the kronecker product with an identity matrix
-            else:
-                for matrix_index,matrix in enumerate(list_of_matrices):
-                        list_of_matrices[matrix_index] = np.kron(matrix,identity_matrix)
-
+    def __compute_controlled_gates(self, layer_gates: NDArray) -> NDArray:
+        """
+        Compute all controlled gates in one layer.
+        
+        Args:
+            layer_gates: List of controlled gates in the layer
+            
+        Returns:
+            The unitary matrix representing the complete layer
+        """
+        processed_qubits: Set[int] = set()
         result_matrix = np.identity(2 ** self.__number_of_compatible_qubits)
-        # Sum all matrices
-        for matrix in list_of_matrices:
-            result_matrix += matrix
-
+        
+        for qubit_index,gate in enumerate(layer_gates):
+            if qubit_index in processed_qubits:
+                continue
+            if gate.is_control_gate():
+                control_index = gate.get_control_index()
+                target_index = gate.get_target_index()
+                # Mark qubits as processed
+                processed_qubits.update({control_index, target_index})
+                
+                
+                # Create and embed the controlled operation
+                controlled_op = self.__create_controlled_operation(gate, control_index,target_index)
+                embedded_op = self.__embed_in_circuit(gate, controlled_op,control_index,target_index)
+                
+                # Update the result matrix
+                result_matrix = result_matrix @ embedded_op
+            
         return result_matrix
-
 
     def __compute_layer(self, layer_index: int) -> NDArray[np.complex128]:
         """
@@ -483,7 +531,7 @@ class Circuit:
                     # Add gate elements
                     for i in range(self.__number_of_compatible_qubits):
                         if i == control_idx:
-                            circuit_lines[i].append(f'──●{qubit}──')
+                            circuit_lines[i].append(f'──●{target_idx}──')
                         elif i == target_idx:
                             circuit_lines[i].append(f'─[{target_symbol}]─')
                 else:

@@ -1,5 +1,5 @@
 import numpy as np
-from circuit import Circuit
+from circuit import QuantumCircuit
 import time
 
 EPSILON = 1e-16
@@ -10,7 +10,7 @@ def test_qft_matrix_output():
     # Test 2: Compare QFT matrices and output matrices for 2 to number of qubits to test
 
     for num_qubits in range(2, QUBITS_TO_TEST_QFT):
-        circuit = Circuit(num_qubits)
+        circuit = QuantumCircuit(num_qubits)
         circuit.load_qft_preset()
         circuit.compute_circuit()
         qft_matrix = circuit.get_circuit_operator_matrix()
