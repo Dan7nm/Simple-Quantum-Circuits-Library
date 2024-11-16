@@ -496,6 +496,8 @@ class QuantumCircuit:
         self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
         self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits)
 
+        self.__circuit_is_computed = False
+
     def apply_circuit(self, input_state: MultiQubit) -> MultiQubit:
         """
         Apply the circuit operator to the input quantum state.
