@@ -108,8 +108,7 @@
 <p>This class implements the tensor product operation for quantum states,
 allowing for the construction and manipulation of multi-qubit systems.
 It maintains both the vector representation and the quantum state notation.</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
@@ -133,14 +132,12 @@ product state vector accordingly.</p>
 <dd class="field-even"><p><strong>TypeError</strong> – If new_qubit is not a Qubit object</p>
 </dd>
 </dl>
-<section id="id1">
-<h3>Example<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># |0⟩ state</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
 </dd></dl>
 
 <dl class="py method">
@@ -187,7 +184,6 @@ with their corresponding complex coefficients.</p>
 basis as a list of complex numbers.</p>
 </dd></dl>
 
-</section>
 </dd></dl>
 
 </section>

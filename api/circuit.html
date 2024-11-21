@@ -61,7 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_array()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_operator_matrix()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_last_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_last_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_layer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_two_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_two_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.reset_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.reset_circuit()</span></code></a></li>
@@ -173,9 +173,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_layer">
-<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_layer" title="Permalink to this definition"></a></dt>
-<dd><p>Add a new empty layer to the circuit.</p>
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_layer" title="Permalink to this definition"></a></dt>
+<dd><p>Adds a new empty layer to aspecified layer index in the circuit. If now index is given then adds the layer to the end of the circuit by default.</p>
 <p>The new layer is initialized with None values, representing identity gates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_index</strong> (<em>int</em>) – The index to which a layer will be added.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -273,10 +278,14 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="circuit.QuantumCircuit.remove_last_layer">
-<span class="sig-name descname"><span class="pre">remove_last_layer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_last_layer" title="Permalink to this definition"></a></dt>
-<dd><p>Remove the last layer from the circuit.</p>
-<p>Reduces the number of layers by one and removes all gates in the last layer.</p>
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.remove_layer">
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_layer" title="Permalink to this definition"></a></dt>
+<dd><p>Remove the a specified layer from the circuit. If no layer was specified than the last layer is removed by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer_index</strong> (<em>int</em>) – The index to which a layer will be removed.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
