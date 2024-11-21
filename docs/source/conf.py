@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx_rtd_theme',
+    'sphinx.ext.napoleon',  # Support for Google and NumPy docstrings       
 ]
 
 templates_path = ['_templates']

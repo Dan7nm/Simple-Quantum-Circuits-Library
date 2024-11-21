@@ -199,27 +199,51 @@ class QuantumCircuit:
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
 
-    def add_layer(self) -> None:
+    def add_layer(self, layer_index: int= None) -> None:
         """
-        Add a new empty layer to the circuit.
+        Adds a new empty layer to aspecified layer index in the circuit. If now index is given then adds the layer to the end of the circuit by default.
         
         The new layer is initialized with None values, representing identity gates.
-        """
-        self.__number_of_layers+=1
-        # Add another row of nones:
-        new_row = np.full((1, self.__number_of_compatible_qubits), None)
-        self.__circuit = np.vstack((self.__circuit, new_row))
 
+        Parameters
+        ----------
+        layer_index : int
+            The index to which a layer will be added.
+
+        """
+        # Check if the layer index is valid
+        if layer_index is not None:
+            self.__valid_layer_index(layer_index=layer_index)
+    
+        self.__number_of_layers+=1
+        if layer_index is None:
+            # Add another row of nones:
+            new_row = np.full((1, self.__number_of_compatible_qubits), None)
+            self.__circuit = np.vstack((self.__circuit, new_row))
+        else:
+            new_row = np.full((1, self.__number_of_compatible_qubits), None)
+            self.__circuit = np.insert(self.__circuit,layer_index,new_row,axis=0)
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
 
-    def remove_last_layer(self) -> None:
+    def remove_layer(self,layer_index: int = None) -> None:
         """
-        Remove the last layer from the circuit.
+        Remove the a specified layer from the circuit. If no layer was specified than the last layer is removed by default.
         
-        Reduces the number of layers by one and removes all gates in the last layer.
+        Parameters
+        ----------
+        layer_index : int
+            The index to which a layer will be removed.
         """
-        self.__circuit = self.__circuit[:-1]
+        # Check if the layer index is valid
+        if layer_index is not None:
+            self.__valid_layer_index(layer_index=layer_index)
+        
+        if layer_index is None:
+            self.__circuit = self.__circuit[:-1]
+        else:
+            self.__circuit = np.delete(self.__circuit,layer_index,axis=0)
+
         self.__number_of_layers -= 1
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
@@ -232,7 +256,7 @@ class QuantumCircuit:
         Reduces the number of layers by one and removes all gates in the last layer.
         """
         # Check for valid indexes
-        if not 0 <= qubit_index <= self.__number_of_compatible_qubits - 1:
+        if not isinstance(qubit_index,int) and not isinstance(layer_index) and not 0 <= qubit_index <= self.__number_of_compatible_qubits - 1:
             raise ValueError(INV_QUBIT_INDEX)
         # Check this step only if we are adding a gate. In removal this step is not used.
         # Check if the cell is an empty to add a gate
@@ -247,7 +271,7 @@ class QuantumCircuit:
         :type layer_index: int
         :raises ValueError: If layer index is invalid
         """
-        if not 0 <= layer_index <= self.__number_of_layers:
+        if not isinstance(layer_index,int) and not 0 <= layer_index <= self.__number_of_layers:
             raise ValueError(INV_LAYER_INDEX)
         
     def __fill_identity_gates(self) -> None:
@@ -604,7 +628,11 @@ class QuantumCircuit:
         # Print the circuit
         print("\nCircuit Diagram:")
         for i, line in enumerate(circuit_lines):
-            print(f'q{i}: {"".join(line)}')
+            print(f'    q{i}: {"".join(line)}')
+        
+        layers_indexes = [f"──{i}───" for i in range(self.__number_of_layers)]
+
+        print(f"layers: {''.join(layers_indexes)}")
 
     def print_operator_matrix(self) -> None:
         """
