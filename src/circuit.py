@@ -3,14 +3,18 @@ from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
 from typing import List,Tuple,Set
+import matplotlib.pyplot as plt
+import random
 
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
-INV_LAYER_INDEX = "The layer index is invalid. The layer index should be between 0 and number of layers - 1"
+INV_LAYER_INDEX = "The layer index is invalid. The layer index should be an integer between 0 and number of layers - 1"
 CELL_TAKEN = "This cell already has a gate assigned to it. Use the remove gate method to remove a gate."
 INV_INPUT = "The input state has a different number of qubits to that of this quantum circuit."
 COMP_CIRCUIT = "The circuit was not computed. Before applying a state you should compute the circuit and after every update to a gate."
 INV_NUM_QUBITS = "The number of qubits should be atleast 1."
 INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
+INV_INIT_LAYERS = "Invalid number of layers. The number should be non zero positive integer."
+INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
 
 class QuantumCircuit:
     """
@@ -60,11 +64,14 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,number_of_qubits: int) -> None:
-        if number_of_qubits < 1:
-            raise ValueError(INV_NUM_QUBITS)
+    def __init__(self,number_of_qubits: int, num_of_layers: int = 1) -> None:
+        # Check if valid inputs:
+        self.__valid_pos_val(number_of_qubits)
+        self.__valid_pos_val(num_of_layers)
+
         self.__number_of_compatible_qubits = number_of_qubits
-        self.__number_of_layers = 1
+        self.__number_of_layers = num_of_layers
+
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
         self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
         self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits)
@@ -248,6 +255,23 @@ class QuantumCircuit:
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
+
+    def __valid_pos_val(self,value:int) -> None:
+        """
+        This method check if the argument is non zero positive integer.
+        Parameters
+        ----------
+        values : int 
+            The value to check
+        
+        Raises
+        ------
+        ValueError
+            Raises a value error if the the given value is not a positive integer 
+        """
+
+        
+
 
     def __valid_qubit_index(self,qubit_index: int,layer_index: int, adding_gate: bool = True) -> None:
         """
@@ -434,10 +458,14 @@ class QuantumCircuit:
         """
         Compute all controlled gates in one layer.
         
-        Args:
-            layer_gates: List of controlled gates in the layer
+        Parameters
+        ----------
+        layer_gates: NDArray
+            List of controlled gates in the layer.
             
-        Returns:
+        Returns
+        -------
+        out - NDArray    
             The unitary matrix representing the complete layer
         """
         processed_qubits: Set[int] = set()
@@ -466,10 +494,15 @@ class QuantumCircuit:
         """
         Compute the combined operation of all gates in a single layer.
 
-        :param layer_index: Index of the layer to compute
-        :type layer_index: int
-        :return: Matrix representing the combined operation of all gates in the layer
-        :rtype: NDArray[np.complex128]
+        Parameters
+        ----------
+        layer_index : int
+            Index of the layer to compute.
+        
+        Returns
+        -------
+        matrix : NDArray[np.complex128]
+            Matrix representing the combined operation of all gates in the layer.
         """
         # Get all gates in the current layer
         layer_gates = self.__circuit[layer_index]
@@ -526,11 +559,20 @@ class QuantumCircuit:
         """
         Apply the circuit operator to the input quantum state.
 
-        :param input_state: New quantum state to use as input.
-        :type input_state: MultiQubit
-        :return: Resulting quantum state after applying the circuit.
-        :rtype: MultiQubit
-        :raises ValueError: If the input state has a different number of qubits
+        Parameters
+        ----------
+        input_state : MultiQubit
+            New quantum state to use as input.
+
+        Returns
+        -------
+        mult_qubit : MultiQubit
+             Resulting quantum state after applying the circuit.
+
+        Raises
+        ------
+        ValueError
+            If the input state has a different number of qubits
         """
         # Check that the number of qubits is correct.
         if input_state.get_number_of_qubits() != self.__number_of_compatible_qubits:
@@ -648,8 +690,11 @@ class QuantumCircuit:
     def get_circuit_operator_matrix(self) -> NDArray[np.complex128]:
         """
         This function returns the final computed matrix of the entire circuit:
-        :return: Matrix representing the entire circuit.
-        :rtype: NDArray 
+
+        Returns
+        -------
+        circuit_operator : NDarray
+            Matrix representing the entire circuit.
         """
         # Check that the circuit was computed before applying a state if not than we compute the circuit:
         if not self.__circuit_is_computed:
@@ -682,6 +727,70 @@ class QuantumCircuit:
         for qubit_index in range(self.__number_of_compatible_qubits):
             if qubit_index < self.__number_of_compatible_qubits - 1 - qubit_index:
                 self.add_swap_gate(qubit_index,self.__number_of_compatible_qubits - 1 - qubit_index,curr_layer_index)
+
+
+
+    def __collapse_to_state(self,amplitude:complex) -> float:
+        """
+        This function returns with specified amplitude a bolean if the state collapsed to this state or not.
+
+        Parameters
+        ----------
+        Amplitude : complex
+            The amplitude of the given state.
+
+        Returns
+        -------
+        out : bool
+            True if we collapsed to the current desired state, otherwise return False.
+        
+        """
+        prob = abs(amplitude) ** 2
+        return random.random() < prob
+
+    def measure_all(self,input_state: MultiQubit,number_of_shots: int = 10000) -> None:
+        """
+        This function measures the entire circuit and collapes using born rule to one of the superposition states with probability of the amplitudes squared.
+
+        The function can measure the circuit a specified number of times. The method plots in a graph the probablity of each state.
+
+        Parameters
+        ----------
+        number_of_shots : int
+            The number of times to measure the entire circuit.
+        input_state : MultiQubit
+            The input state to measure.
+        """
+        self.__valid_pos_val(value= number_of_shots)
+        result_state = self.apply_circuit(input_state= input_state)
+        result_vector = result_state.get_tensor_vector()
+
+        # Dictionary to stores the states and number of times we collapsed to that state.
+        states_dict = {}
+
+        for shot in range(number_of_shots):
+            for state in range(2 ** self.__number_of_compatible_qubits):
+                if self.__collapse_to_state(result_vector[state]):
+                    state_binary = format(state, f'0{self.__number_of_compatible_qubits}b')
+                    states_dict[state_binary] = states_dict.get(state_binary,0) + 1
+        
+        states_list = list(states_dict.keys())
+        probs_list = np.array(list(states_dict.values())) / number_of_shots
+
+        # Plot
+        plt.figure(figsize=(10, 6))
+        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
+
+        # Add labels and title
+        plt.xlabel('Quantum States', fontsize=12)
+        plt.ylabel('Probability', fontsize=12)
+        plt.title(f'Probability Distribution of Measured Quantum States\n(Number of Measurments: {number_of_shots})', fontsize=14)
+
+        # Show grid and the plot
+        plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.show()
+
+
 
 
 

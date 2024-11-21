@@ -67,7 +67,8 @@ class Qubit:
         """
         r_0, theta_0 = self.__complex_to_euler(alpha)
         r_1, theta_1 = self.__complex_to_euler(beta)
-        return (0<= r_0 <= 1 and 0<= r_1 <= 1 and ((r_0**2 + r_1**2) - 1 <= EPSILON))
+        print(r_0**2,r_1**2)
+        return (0<= r_0 <= 1 and 0<= r_1 <= 1 and abs((r_0**2 + r_1**2) - 1) <= EPSILON)
         
 
     def get_alpha(self) -> complex:
