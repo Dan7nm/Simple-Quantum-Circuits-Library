@@ -480,7 +480,6 @@ class QuantumCircuit:
                 # Mark qubits as processed
                 processed_qubits.update({control_index, target_index})
                 
-                
                 # Create and embed the controlled operation
                 controlled_op = self.__create_controlled_operation(gate, control_index,target_index)
                 embedded_op = self.__embed_in_circuit(gate, controlled_op,control_index,target_index)
