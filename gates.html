@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -13,9 +13,9 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -93,13 +93,14 @@
            <div itemprop="articleBody">
              
   <section id="quantum-gates">
-<h1>Quantum Gates<a class="headerlink" href="#quantum-gates" title="Permalink to this heading"></a></h1>
+<h1>Quantum Gates<a class="headerlink" href="#quantum-gates" title="Link to this heading"></a></h1>
 <p>In quantum computing, gates manipulate qubits through various transformations. Here we describe some of the most commonly used gates in quantum circuits, including the X, Y, Z, Hadamard, Phase Shift, and Swap gates.</p>
 <section id="single-qubit-gates">
-<h2>Single Qubit Gates<a class="headerlink" href="#single-qubit-gates" title="Permalink to this heading"></a></h2>
+<h2>Single Qubit Gates<a class="headerlink" href="#single-qubit-gates" title="Link to this heading"></a></h2>
 <section id="i-gate-the-identity-gate">
-<h3>I Gate (The identity gate)<a class="headerlink" href="#i-gate-the-identity-gate" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Qcircuit_I.svg"><img alt="I Gate" class="align-center" src="_images/Qcircuit_I.svg" width="250px" /></a>
+<h3>I Gate (The identity gate)<a class="headerlink" href="#i-gate-the-identity-gate" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="_images/Qcircuit_I.svg"><img alt="I Gate" class="align-center" src="_images/Qcircuit_I.svg" style="width: 250px;" />
+</a>
 <p>The I gate or the identity gate is the identity matrix and is defined as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}I =  \begin{pmatrix}
@@ -109,8 +110,9 @@
 <p>The identity gate doesn’t change the the quantum state or the qubit state. This property is useful in some cases.</p>
 </section>
 <section id="x-gate-pauli-x">
-<h3>X Gate (Pauli-X)<a class="headerlink" href="#x-gate-pauli-x" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Qcircuit_NOT.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_NOT.svg" width="250px" /></a>
+<h3>X Gate (Pauli-X)<a class="headerlink" href="#x-gate-pauli-x" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="_images/Qcircuit_NOT.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_NOT.svg" style="width: 250px;" />
+</a>
 <p>The X gate, also known as the Pauli-X gate or the quantum NOT gate, flips the state of a qubit from <span class="math notranslate nohighlight">\(|0⟩\)</span> to <span class="math notranslate nohighlight">\(|1⟩\)</span> or from <span class="math notranslate nohighlight">\(|1⟩\)</span> to <span class="math notranslate nohighlight">\(|0⟩\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}X = \begin{pmatrix}
@@ -120,8 +122,9 @@
 <p>This gate acts similarly to the classical NOT gate, flipping the value of the qubit. For example, if the input state is <span class="math notranslate nohighlight">\(|0⟩\)</span>, applying an X gate transforms it to <span class="math notranslate nohighlight">\(|1⟩\)</span>, and vice versa.</p>
 </section>
 <section id="y-gate-pauli-y">
-<h3>Y Gate (Pauli-Y)<a class="headerlink" href="#y-gate-pauli-y" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Qcircuit_Y.svg"><img alt="Y Gate" class="align-center" src="_images/Qcircuit_Y.svg" width="250px" /></a>
+<h3>Y Gate (Pauli-Y)<a class="headerlink" href="#y-gate-pauli-y" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="_images/Qcircuit_Y.svg"><img alt="Y Gate" class="align-center" src="_images/Qcircuit_Y.svg" style="width: 250px;" />
+</a>
 <p>The Y gate, also known as the Pauli-Y gate, combines the flipping of the qubit’s state with a phase shift of π radians.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}Y = \begin{pmatrix}
@@ -131,8 +134,9 @@ i &amp; 0
 <p>The Y gate flips the qubit like the X gate but introduces an imaginary phase factor. It transforms the <span class="math notranslate nohighlight">\(|0⟩\)</span> state into i:math:<cite>|1⟩</cite> and the <span class="math notranslate nohighlight">\(|1⟩\)</span> state into -i:math:<cite>|0⟩</cite>.</p>
 </section>
 <section id="z-gate-pauli-z">
-<h3>Z Gate (Pauli-Z)<a class="headerlink" href="#z-gate-pauli-z" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Qcircuit_Z.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_Z.svg" width="250px" /></a>
+<h3>Z Gate (Pauli-Z)<a class="headerlink" href="#z-gate-pauli-z" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="_images/Qcircuit_Z.svg"><img alt="NOT Gate" class="align-center" src="_images/Qcircuit_Z.svg" style="width: 250px;" />
+</a>
 <p>The Z gate, also known as the Pauli-Z gate, applies a phase shift of π radians to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state while leaving the <span class="math notranslate nohighlight">\(|0⟩\)</span> state unchanged.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}Z = \begin{pmatrix}
@@ -142,8 +146,9 @@ i &amp; 0
 <p>In effect, the Z gate flips the phase of the <span class="math notranslate nohighlight">\(|1⟩\)</span> state but doesn’t affect the computational basis of the qubit. This gate can be used for phase inversion operations.</p>
 </section>
 <section id="h-gate-hadamard-gate">
-<h3>H Gate (Hadamard Gate)<a class="headerlink" href="#h-gate-hadamard-gate" title="Permalink to this heading"></a></h3>
-<a class="reference internal image-reference" href="_images/Hadamard_gate.svg"><img alt="NOT Gate" class="align-center" src="_images/Hadamard_gate.svg" width="250px" /></a>
+<h3>H Gate (Hadamard Gate)<a class="headerlink" href="#h-gate-hadamard-gate" title="Link to this heading"></a></h3>
+<a class="reference internal image-reference" href="_images/Hadamard_gate.svg"><img alt="NOT Gate" class="align-center" src="_images/Hadamard_gate.svg" style="width: 250px;" />
+</a>
 <p>The Hadamard gate creates a superposition of the <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span> states. When applied to a qubit in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, it generates an equal superposition of <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span>, sometimes denoted as the plus state:</p>
 <div class="math notranslate nohighlight">
 \[|+⟩ = \frac{1}{\sqrt{2}}(|0⟩+|1⟩)\]</div>
@@ -159,7 +164,7 @@ i &amp; 0
 <p>The Hadamard gate plays a crucial role in quantum algorithms such as QFT, creating superpositions and allowing interference patterns to emerge in quantum computations.</p>
 </section>
 <section id="r-gate-phase-shift-gate">
-<h3>R Gate (Phase Shift Gate)<a class="headerlink" href="#r-gate-phase-shift-gate" title="Permalink to this heading"></a></h3>
+<h3>R Gate (Phase Shift Gate)<a class="headerlink" href="#r-gate-phase-shift-gate" title="Link to this heading"></a></h3>
 <p>The Phase Shift gate introduces a phase shift of φ to the <span class="math notranslate nohighlight">\(|1⟩\)</span> state while leaving the <span class="math notranslate nohighlight">\(|0⟩\)</span> state unchanged. It generalizes the Z gate by allowing for arbitrary phase shifts.</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}R_\phi = \begin{pmatrix}
@@ -170,7 +175,7 @@ i &amp; 0
 </section>
 </section>
 <section id="two-qubit-gates">
-<h2>Two Qubit Gates<a class="headerlink" href="#two-qubit-gates" title="Permalink to this heading"></a></h2>
+<h2>Two Qubit Gates<a class="headerlink" href="#two-qubit-gates" title="Link to this heading"></a></h2>
 <p>The controlled-U gate, denoted as ‘CU’, is a general construction that applies the single-qubit unitary transformation U on the target qubit only if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <p>In a two qubit system where the first qubit is the control qubit and the second qubit is the target qubit, the dirac notation will be as follows:</p>
 <div class="math notranslate nohighlight">
@@ -190,7 +195,7 @@ i &amp; 0
          0 &amp; 0 &amp; u_{10} &amp; u_{11}
 \end{pmatrix}\end{split}\]</div>
 <section id="cnot-gate-controlled-x-gate">
-<h3>CNOT Gate (Controlled X Gate)<a class="headerlink" href="#cnot-gate-controlled-x-gate" title="Permalink to this heading"></a></h3>
+<h3>CNOT Gate (Controlled X Gate)<a class="headerlink" href="#cnot-gate-controlled-x-gate" title="Link to this heading"></a></h3>
 <p>The CNOT (Controlled-NOT) gate is a fundamental two-qubit gate used in quantum computing. It operates on two qubits: a control qubit and a target qubit. The CNOT gate flips the state of the target qubit (applies an X gate) if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. If the control qubit is in the <span class="math notranslate nohighlight">\(|0⟩\)</span> state, the target qubit remains unchanged.</p>
 <p>The matrix representation of the CNOT gate is:</p>
 <div class="math notranslate nohighlight">
@@ -229,7 +234,7 @@ i &amp; 0
 </table>
 </section>
 <section id="controlled-z-gate">
-<h3>Controlled Z Gate<a class="headerlink" href="#controlled-z-gate" title="Permalink to this heading"></a></h3>
+<h3>Controlled Z Gate<a class="headerlink" href="#controlled-z-gate" title="Link to this heading"></a></h3>
 <p>The CZ (Controlled-Z) gate is another two-qubit gate where the second qubit (target qubit) experiences a phase flip (Z gate) if the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state. Unlike the CNOT gate, the CZ gate does not flip the target qubit’s value, but applies a phase change (sign flip) to the target qubit when the control qubit is in the <span class="math notranslate nohighlight">\(|1⟩\)</span> state.</p>
 <p>The matrix representation of the CZ gate is:</p>
 <div class="math notranslate nohighlight">
@@ -268,7 +273,7 @@ i &amp; 0
 </table>
 </section>
 <section id="swap-gate">
-<h3>Swap Gate<a class="headerlink" href="#swap-gate" title="Permalink to this heading"></a></h3>
+<h3>Swap Gate<a class="headerlink" href="#swap-gate" title="Link to this heading"></a></h3>
 <p>The Swap gate exchanges the states of two qubits.</p>
 <p>The matrix representation for a two qubit system is as follows:</p>
 <div class="math notranslate nohighlight">
@@ -285,7 +290,7 @@ i &amp; 0
 </section>
 </section>
 <section id="gates-summary">
-<h2>Gates Summary<a class="headerlink" href="#gates-summary" title="Permalink to this heading"></a></h2>
+<h2>Gates Summary<a class="headerlink" href="#gates-summary" title="Link to this heading"></a></h2>
 <p>Here’s a summary of how each gate operates on the standard computational basis:</p>
 <ul class="simple">
 <li><p><strong>I Gate</strong>: Doesn’t change the state</p></li>

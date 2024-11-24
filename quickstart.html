@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -13,9 +13,9 @@
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="_static/doctools.js?v=888ff710"></script>
-      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -89,14 +89,14 @@
            <div itemprop="articleBody">
              
   <section id="quickstart-guide">
-<h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this heading"></a></h1>
+<h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Link to this heading"></a></h1>
 <p>This guide will help you get started with running simple QFT simulations using this library.</p>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
 <p>The <strong>Quantum Fourier Transform (QFT)</strong> is a fundamental operation in quantum computing that serves as the quantum analogue of the classical discrete Fourier transform (DFT). It plays a crucial role in many quantum algorithms, including Shor’s algorithm for factoring large numbers, which has profound implications for cryptography. In this simulation, we explore the implementation and behavior of the Quantum Fourier Transform, demonstrating how quantum states are transformed in a superposition of basis states. By leveraging the power of quantum parallelism, this simulation provides insight into how QFT can efficiently process information in ways that are exponentially faster than classical methods for certain tasks. Through step-by-step visualization and quantum circuit manipulation, this simulation aims to deepen the understanding of QFT’s mechanics and its potential applications in real-world quantum algorithms.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
 <p>First, ensure you have NumPy installed:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span>
 </pre></div>
@@ -108,7 +108,7 @@
 <p>Or you can go to the project link in on the homepage.</p>
 </section>
 <section id="basic-usage">
-<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h2>
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h2>
 <p>Here’s a complete example demonstrating how to create qubits, combine them into a tensor product, and apply the QFT:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qubit</span> <span class="kn">import</span> <span class="n">Qubit</span>
 <span class="kn">from</span> <span class="nn">qubit_tensor</span> <span class="kn">import</span> <span class="n">QubitTensor</span>
@@ -140,9 +140,9 @@
 </div>
 </section>
 <section id="step-by-step-explanation">
-<h2>Step-by-Step Explanation<a class="headerlink" href="#step-by-step-explanation" title="Permalink to this heading"></a></h2>
+<h2>Step-by-Step Explanation<a class="headerlink" href="#step-by-step-explanation" title="Link to this heading"></a></h2>
 <section id="creating-qubits">
-<h3>1. Creating Qubits<a class="headerlink" href="#creating-qubits" title="Permalink to this heading"></a></h3>
+<h3>1. Creating Qubits<a class="headerlink" href="#creating-qubits" title="Link to this heading"></a></h3>
 <p>Each qubit is initialized with amplitudes for the <span class="math notranslate nohighlight">\(|0⟩\)</span> and <span class="math notranslate nohighlight">\(|1⟩\)</span> states:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a qubit in state |0⟩</span>
 <span class="n">qubit</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
@@ -156,7 +156,7 @@
 </div>
 </section>
 <section id="creating-qubit-tensors">
-<h3>2. Creating Qubit Tensors<a class="headerlink" href="#creating-qubit-tensors" title="Permalink to this heading"></a></h3>
+<h3>2. Creating Qubit Tensors<a class="headerlink" href="#creating-qubit-tensors" title="Link to this heading"></a></h3>
 <p>Combine multiple qubits using the QubitTensor class:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tensor</span> <span class="o">=</span> <span class="n">QubitTensor</span><span class="p">()</span>
 
@@ -170,7 +170,7 @@
 </div>
 </section>
 <section id="applying-qft">
-<h3>3. Applying QFT<a class="headerlink" href="#applying-qft" title="Permalink to this heading"></a></h3>
+<h3>3. Applying QFT<a class="headerlink" href="#applying-qft" title="Link to this heading"></a></h3>
 <p>The QFT is applied by creating a QFT object with your tensor:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply QFT</span>
 <span class="n">qft</span> <span class="o">=</span> <span class="n">QFT</span><span class="p">(</span><span class="n">tensor</span><span class="p">)</span>
@@ -185,7 +185,7 @@
 </section>
 </section>
 <section id="example-creating-a-bell-state-and-applying-qft">
-<h2>Example: Creating a Bell State and Applying QFT<a class="headerlink" href="#example-creating-a-bell-state-and-applying-qft" title="Permalink to this heading"></a></h2>
+<h2>Example: Creating a Bell State and Applying QFT<a class="headerlink" href="#example-creating-a-bell-state-and-applying-qft" title="Link to this heading"></a></h2>
 <p>Here’s a more complex example creating a Bell state and applying QFT:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a Bell state (|00⟩ + |11⟩)/√2</span>
 <span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># (|0⟩ + |1⟩)/√2</span>
@@ -214,7 +214,7 @@
 </div>
 </section>
 <section id="tips-and-notes">
-<h2>Tips and Notes<a class="headerlink" href="#tips-and-notes" title="Permalink to this heading"></a></h2>
+<h2>Tips and Notes<a class="headerlink" href="#tips-and-notes" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Always ensure your qubits are properly normalized (α² + β² = 1)</p></li>
 <li><p>The QFT implementation automatically handles the phase rotations and Hadamard gates</p></li>
@@ -223,7 +223,7 @@
 </ol>
 </section>
 <section id="common-issues">
-<h2>Common Issues<a class="headerlink" href="#common-issues" title="Permalink to this heading"></a></h2>
+<h2>Common Issues<a class="headerlink" href="#common-issues" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p><strong>Invalid Amplitudes</strong>: Ensure qubit amplitudes satisfy normalization</p></li>
 <li><p><strong>Dimension Mismatch</strong>: Check that gate operations match tensor dimensions</p></li>

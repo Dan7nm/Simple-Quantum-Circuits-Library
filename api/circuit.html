@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -13,9 +13,9 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -58,6 +58,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_circuit_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_circuit_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.load_qft_preset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.measure_all"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.measure_all()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_array()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_operator_matrix()</span></code></a></li>
@@ -99,10 +100,10 @@
            <div itemprop="articleBody">
              
   <section id="module-circuit">
-<span id="circuit-class"></span><h1>Circuit Class<a class="headerlink" href="#module-circuit" title="Permalink to this heading"></a></h1>
+<span id="circuit-class"></span><h1>Circuit Class<a class="headerlink" href="#module-circuit" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">QuantumCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">QuantumCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
@@ -112,7 +113,7 @@
 <p>A class to represent a quantum circuit using quantum gates.</p>
 <p>The QuantumCircuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.</p>
 <section id="steps-for-circuit-building">
-<h2>Steps for circuit building:<a class="headerlink" href="#steps-for-circuit-building" title="Permalink to this heading"></a></h2>
+<h2>Steps for circuit building:<a class="headerlink" href="#steps-for-circuit-building" title="Link to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Initializes a first empty layer without any gates.</p></li>
 <li><p>Adds single qubit gates and control gates. Build a two dimensional array. Every row of the array represents a layer and every column represents a gate on that particular qubit. If no gate is chosen the identity gate will be the default gate.</p></li>
@@ -121,7 +122,7 @@
 </ol>
 </section>
 <section id="example-usage">
-<h2>Example Usage:<a class="headerlink" href="#example-usage" title="Permalink to this heading"></a></h2>
+<h2>Example Usage:<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h2>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
@@ -153,7 +154,7 @@
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_controlled_qubit_gate">
-<span class="sig-name descname"><span class="pre">add_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_controlled_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_controlled_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Add a controlled quantum gate to the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -173,7 +174,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_layer">
-<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_layer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_layer" title="Link to this definition"></a></dt>
 <dd><p>Adds a new empty layer to aspecified layer index in the circuit. If now index is given then adds the layer to the end of the circuit by default.</p>
 <p>The new layer is initialized with None values, representing identity gates.</p>
 <dl class="field-list simple">
@@ -185,7 +186,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_single_qubit_gate">
-<span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_single_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Add a single qubit gate to the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -204,7 +205,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_swap_gate">
-<span class="sig-name descname"><span class="pre">add_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_swap_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_swap_gate" title="Link to this definition"></a></dt>
 <dd><p>Add a SWAP gate between two qubits in the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -222,14 +223,14 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.apply_circuit">
-<span class="sig-name descname"><span class="pre">apply_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></span><a class="headerlink" href="#circuit.QuantumCircuit.apply_circuit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">apply_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></span><a class="headerlink" href="#circuit.QuantumCircuit.apply_circuit" title="Link to this definition"></a></dt>
 <dd><p>Apply the circuit operator to the input quantum state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>input_state</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – New quantum state to use as input.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Resulting quantum state after applying the circuit.</p>
+<dd class="field-even"><p><strong>mult_qubit</strong> – Resulting quantum state after applying the circuit.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
@@ -242,26 +243,47 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.get_circuit_operator_matrix">
-<span class="sig-name descname"><span class="pre">get_circuit_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.get_circuit_operator_matrix" title="Permalink to this definition"></a></dt>
-<dd><p>This function returns the final computed matrix of the entire circuit:
-:return: Matrix representing the entire circuit.
-:rtype: NDArray</p>
+<span class="sig-name descname"><span class="pre">get_circuit_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.get_circuit_operator_matrix" title="Link to this definition"></a></dt>
+<dd><p>This function returns the final computed matrix of the entire circuit:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>circuit_operator</strong> – Matrix representing the entire circuit.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>NDarray</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.load_qft_preset">
-<span class="sig-name descname"><span class="pre">load_qft_preset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.load_qft_preset" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">load_qft_preset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.load_qft_preset" title="Link to this definition"></a></dt>
 <dd><p>This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.measure_all">
+<span class="sig-name descname"><span class="pre">measure_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_shots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.measure_all" title="Link to this definition"></a></dt>
+<dd><p>This function measures the entire circuit and collapes using born rule to one of the superposition states with probability of the amplitudes squared.</p>
+<p>The function can measure the circuit a specified number of times. The method plots in a graph the probablity of each state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_of_shots</strong> (<em>int</em>) – The number of times to measure the entire circuit.</p></li>
+<li><p><strong>input_state</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – The input state to measure.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.print_array">
-<span class="sig-name descname"><span class="pre">print_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_array" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_array" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.print_circuit">
-<span class="sig-name descname"><span class="pre">print_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_circuit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_circuit" title="Link to this definition"></a></dt>
 <dd><p>Print a text-based visualization of the quantum circuit.</p>
 <p>The visualization includes:
 - Horizontal lines (─) representing qubit wires
@@ -273,13 +295,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.print_operator_matrix">
-<span class="sig-name descname"><span class="pre">print_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_operator_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_operator_matrix" title="Link to this definition"></a></dt>
 <dd><p>Print the final matrix that is applid on the state.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.remove_layer">
-<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_layer" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_layer" title="Link to this definition"></a></dt>
 <dd><p>Remove the a specified layer from the circuit. If no layer was specified than the last layer is removed by default.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -290,7 +312,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.remove_single_qubit_gate">
-<span class="sig-name descname"><span class="pre">remove_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_single_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Remove a single qubit gate from the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -307,7 +329,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.remove_two_qubit_gate">
-<span class="sig-name descname"><span class="pre">remove_two_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_two_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">remove_two_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.remove_two_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Remove a two-qubit gate (controlled or SWAP) from the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -325,7 +347,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.reset_circuit">
-<span class="sig-name descname"><span class="pre">reset_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.reset_circuit" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">reset_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.reset_circuit" title="Link to this definition"></a></dt>
 <dd><p>Reset the circuit to its initial empty state.</p>
 <p>Clears all gates and returns to a single empty layer with identity gates.</p>
 </dd></dl>

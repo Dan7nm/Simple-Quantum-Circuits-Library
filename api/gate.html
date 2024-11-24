@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -13,9 +13,9 @@
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b3ba4146"></script>
-      <script src="../_static/doctools.js?v=888ff710"></script>
-      <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -98,10 +98,10 @@
            <div itemprop="articleBody">
              
   <section id="module-gate">
-<span id="gate-class"></span><h1>Gate Class<a class="headerlink" href="#module-gate" title="Permalink to this heading"></a></h1>
+<span id="gate-class"></span><h1>Gate Class<a class="headerlink" href="#module-gate" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="gate.Gate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate.</span></span><span class="sig-name descname"><span class="pre">Gate</span></span><a class="headerlink" href="#gate.Gate" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gate.</span></span><span class="sig-name descname"><span class="pre">Gate</span></span><a class="headerlink" href="#gate.Gate" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
@@ -122,7 +122,7 @@
 <p>The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate,
 or a swap gate, allowing for versatile operations on qubits in a quantum system.</p>
 <section id="example">
-<h2>Example:<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<h2>Example:<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span> <span class="o">=</span> <span class="n">Gate</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="o">.</span><span class="n">set_controlled_qubit_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;P&quot;</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gate</span><span class="o">.</span><span class="n">print_matrix</span><span class="p">()</span>
@@ -139,7 +139,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.apply_matrix">
-<span class="sig-name descname"><span class="pre">apply_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></span><a class="headerlink" href="#gate.Gate.apply_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">apply_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></span><a class="headerlink" href="#gate.Gate.apply_matrix" title="Link to this definition"></a></dt>
 <dd><p>Apply the gate matrix to a qubit and return the resulting qubit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -156,7 +156,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.get_control_index">
-<span class="sig-name descname"><span class="pre">get_control_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gate.Gate.get_control_index" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_control_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gate.Gate.get_control_index" title="Link to this definition"></a></dt>
 <dd><p>Return the control qubit index if this gate is a control or swap gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -173,7 +173,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.get_gate_type">
-<span class="sig-name descname"><span class="pre">get_gate_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gate.Gate.get_gate_type" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_gate_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#gate.Gate.get_gate_type" title="Link to this definition"></a></dt>
 <dd><p>This function returns the gate type of this gate (e.g., I, X, Y, Z, H, SWAP)
 :return: The gate type
 :rtype: str</p>
@@ -181,7 +181,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.get_matrix">
-<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gate.Gate.get_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#gate.Gate.get_matrix" title="Link to this definition"></a></dt>
 <dd><p>Return the matrix representation of the gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -195,7 +195,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.get_target_index">
-<span class="sig-name descname"><span class="pre">get_target_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gate.Gate.get_target_index" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_target_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#gate.Gate.get_target_index" title="Link to this definition"></a></dt>
 <dd><p>Return the target qubit index if this gate is a control or swap gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -212,7 +212,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.is_control_gate">
-<span class="sig-name descname"><span class="pre">is_control_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_control_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">is_control_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_control_gate" title="Link to this definition"></a></dt>
 <dd><p>Returns true or false if the gate is a control gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -226,7 +226,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.is_single_qubit_gate">
-<span class="sig-name descname"><span class="pre">is_single_qubit_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">is_single_qubit_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_single_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>This method returns if the gate is a single qubit gate or not.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -240,7 +240,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.is_swap_gate">
-<span class="sig-name descname"><span class="pre">is_swap_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_swap_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">is_swap_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#gate.Gate.is_swap_gate" title="Link to this definition"></a></dt>
 <dd><p>Returns true or false if the gate is a swap gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -254,14 +254,14 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.print_matrix">
-<span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.print_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.print_matrix" title="Link to this definition"></a></dt>
 <dd><p>Print the gate matrix with formatted complex values.</p>
 <p>Values close to zero are rounded to zero for better readability.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.set_controlled_qubit_gate">
-<span class="sig-name descname"><span class="pre">set_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_controlled_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_controlled_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_controlled_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Set up a controlled gate with the specified control and target qubits and gate type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -280,7 +280,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.set_single_qubit_gate">
-<span class="sig-name descname"><span class="pre">set_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_single_qubit_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'I'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_single_qubit_gate" title="Link to this definition"></a></dt>
 <dd><p>Set the gate matrix for a specified single qubit gate type or phase gate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -297,7 +297,7 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="gate.Gate.set_swap_gate">
-<span class="sig-name descname"><span class="pre">set_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_swap_gate" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_swap_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#gate.Gate.set_swap_gate" title="Link to this definition"></a></dt>
 <dd><p>Configure a swap gate with the specified first and second qubits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
