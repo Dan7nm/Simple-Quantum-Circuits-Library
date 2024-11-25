@@ -1,10 +1,13 @@
 import numpy as np
 from qubit import Qubit
 from numpy.typing import NDArray
+import matplotlib.pyplot as plt
+import random
 
 EPSILON = 1e-10
 
 INV_VEC = "The input vector is invalid. Vector should be normalized, meaning the sum of all cells squared should sum to 1."
+INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
 
 class MultiQubit:
     """
@@ -202,13 +205,139 @@ class MultiQubit:
             If the vector doesn't meet the the normalization condition then a ValueError will be raised
         """
         sum = 0
-        print(vector)
         if len(vector) == 0:
             return 
         for amplitude in vector:
             probability = abs(amplitude) ** 2
             sum += probability
-        print(sum)
         if not abs(sum - 1) <= EPSILON:
             raise ValueError(INV_VEC)
         
+    def __init_state_intervals(self) -> dict:
+        """
+        This method returns a dictionary with the intervals and it's states.
+        Using those intervals we can now to which state the measurement collapsed.
+
+        Returns
+        -------
+        out : dict
+            The dictionary with keys as intervals and it corresponding amplitudes 
+        """
+        interval_dict = {}
+        lower_bound = 0
+        upper_bound = 0
+        for state_index,amplitude in enumerate(self.__tensor_vector):
+            prob = abs(amplitude) ** 2
+            # We could have prob that are not zero but close to zero to floating inaccuracies. This should solve this problem.
+            if prob > EPSILON:
+                upper_bound+=prob
+                state = format(state_index,f'0{self.__number_of_qubits}b')
+                interval_dict.update({(lower_bound,upper_bound):state})
+            lower_bound = upper_bound
+        
+        return interval_dict
+
+    def measure(self) -> str:
+        """
+        This function measures the state one time and returns the state to which the mesurement collapsed to.
+
+        Returns
+        -------
+        out : str
+           The state to which the measurement collapsed to.
+        """
+        interval_dict = self.__init_state_intervals()
+        rand_num = random.uniform(0,1)
+        for interval,state in interval_dict.items():
+            if interval[0]<= rand_num <= interval[1]:
+                return state
+
+    def plot_measurements(self,num_of_measurements: int = 10000) -> None:
+        """
+        This function measures a specified number of times. Then plots in a graph the number of times we got each state divided by the number of measurements thus resulting in the probabilities.
+
+        Parameters
+        ----------
+        number_of_measurements : int
+            The number of times to measure the entire circuit.
+        """
+        self.__valid_pos_val(value= num_of_measurements)
+
+        # Initialize dictionary to stores the states and number of times we collapsed to that state.
+        states_dict = {format(state_index, f"0{self.__number_of_qubits}b"): 0
+               for state_index in range(2**self.__number_of_qubits)}
+    
+        for measurements in range(num_of_measurements):
+            collapsed_state = self.measure()
+            states_dict[collapsed_state] += 1
+        
+        states_list = list(states_dict.keys())
+        probs_list = np.array(list(states_dict.values())) / num_of_measurements
+
+        # Plot
+        plt.figure(figsize=(10, 6))
+        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
+
+        # Add labels and title
+        plt.xlabel('Quantum States', fontsize=12)
+        plt.ylabel('Probability', fontsize=12)
+        plt.title(f'Probability Distribution of Measured Quantum States\n(Number of Measurments: {num_of_measurements})', fontsize=14)
+
+        # Show grid and the plot
+        plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.show()
+
+    def __valid_pos_val(self,value:int) -> None:
+        """
+        This method check if the argument is non zero positive integer.
+        Parameters
+        ----------
+        values : int 
+            The value to check
+        
+        Raises
+        ------
+        ValueError
+            Raises a value error if the the given value is not a positive integer 
+        """
+        if not isinstance(value,int) and value < 1:
+            raise ValueError(INV_POS_VAL)
+    
+    def plot_probabilities(self) -> None:
+        """
+        This function plots directly the probabilities for the the state with measuring.
+        """
+        states_list = [format(state,f"0{self.__number_of_qubits}b") for state in range(2 ** self.__number_of_qubits)]
+        probs_list = [abs(amplitude)**2 for amplitude in self.__tensor_vector]
+        # Plot
+        plt.figure(figsize=(10, 6))
+        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
+
+        # Add labels and title
+        plt.xlabel('Quantum States', fontsize=12)
+        plt.ylabel('Probability', fontsize=12)
+        plt.title(f'Probability Distribution of a Quantum State\n', fontsize=14)
+
+        # Show grid and the plot
+        plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.show()
+
+
+    def plot_amplitudes(self) -> None:
+        """
+        This function plots directly the probabilities for the the state with measuring.
+        """
+        states_list = [format(state,f"0{self.__number_of_qubits}b") for state in range(2 ** self.__number_of_qubits)]
+        amplitude_list = [amplitude for amplitude in self.__tensor_vector]
+        # Plot
+        plt.figure(figsize=(10, 6))
+        plt.bar(states_list, amplitude_list, color='blue', alpha=0.7)
+
+        # Add labels and title
+        plt.xlabel('Quantum States', fontsize=12)
+        plt.ylabel('Amplitudes', fontsize=12)
+        plt.title(f'Amplitudes Distribution of a Quantum State\n', fontsize=14)
+
+        # Show grid and the plot
+        plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.show()

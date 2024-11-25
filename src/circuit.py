@@ -4,8 +4,6 @@ from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
 from typing import Set
-import matplotlib.pyplot as plt
-import random
 import torch
 
 # Constants
@@ -539,8 +537,8 @@ class QuantumCircuit:
         2. Computes the matrix for each layer
         3. Multiplies all layer matrices to get the final circuit operator
         """
-        self.__valid_layer_index(layer_index)
         layers_to_compute = (self.__number_of_layers if layer_index is None else layer_index)
+        self.__valid_layer_index(layers_to_compute)
         # First fill all empty cells with identity gates
         self.__fill_identity_gates()
         computed_layers = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
@@ -735,66 +733,6 @@ class QuantumCircuit:
         for qubit_index in range(self.__number_of_compatible_qubits):
             if qubit_index < self.__number_of_compatible_qubits - 1 - qubit_index:
                 self.add_swap_gate(qubit_index,self.__number_of_compatible_qubits - 1 - qubit_index,curr_layer_index)
-
-    def __collapse_to_state(self,amplitude:complex) -> float:
-        """
-        This function returns with specified amplitude a bolean if the state collapsed to this state or not.
-
-        Parameters
-        ----------
-        Amplitude : complex
-            The amplitude of the given state.
-
-        Returns
-        -------
-        out : bool
-            True if we collapsed to the current desired state, otherwise return False.
-        
-        """
-        prob = abs(amplitude) ** 2
-        return random.random() < prob
-
-    def measure_all(self,input_state: MultiQubit,number_of_shots: int = 10000) -> None:
-        """
-        This function measures the entire circuit and collapes using born rule to one of the superposition states with probability of the amplitudes squared.
-
-        The function can measure the circuit a specified number of times. The method plots in a graph the probablity of each state.
-
-        Parameters
-        ----------
-        number_of_shots : int
-            The number of times to measure the entire circuit.
-        input_state : MultiQubit
-            The input state to measure.
-        """
-        self.__valid_pos_val(value= number_of_shots)
-        result_state = self.apply_circuit(input_state= input_state)
-        result_vector = result_state.get_tensor_vector()
-
-        # Dictionary to stores the states and number of times we collapsed to that state.
-        states_dict = {}
-
-        for shot in range(number_of_shots):
-            for state in range(2 ** self.__number_of_compatible_qubits):
-                if self.__collapse_to_state(result_vector[state]):
-                    state_binary = format(state, f'0{self.__number_of_compatible_qubits}b')
-                    states_dict[state_binary] = states_dict.get(state_binary,0) + 1
-        
-        states_list = list(states_dict.keys())
-        probs_list = np.array(list(states_dict.values())) / number_of_shots
-
-        # Plot
-        plt.figure(figsize=(10, 6))
-        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
-
-        # Add labels and title
-        plt.xlabel('Quantum States', fontsize=12)
-        plt.ylabel('Probability', fontsize=12)
-        plt.title(f'Probability Distribution of Measured Quantum States\n(Number of Measurments: {number_of_shots})', fontsize=14)
-
-        # Show grid and the plot
-        plt.grid(axis='y', linestyle='--', alpha=0.6)
-        plt.show()
 
     def device_in_use(self) -> None:
         """
