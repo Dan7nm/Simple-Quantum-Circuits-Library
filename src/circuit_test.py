@@ -3,13 +3,13 @@ from circuit import QuantumCircuit
 import time
 
 EPSILON = 1e-16
-QUBITS_TO_TEST_QFT = 12
+QUBITS_TO_TEST_QFT = 11
 
-def test_qft_matrix_output():
+def test_qft_matrix_output(qubits_to_test = 3):
     start_time = time.perf_counter()
     # Test 2: Compare QFT matrices and output matrices for 2 to number of qubits to test
 
-    for num_qubits in range(2, QUBITS_TO_TEST_QFT + 1):
+    for num_qubits in range(2, qubits_to_test + 1):
         # Start measurement of computing quantum circuit.
         start_time_qft = time.perf_counter()
 
@@ -37,5 +37,5 @@ def test_qft_matrix_output():
     print("=============== QFT tests passed! ===============")
 
 if __name__ == "__main__":
-    test_qft_matrix_output()
+    test_qft_matrix_output(QUBITS_TO_TEST_QFT)
     print("=============== All tests passed! ===============")

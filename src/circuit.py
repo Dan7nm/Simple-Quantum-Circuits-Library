@@ -1,11 +1,14 @@
+# Imports:
 from gate import Gate
 from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
-from typing import List,Tuple,Set
+from typing import Set
 import matplotlib.pyplot as plt
 import random
+import torch
 
+# Constants
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
 INV_LAYER_INDEX = "The layer index is invalid. The layer index should be an integer between 0 and number of layers - 1"
 CELL_TAKEN = "This cell already has a gate assigned to it. Use the remove gate method to remove a gate."
@@ -64,7 +67,10 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,number_of_qubits: int, num_of_layers: int = 1) -> None:
+    def __init__(self,number_of_qubits: int, num_of_layers: int = 1, device=None) -> None:
+        # Select a device to compute the matrices:
+        self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
         # Check if valid inputs:
         self.__valid_pos_val(number_of_qubits)
         self.__valid_pos_val(num_of_layers)
@@ -73,8 +79,8 @@ class QuantumCircuit:
         self.__number_of_layers = num_of_layers
 
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
-        self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None)
-        self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits)
+        self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None,dtype=Gate)
+        self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits,dtype=np.complex128)
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
@@ -269,9 +275,8 @@ class QuantumCircuit:
         ValueError
             Raises a value error if the the given value is not a positive integer 
         """
-
-        
-
+        if not isinstance(value,int) and value < 1:
+            raise ValueError(INV_POS_VAL)
 
     def __valid_qubit_index(self,qubit_index: int,layer_index: int, adding_gate: bool = True) -> None:
         """
@@ -313,31 +318,32 @@ class QuantumCircuit:
                     identity_gate.set_single_qubit_gate("I")
                     self.__circuit[layer_index][qubit_index] = identity_gate
 
-    def __compute_single_qubit_gates(self, layer_gates: NDArray) -> NDArray:
+    def __compute_single_qubit_gates(self, layer_gates: NDArray) -> torch.Tensor:
         """
         This function  computes all single qubit gates in one layer.
 
         :param layer_gates: An array of all gates in the layer we want to compute.
         :type layer_gates: NDArray
         :return: The function returns the unitary matrix of that layer
-        :rtype: NDArray
+        :rtype: Tensor
         """
-        result_matrix = np.ones((1,),dtype=complex)
-        identity_matrix = np.identity(2)
+        result_matrix = torch.tensor([1],dtype=torch.complex128,device=self.__device)
+        identity_matrix = torch.eye(2,dtype=torch.complex128,device=self.__device)
 
         for gate in layer_gates:
             # Check if current gate is a single qubit gate.
             if gate.is_single_qubit_gate():
-                gate_matrix = gate.get_matrix()
+                gate_matrix = torch.tensor(gate.get_matrix(),dtype=torch.complex128, device=self.__device)
+
                 # Compute the kronecker product of all single qubit gates
-                result_matrix = np.kron(result_matrix,gate_matrix)
+                result_matrix = torch.kron(result_matrix,gate_matrix)
             else:
                 # If the gate is not a single qubit gate we compute the kronecker product with the identity matrix.
-                result_matrix = np.kron(result_matrix,identity_matrix)
+                result_matrix = torch.kron(result_matrix,identity_matrix)
         
         return result_matrix
 
-    def __swap_gate_matrix(self,first_index: int, second_index: int) -> NDArray:
+    def __swap_gate_matrix(self,first_index: int, second_index: int) -> torch.Tensor:
         """
         Generate the matrix representation of a SWAP gate between first_index and second qubit index in an n-qubit system.
         
@@ -347,13 +353,13 @@ class QuantumCircuit:
         :type second_index: int
 
         :return: 2^n x 2^n matrix representing the SWAP operation
-        :rtype: NDArray
+        :rtype: Tensor
         """
         # Calculate matrix dimension
         dim = 2 ** self.__number_of_compatible_qubits
         
         # Initialize the matrix with zeros
-        swap_matrix = np.zeros((dim, dim))
+        swap_matrix = torch.zeros((dim,dim),dtype=torch.complex128,device=self.__device)
         
         # Generate all possible basis states
         for state in range(dim):
@@ -381,7 +387,7 @@ class QuantumCircuit:
         :return: The function returns the unitary matrix of that layer
         :rtype: NDArray
         """
-        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits)
+        result_matrix = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
 
         processed_qubits = set()
 
@@ -397,7 +403,8 @@ class QuantumCircuit:
 
                 swap_matrix = self.__swap_gate_matrix(first_index=first_index,second_index=second_index)
 
-                result_matrix = result_matrix @ swap_matrix
+                # Multiply all the matrices of all swap gates
+                result_matrix = torch.matmul(result_matrix,swap_matrix)
         
         return result_matrix
 
@@ -406,7 +413,7 @@ class QuantumCircuit:
         gate: Gate,
         control_index: int,
         target_index: int
-    ) -> NDArray:
+    ) -> torch.Tensor:
         """
         Create a controlled operation matrix for the given gate.
         
@@ -418,22 +425,23 @@ class QuantumCircuit:
             The resulting controlled operation matrix
         """
         index_diff = abs(control_index - target_index) - 1
-        identity_mid = np.identity(2 ** index_diff)
-        proj_00_matrix = np.array([[1,0],[0,0]], dtype=complex)
-        proj_11_matrix = np.array([[0,0],[0,1]], dtype=complex)
-        gate_matrix = gate.get_matrix()
+        identity_mid = torch.eye(2 ** index_diff,dtype=torch.complex128,device=self.__device)
+        proj_00_matrix = torch.tensor([[1,0],[0,0]], dtype=torch.complex128,device=self.__device)
+        proj_11_matrix = torch.tensor([[0,0],[0,1]], dtype=torch.complex128,device=self.__device)
+        gate_matrix = torch.tensor(gate.get_matrix(),dtype=torch.complex128, device=self.__device)
+        identity_matrix = torch.eye(2,dtype=torch.complex128,device=self.__device)
         
         # Check if control index is before target index
         if control_index < target_index:
-            first_term = np.kron(np.kron(proj_00_matrix, identity_mid), np.identity(2))
-            second_term = np.kron(np.kron(proj_11_matrix, identity_mid), gate_matrix)
+            first_term = torch.kron(torch.kron(proj_00_matrix, identity_mid), identity_matrix)
+            second_term = torch.kron(torch.kron(proj_11_matrix, identity_mid), gate_matrix)
         else:
-            first_term = np.kron(np.kron(np.identity(2), identity_mid), proj_00_matrix)
-            second_term = np.kron(np.kron(gate_matrix, identity_mid),proj_11_matrix)
+            first_term = torch.kron(torch.kron(identity_matrix, identity_mid), proj_00_matrix)
+            second_term = torch.kron(torch.kron(gate_matrix, identity_mid),proj_11_matrix)
             
         return first_term + second_term
 
-    def __embed_in_circuit(self, gate: Gate, operation: NDArray, control_index: int, target_index: int) -> NDArray:
+    def __embed_in_circuit(self, gate: Gate, operation: NDArray, control_index: int, target_index: int) -> torch.Tensor:
         """
         Embed the controlled operation in the full circuit space.
         
@@ -448,13 +456,13 @@ class QuantumCircuit:
         higher_idx = max(control_index, target_index)
         
         # Create identity matrices for unused qubits
-        identity_prev = np.identity(2 ** lower_idx)
-        identity_after = np.identity(2 ** (self.__number_of_compatible_qubits - higher_idx - 1))
+        identity_prev = torch.eye(2 ** lower_idx,dtype=torch.complex128,device=self.__device)
+        identity_after = torch.eye(2 ** (self.__number_of_compatible_qubits - higher_idx - 1),dtype=torch.complex128,device=self.__device)
         
         # Embed the operation in the full circuit space
-        return np.kron(np.kron(identity_prev, operation), identity_after)
+        return torch.kron(torch.kron(identity_prev, operation), identity_after)
 
-    def __compute_controlled_gates(self, layer_gates: NDArray) -> NDArray:
+    def __compute_controlled_gates(self, layer_gates: NDArray) -> torch.Tensor:
         """
         Compute all controlled gates in one layer.
         
@@ -465,11 +473,11 @@ class QuantumCircuit:
             
         Returns
         -------
-        out - NDArray    
+        out : Tensor    
             The unitary matrix representing the complete layer
         """
         processed_qubits: Set[int] = set()
-        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits)
+        result_matrix = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
         
         for qubit_index,gate in enumerate(layer_gates):
             if qubit_index in processed_qubits:
@@ -485,11 +493,11 @@ class QuantumCircuit:
                 embedded_op = self.__embed_in_circuit(gate, controlled_op,control_index,target_index)
                 
                 # Update the result matrix
-                result_matrix = result_matrix @ embedded_op
+                result_matrix = torch.matmul(result_matrix,embedded_op)
             
         return result_matrix
 
-    def __compute_layer(self, layer_index: int) -> NDArray[np.complex128]:
+    def __compute_layer(self, layer_index: int) -> torch.Tensor:
         """
         Compute the combined operation of all gates in a single layer.
 
@@ -500,13 +508,13 @@ class QuantumCircuit:
         
         Returns
         -------
-        matrix : NDArray[np.complex128]
+        matrix : Tensor
             Matrix representing the combined operation of all gates in the layer.
         """
         # Get all gates in the current layer
         layer_gates = self.__circuit[layer_index]
 
-        result_matrix = np.identity(2 ** self.__number_of_compatible_qubits, dtype= complex)
+        result_matrix = torch.eye(2 ** self.__number_of_compatible_qubits, dtype= torch.complex128,device=self.__device)
         
         # Compute all single qubit matrices:
         single_qubit_gates_matrix = self.__compute_single_qubit_gates(layer_gates)
@@ -517,7 +525,7 @@ class QuantumCircuit:
         # Compute all swap gates in this layer:
         swap_gates_matrices = self.__compute_swap_gates(layer_gates=layer_gates)
 
-        # Multtiply all computed matrices
+        # Multiply all the computed matrices
         result_matrix = result_matrix @ single_qubit_gates_matrix @ controlled_gates_matrix @ swap_gates_matrices
              
         return result_matrix
@@ -533,11 +541,13 @@ class QuantumCircuit:
         """
         # First fill all empty cells with identity gates
         self.__fill_identity_gates()
+        computed_layers = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
         # Multiply the matrices of each layer to compute the final matrix of the whole circuit.
         for layer_index in range(self.__number_of_layers):
             layer_matrix = self.__compute_layer(layer_index)
-            self.__circuit_operator = np.matmul(self.__circuit_operator,layer_matrix)
+            computed_layers = torch.matmul(computed_layers,layer_matrix)
 
+        self.__circuit_operator = computed_layers.cpu().numpy()
         # Update that the circuit was computed
         self.__circuit_is_computed = True
 
