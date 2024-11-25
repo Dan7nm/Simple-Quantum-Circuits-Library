@@ -55,7 +55,7 @@ class QuantumCircuit:
     >>> circuit.add_single_qubit_gate(0,1,"X")
     >>> circuit.add_swap_gate(2,4,0)
     >>> circuit.compute_circuit()
-    >>> circuit.print_circuit()
+    >>> circuit.draw_circuit()
     >>> result = circuit.apply_circuit()
     >>> result.print_tensor_form()
     Tensor product in basis state form: |11100⟩
@@ -69,11 +69,7 @@ class QuantumCircuit:
     """
     def __init__(self,number_of_qubits: int, num_of_layers: int = 1, device=None) -> None:
         # Select a device to compute the matrices:
-        if device is not None:
-            self.__device = device
-        else:
-            self.__device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        print(self.__device)
+        self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         # Check if valid inputs:
         self.__valid_pos_val(number_of_qubits)
@@ -600,7 +596,7 @@ class QuantumCircuit:
         result_qubit_tensor = MultiQubit(result_vector, self.__number_of_compatible_qubits)
         return result_qubit_tensor
     
-    def print_circuit(self) -> None:
+    def draw_circuit(self) -> None:
         """
         Print a text-based visualization of the quantum circuit.
 
@@ -716,9 +712,6 @@ class QuantumCircuit:
 
         return self.__circuit_operator
 
-    def print_array(self) -> None:
-        print(self.__circuit)
-
     def load_qft_preset(self) -> None:
         """
         This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given.
@@ -740,8 +733,6 @@ class QuantumCircuit:
         for qubit_index in range(self.__number_of_compatible_qubits):
             if qubit_index < self.__number_of_compatible_qubits - 1 - qubit_index:
                 self.add_swap_gate(qubit_index,self.__number_of_compatible_qubits - 1 - qubit_index,curr_layer_index)
-
-
 
     def __collapse_to_state(self,amplitude:complex) -> float:
         """
@@ -803,8 +794,10 @@ class QuantumCircuit:
         plt.grid(axis='y', linestyle='--', alpha=0.6)
         plt.show()
 
-
-
-
+    def device_in_use(self) -> None:
+        """
+        This function prints the device in use by this quantum circuit.
+        """
+        print(f"The device computing device used in this circuit: {self.__device}")
 
 
