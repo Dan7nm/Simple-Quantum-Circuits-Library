@@ -1,9 +1,11 @@
 import numpy as np
 from qubit import Qubit
-from typing import List
 from numpy.typing import NDArray
 
 EPSILON = 1e-10
+
+INV_VEC = "The input vector is invalid. Vector should be normalized, meaning the sum of all cells squared should sum to 1."
+
 class MultiQubit:
     """
     :ivar __number_of_qubits: Number of qubits in the tensor product.
@@ -28,20 +30,21 @@ class MultiQubit:
     Tensor product in basis state form: |01⟩
     """
 
-    def __init__(self, vector: List[complex]=[], number_of_qubits: int = 0) -> None:
+    def __init__(self, vector: NDArray[np.complex128]=np.array([])) -> None:
         """
         Initialize an empty QubitTensor object.
 
         The tensor product starts with no qubits and an empty tensor vector.
         Qubits can be added using the add_qubit method.
 
-        :param __number_of_qubits: Number of qubits in the tensor product.
-        :type __number_of_qubits: int
         :param __tensor_vector: Vector representation of the quantum state.
-        :type __tensor_vector: list[complex]
+        :type __tensor_vector: NDArray[np.complex128]
         """
-        self.__number_of_qubits = number_of_qubits
+        # Check if the given vector is normalized:
+        self.__valid_amplitudes(vector)
         self.__tensor_vector = vector
+        vector_len = len(self.__tensor_vector)
+        self.__number_of_qubits = int(np.log2(vector_len) if vector_len > 0 else 0)
 
     def add_qubit(self, new_qubit: Qubit) -> None:
         """
@@ -182,3 +185,30 @@ class MultiQubit:
             new_tensor_vec.append(vec2[1])
 
         return np.array(new_tensor_vec)
+
+
+    def __valid_amplitudes(self,vector: NDArray[np.complex128]) -> None:
+        """
+        This method checks if the input vector respects the normalization condition.
+
+        Parameters
+        ----------
+        vector : NDArray[np.complex128]
+            The input vector to check normalization.
+
+        Raises
+        ------
+        ValueError
+            If the vector doesn't meet the the normalization condition then a ValueError will be raised
+        """
+        sum = 0
+        print(vector)
+        if len(vector) == 0:
+            return 
+        for amplitude in vector:
+            probability = abs(amplitude) ** 2
+            sum += probability
+        print(sum)
+        if not abs(sum - 1) <= EPSILON:
+            raise ValueError(INV_VEC)
+        

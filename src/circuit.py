@@ -294,7 +294,7 @@ class QuantumCircuit:
         
     def __valid_layer_index(self, layer_index) -> None:
         """
-        Validate a layer index.
+        Validate a layer index. Check if the given index is non negative and an integer.
 
         :param layer_index: Index of the layer to validate
         :type layer_index: int
@@ -530,7 +530,7 @@ class QuantumCircuit:
              
         return result_matrix
         
-    def __compute_circuit(self) -> None:
+    def __compute_circuit(self,layer_index: int = None) -> None:
         """
         Compute the final unitary matrix representing the entire circuit.
 
@@ -539,11 +539,13 @@ class QuantumCircuit:
         2. Computes the matrix for each layer
         3. Multiplies all layer matrices to get the final circuit operator
         """
+        self.__valid_layer_index(layer_index)
+        layers_to_compute = (self.__number_of_layers if layer_index is None else layer_index)
         # First fill all empty cells with identity gates
         self.__fill_identity_gates()
         computed_layers = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
         # Multiply the matrices of each layer to compute the final matrix of the whole circuit.
-        for layer_index in range(self.__number_of_layers):
+        for layer_index in range(layers_to_compute):
             layer_matrix = self.__compute_layer(layer_index)
             computed_layers = torch.matmul(computed_layers,layer_matrix)
 
@@ -593,7 +595,7 @@ class QuantumCircuit:
 
         qubit_tensor_vector = input_state.get_tensor_vector()
         result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
-        result_qubit_tensor = MultiQubit(result_vector, self.__number_of_compatible_qubits)
+        result_qubit_tensor = MultiQubit(result_vector)
         return result_qubit_tensor
     
     def draw_circuit(self) -> None:
@@ -800,4 +802,34 @@ class QuantumCircuit:
         """
         print(f"The device computing device used in this circuit: {self.__device}")
 
+    def get_number_of_layers(self) -> int:
+        """
+        This function returns the number of layers in this circuit.
+        Returns
+        -------
+        number_of_layers : int
+            The number of layers in the circuit.
+        """ 
+        return self.__number_of_layers
 
+    def get_number_of_compatible_qubits(self) -> int:
+        """
+        This function returns the number of qubits this circuit is compatible with.
+
+        Returns
+        -------
+        number_of_compatible_qubits : int
+            The number of qubit this circuit is compatible with.
+        """
+        return self.__number_of_compatible_qubits
+    
+    def get_array(self) -> NDArray:
+        """
+        This function returns the matrix with all of the gates.
+
+        Returns
+        -------
+        layers_array : NDArray
+            Matrix with all of the gates.
+        """
+        return self.__circuit
