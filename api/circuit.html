@@ -56,11 +56,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_swap_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_swap_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.device_in_use"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.device_in_use()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.draw_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.draw_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_circuit_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_circuit_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.load_qft_preset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.measure_all"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.measure_all()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_array()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_layer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_single_qubit_gate()</span></code></a></li>
@@ -139,7 +139,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">add_swap_gate</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">compute_circuit</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">print_circuit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">apply_circuit</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
 <span class="go">Tensor product in basis state form: |11100⟩</span>
@@ -242,6 +242,24 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.device_in_use">
+<span class="sig-name descname"><span class="pre">device_in_use</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.device_in_use" title="Link to this definition"></a></dt>
+<dd><p>This function prints the device in use by this quantum circuit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.draw_circuit">
+<span class="sig-name descname"><span class="pre">draw_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.draw_circuit" title="Link to this definition"></a></dt>
+<dd><p>Print a text-based visualization of the quantum circuit.</p>
+<p>The visualization includes:
+- Horizontal lines (─) representing qubit wires
+- Single qubit gates with their type (H, X, Y, Z, P)
+- Control points (●) for controlled gates
+- Target points (⊕ for X gates, ◯ for others)
+- Swap gates (⨉)</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.get_circuit_operator_matrix">
 <span class="sig-name descname"><span class="pre">get_circuit_operator_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">complex128</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.get_circuit_operator_matrix" title="Link to this definition"></a></dt>
 <dd><p>This function returns the final computed matrix of the entire circuit:</p>
@@ -274,23 +292,6 @@
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="circuit.QuantumCircuit.print_array">
-<span class="sig-name descname"><span class="pre">print_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_array" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="circuit.QuantumCircuit.print_circuit">
-<span class="sig-name descname"><span class="pre">print_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.print_circuit" title="Link to this definition"></a></dt>
-<dd><p>Print a text-based visualization of the quantum circuit.</p>
-<p>The visualization includes:
-- Horizontal lines (─) representing qubit wires
-- Single qubit gates with their type (H, X, Y, Z, P)
-- Control points (●) for controlled gates
-- Target points (⊕ for X gates, ◯ for others)
-- Swap gates (⨉)</p>
 </dd></dl>
 
 <dl class="py method">
