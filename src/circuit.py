@@ -69,7 +69,11 @@ class QuantumCircuit:
     """
     def __init__(self,number_of_qubits: int, num_of_layers: int = 1, device=None) -> None:
         # Select a device to compute the matrices:
-        self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        if device is not None:
+            self.__device = device
+        else:
+            self.__device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        print(self.__device)
 
         # Check if valid inputs:
         self.__valid_pos_val(number_of_qubits)

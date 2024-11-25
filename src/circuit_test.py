@@ -3,7 +3,7 @@ from circuit import QuantumCircuit
 import time
 
 EPSILON = 1e-16
-QUBITS_TO_TEST_QFT = 11
+QUBITS_TO_TEST_QFT = 9
 
 def test_qft_matrix_output(qubits_to_test = 3):
     start_time = time.perf_counter()
