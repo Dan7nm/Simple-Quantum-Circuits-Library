@@ -360,3 +360,66 @@ class MultiQubit:
         plt.grid(axis='y', linestyle='--', alpha=0.6)
         plt.xticks(rotation=90)  # Rotate state labels for better readability
         plt.show()
+
+
+    def __valid_qubit_index(self, index: int) -> None:
+        """
+        Validates the given qubit index.
+
+        Parameters
+        ----------
+        index : int
+            The index of the qubit to be validated.
+
+        Raises
+        ------
+        ValueError
+            If the index is not an integer or not within the valid range (0 to number_of_qubits - 1).
+        """
+        if not isinstance(index, int):
+            raise ValueError("The index should be an integer.")
+        if not 0 <= index < self.__number_of_qubits:
+            raise ValueError("Index should be between 0 and number of qubits - 1.")
+
+    def get_qubit(self,qubit_index:int) -> Qubit:
+        """
+        Returns the qubit we want to trace out from the quantum state of multiple qubits.
+        
+        The function computes the sum of the amplitudes of the projection of a specific qubit 
+        in the given quantum state on the `|0⟩` and `|1⟩` states.
+
+        Parameters
+        ----------
+        qubit_index : int
+            The index of the qubit whose amplitudes are to be extracted.
+
+        Returns
+        -------
+        Qubit
+            An object of class `Qubit` representing the amplitudes for the `|0⟩` and `|1⟩` states.
+        
+        Raises
+        ------
+        ValueError
+            If the qubit_index is not valid.
+        """
+        # Check if valid qubit index was given:
+        self.__valid_qubit_index(qubit_index)
+        proj_00_mat = np.array([[1,0],[0,0]])
+        proj_11_mat = np.array([[0,0],[0,1]])
+
+        # Idenity matrices for all the qubits we want to not change.
+        identity_mat_prev = np.identity(2**(qubit_index))
+        identity_mat_after = np.identity(2**(self.__number_of_qubits-qubit_index - 1))
+
+        # Compute the kornecker product of the matrix that project a specific qubit:
+        proj_tensor_to_zero = np.kron(np.kron(identity_mat_prev,proj_00_mat),identity_mat_after)
+        proj_tensor_to_one = np.kron(np.kron(identity_mat_prev,proj_11_mat),identity_mat_after)
+
+
+        # We sum all the probabilties of the projected state and the result is the probability of the state we want to trace out.
+        alpha = np.sqrt(np.sum(np.abs(proj_tensor_to_zero @ self.__tensor_vector)**2))
+        beta = np.sqrt(np.sum(np.abs(proj_tensor_to_one @ self.__tensor_vector)**2))
+        return Qubit(alpha,beta)
+
+

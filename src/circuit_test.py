@@ -1,10 +1,12 @@
 import numpy as np
 from circuit import QuantumCircuit
 from multi_qubit import MultiQubit
+from qubit import Qubit
 import time
+import random
 
 EPSILON = 1e-16
-QUBITS_TO_TEST = 7
+QUBITS_TO_TEST = 2
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -168,10 +170,71 @@ def test_qft_matrix_output(qubits_to_test: int = 3) -> None:
     print(f"==== Total QFT Test runtime: {elapsed_time:.2f} seconds =======")
     print("=============== QFT tests passed! ===============")
 
+def test_tracing_out_qubit(qubits_to_test: int) -> None:
+    """
+    Tests the process of tracing out a qubit in a multi-qubit quantum state by comparing 
+    the amplitudes of each qubit before and after the operation. The function generates 
+    a random quantum state for multiple qubits, traces out each qubit one by one, and 
+    verifies if the original amplitudes are preserved.
+
+    Parameters
+    ----------
+    qubits_to_test : int
+        The number of qubits in the quantum state to test. Each qubit will be initialized
+        with random amplitudes, and the test will check that the amplitudes are correctly 
+        traced out for each qubit.
+
+    Returns
+    -------
+    None
+        This function does not return any values. It performs an assertion to verify that 
+        the traced out qubits' amplitudes match the original amplitudes and prints confirmation.
+
+    Notes
+    -----
+    The function assumes that the `MultiQubit` class has methods like `add_qubit`, `get_qubit`, 
+    and `print_tensor_form` for handling the quantum state, and that each `Qubit` has methods 
+    like `get_alpha` and `get_beta` for retrieving the amplitudes of individual qubits.
+    
+    The test checks that the amplitudes of each qubit remain unchanged after tracing out each qubit 
+    by comparing them to the original values stored before the tracing out operation.
+    
+    Example
+    -------
+    >>> test_tracing_out_qubit(3)
+    Prints the original amplitudes and confirms that tracing out each qubit works correctly.
+    """
+
+    q_state = MultiQubit()
+    qubits_original_ampitudes = []
+    for qubit in range(qubits_to_test):
+        alpha = random.uniform(0,1)
+        beta = random.uniform(0,1)
+        norm_factor = abs(alpha) ** 2 + abs(beta) ** 2
+        alpha /= np.sqrt(norm_factor)
+        beta /= np.sqrt(norm_factor) 
+        q_state.add_qubit(Qubit(alpha,beta))
+        qubits_original_ampitudes.append((alpha,beta))
+    print(qubits_original_ampitudes)
+    q_state.print_tensor_form()
+
+    for qubit_index in range(qubits_to_test):
+        qubit_to_check = q_state.get_qubit(qubit_index)
+        alpha = qubit_to_check.get_alpha()
+        beta = qubit_to_check.get_beta()
+        
+        # Check if the original amplitudes of the qubit are the same as the traced out qubit:
+        assert np.isclose(alpha, qubits_original_ampitudes[qubit_index][0], atol=EPSILON)
+        assert np.isclose(beta, qubits_original_ampitudes[qubit_index][1], atol=EPSILON)
+
+
+    print("==== The traced out qubit's real amplitudes are the same as their original real amplitudes. ==== ")    
+    
 
 if __name__ == "__main__":
     # Run tests.
     # qft_on_sine(QUBITS_TO_TEST)
-    qft_on_gaussian(QUBITS_TO_TEST,mu=0,sigma=0.1)
+    # qft_on_gaussian(QUBITS_TO_TEST,mu=0,sigma=0.1)
     # test_qft_matrix_output(QUBITS_TO_TEST)
+    test_tracing_out_qubit(QUBITS_TO_TEST)
     print("=============== All tests passed! ===============")

@@ -1,8 +1,10 @@
 import numpy as np
 from typing import Tuple
 from numpy.typing import NDArray
+import random
 
 EPSILON = 1e-10
+
 
 INV_AMP = "Amplitude is invalid. The given amplitude needs to be between 0 and 1 and satisfy the normalization condition."
 
@@ -138,3 +140,50 @@ class Qubit:
         Qubit state is [alpha,beta].
         """
         print(self.__qubit_vector)
+
+    def measure(self) -> str:
+        """
+        Perform a measurement on a qubit.
+
+        This method measures the qubit in the computational basis (|0⟩ and |1⟩) and returns the outcome based on the corresponding probabilities.
+        The probabilities are calculated from the squared magnitudes of the 
+        qubit's alpha (α) and beta (β) amplitudes.
+
+        The measurement outcome is determined by generating a random number 
+        and comparing it to the probability distribution of the qubit's states.
+
+        Returns
+        -------
+        str
+            The measurement result, either '0' or '1', collapsed state in the computational basis.
+
+        Notes
+        -----
+        - The method assumes that the qubit is in a superposition of the form:
+        `|ψ⟩ = α|0⟩ + β|1⟩`, where α and β are the complex amplitudes.
+        - The probabilities of measuring |0⟩ and |1⟩ are given by `|α|^2` and `|β|^2`, respectively.
+        - The method uses a uniform random number generator to simulate the measurement process.
+
+        Example
+        -------
+        >>> qubit = Qubit(0.6, 0.8)
+        >>> result = qubit.measure()
+        >>> print(result)  # Output will be '0' with probability 0.36, or '1' with probability 0.64
+        """
+        
+        # Calculate the probability of measuring the state |0⟩
+        prob0 = np.abs(self.__alpha)**2  # |α|^2 gives the probability of |0⟩
+        
+        # Calculate the probability of measuring the state |1⟩
+        prob1 = np.abs(self.__beta)**2   # |β|^2 gives the probability of |1⟩
+
+        # Generate a random number between 0 and 1 to simulate the measurement process
+        rand_num = random.uniform(0, 1)
+
+        # If the random number is within the probability of measuring |0⟩, return '0'
+        if 0 <= rand_num <= prob0:
+            return "0"
+        
+        # If the random number is within the probability of measuring |1⟩, return '1'
+        if prob0 < rand_num <= 1:
+            return "1"
