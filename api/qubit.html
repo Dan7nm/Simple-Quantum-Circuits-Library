@@ -53,6 +53,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_alpha"><code class="docutils literal notranslate"><span class="pre">Qubit.get_alpha()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_beta"><code class="docutils literal notranslate"><span class="pre">Qubit.get_beta()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.get_vector"><code class="docutils literal notranslate"><span class="pre">Qubit.get_vector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.measure"><code class="docutils literal notranslate"><span class="pre">Qubit.measure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_qubit"><code class="docutils literal notranslate"><span class="pre">Qubit.print_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.print_vector_form"><code class="docutils literal notranslate"><span class="pre">Qubit.print_vector_form()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#qubit.Qubit.set_amplitudes"><code class="docutils literal notranslate"><span class="pre">Qubit.set_amplitudes()</span></code></a></li>
@@ -63,6 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit_test.html">Circuit Test Class</a></li>
 </ul>
 </li>
 </ul>
@@ -148,6 +150,38 @@ described by complex amplitudes alpha and beta.</p>
 <dd class="field-even"><p>np.ndarray</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubit.Qubit.measure">
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#qubit.Qubit.measure" title="Link to this definition"></a></dt>
+<dd><p>Perform a measurement on a qubit.</p>
+<p>This method measures the qubit in the computational basis (<a href="#id1"><span class="problematic" id="id2">|</span></a>0⟩ and <a href="#id3"><span class="problematic" id="id4">|</span></a>1⟩) and returns the outcome based on the corresponding probabilities.
+The probabilities are calculated from the squared magnitudes of the
+qubit’s alpha (α) and beta (β) amplitudes.</p>
+<p>The measurement outcome is determined by generating a random number
+and comparing it to the probability distribution of the qubit’s states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The measurement result, either ‘0’ or ‘1’, collapsed state in the computational basis.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The method assumes that the qubit is in a superposition of the form:</p></li>
+</ul>
+<p><cite>|ψ⟩ = α|0⟩ + β|1⟩</cite>, where α and β are the complex amplitudes.
+- The probabilities of measuring <a href="#id5"><span class="problematic" id="id6">|</span></a>0⟩ and <a href="#id7"><span class="problematic" id="id8">|</span></a>1⟩ are given by <cite>|α|^2</cite> and <cite>|β|^2</cite>, respectively.
+- The method uses a uniform random number generator to simulate the measurement process.</p>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">qubit</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">qubit</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>  <span class="c1"># Output will be &#39;0&#39; with probability 0.36, or &#39;1&#39; with probability 0.64</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">

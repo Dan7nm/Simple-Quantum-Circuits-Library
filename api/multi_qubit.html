@@ -52,6 +52,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#multi_qubit.MultiQubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.add_qubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit.add_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_number_of_qubits"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_number_of_qubits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_qubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_tensor_vector"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_tensor_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.measure"><code class="docutils literal notranslate"><span class="pre">MultiQubit.measure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.plot_amplitudes"><code class="docutils literal notranslate"><span class="pre">MultiQubit.plot_amplitudes()</span></code></a></li>
@@ -65,6 +66,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="circuit.html">Circuit Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circuit_test.html">Circuit Test Class</a></li>
 </ul>
 </li>
 </ul>
@@ -154,6 +156,28 @@ product state vector accordingly.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.get_qubit">
+<span class="sig-name descname"><span class="pre">get_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></span><a class="headerlink" href="#multi_qubit.MultiQubit.get_qubit" title="Link to this definition"></a></dt>
+<dd><p>Returns the qubit we want to trace out from the quantum state of multiple qubits.</p>
+<p>The function computes the sum of the amplitudes of the projection of a specific qubit
+in the given quantum state on the <cite>|0⟩</cite> and <cite>|1⟩</cite> states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit_index</strong> (<em>int</em>) – The index of the qubit whose amplitudes are to be extracted.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object of class <cite>Qubit</cite> representing the amplitudes for the <cite>|0⟩</cite> and <cite>|1⟩</cite> states.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit">Qubit</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the qubit_index is not valid.</p>
 </dd>
 </dl>
 </dd></dl>
