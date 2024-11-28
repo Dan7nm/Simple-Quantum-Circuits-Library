@@ -323,15 +323,33 @@ class MultiQubit:
         plt.show()
 
 
-    def plot_amplitudes(self) -> None:
+
+
+    def plot_amplitudes(self, plot_type: str = "bar") -> None:
         """
-        This function plots directly the probabilities for the the state with measuring.
+        This function plots the amplitudes for the quantum state either as a bar chart or a regular plot.
+
+        Parameters
+        ----------
+        plot_type : str, optional
+            The type of plot to display. Can be 'bar' for a bar chart or 'line' for a regular plot (default is 'bar').
+
+        Returns
+        -------
+        None
         """
-        states_list = [format(state,f"0{self.__number_of_qubits}b") for state in range(2 ** self.__number_of_qubits)]
+        states_list = [format(state, f"0{self.__number_of_qubits}b") for state in range(2 ** self.__number_of_qubits)]
         amplitude_list = [amplitude for amplitude in self.__tensor_vector]
+
         # Plot
         plt.figure(figsize=(10, 6))
-        plt.bar(states_list, amplitude_list, color='blue', alpha=0.7)
+
+        if plot_type == "bar":
+            plt.bar(states_list, amplitude_list, color='blue', alpha=0.7)
+        elif plot_type == "line":
+            plt.plot(states_list, amplitude_list, color='blue', marker='o', linestyle='-', markersize=5, alpha=0.7)
+        else:
+            raise ValueError("Invalid plot_type. Choose either 'bar' or 'line'.")
 
         # Add labels and title
         plt.xlabel('Quantum States', fontsize=12)
@@ -340,4 +358,5 @@ class MultiQubit:
 
         # Show grid and the plot
         plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.xticks(rotation=90)  # Rotate state labels for better readability
         plt.show()
