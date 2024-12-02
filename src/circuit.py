@@ -298,7 +298,7 @@ class QuantumCircuit:
         :type layer_index: int
         :raises ValueError: If layer index is invalid
         """
-        if not isinstance(layer_index,int) and not 0 <= layer_index <= self.__number_of_layers:
+        if not isinstance(layer_index,int) and not 0 <= layer_index <= self.__number_of_layers - 1:
             raise ValueError(INV_LAYER_INDEX)
         
     def __fill_identity_gates(self) -> None:
@@ -536,9 +536,21 @@ class QuantumCircuit:
         1. Fills empty cells with identity gates
         2. Computes the matrix for each layer
         3. Multiplies all layer matrices to get the final circuit operator
+
+        Parameters
+        ----------
+        layer_index: int
+            The layer to index indicating to which layer we want to compute.
+
+        Raises
+        ------
+        ValueError
+            If the layer index is not valid
+
         """
-        layers_to_compute = (self.__number_of_layers if layer_index is None else layer_index)
-        self.__valid_layer_index(layers_to_compute)
+        layers_to_compute = (self.__number_of_layers if layer_index is None else layer_index + 1)
+        # Check if the layer index is valid:
+        self.__valid_layer_index(layers_to_compute - 1)
         # First fill all empty cells with identity gates
         self.__fill_identity_gates()
         computed_layers = torch.eye(2 ** self.__number_of_compatible_qubits,dtype=torch.complex128,device=self.__device)
@@ -548,8 +560,10 @@ class QuantumCircuit:
             computed_layers = torch.matmul(computed_layers,layer_matrix)
 
         self.__circuit_operator = computed_layers.cpu().numpy()
-        # Update that the circuit was computed
-        self.__circuit_is_computed = True
+
+        # Update that the circuit was computed only if we computed all layers:
+        if layer_index is None or layers_to_compute == self.__number_of_layers:
+            self.__circuit_is_computed = True
 
     def reset_circuit(self) -> None:
         """
@@ -564,7 +578,7 @@ class QuantumCircuit:
 
         self.__circuit_is_computed = False
 
-    def apply_circuit(self, input_state: MultiQubit) -> MultiQubit:
+    def apply_circuit(self, input_state: MultiQubit,layer_index:int=None) -> MultiQubit:
         """
         Apply the circuit operator to the input quantum state.
 
@@ -581,15 +595,20 @@ class QuantumCircuit:
         Raises
         ------
         ValueError
-            If the input state has a different number of qubits
+            If the input state has a different number of qubits.
+        ValueError
+            If the layer index is not valid.
         """
         # Check that the number of qubits is correct.
         if input_state.get_number_of_qubits() != self.__number_of_compatible_qubits:
             raise ValueError(INV_INPUT)
-        # Check that the circuit was computed before applying a state if not than we compute the circuit:
-        if not self.__circuit_is_computed:
+
+        # If we want to apply the quantum state on the entire circuit we check if the circuit was computed before else the circuit is already computed:
+        if not self.__circuit_is_computed and (layer_index is None or layer_index == self.__number_of_layers - 1):
             self.__compute_circuit()
-            self.__circuit_is_computed = True
+        # If we want to compute to a specific layer we compute the circuit:
+        elif not (layer_index is None or layer_index == self.__number_of_layers - 1):
+            self.__compute_circuit(layer_index)
 
         qubit_tensor_vector = input_state.get_tensor_vector()
         result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
