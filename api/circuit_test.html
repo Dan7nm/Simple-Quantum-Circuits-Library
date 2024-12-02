@@ -160,16 +160,19 @@ The function also plots the input states’s amplitudes and the measurement plot
 
 <dl class="py function">
 <dt class="sig sig-object py" id="circuit_test.test_tracing_out_qubit">
-<span class="sig-prename descclassname"><span class="pre">circuit_test.</span></span><span class="sig-name descname"><span class="pre">test_tracing_out_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubits_to_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit_test.test_tracing_out_qubit" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">circuit_test.</span></span><span class="sig-name descname"><span class="pre">test_tracing_out_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubits_to_test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_amplitudes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit_test.test_tracing_out_qubit" title="Link to this definition"></a></dt>
 <dd><p>Tests the process of tracing out a qubit in a multi-qubit quantum state by comparing
 the amplitudes of each qubit before and after the operation. The function generates
 a random quantum state for multiple qubits, traces out each qubit one by one, and
 verifies if the original amplitudes are preserved.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>qubits_to_test</strong> (<em>int</em>) – The number of qubits in the quantum state to test. Each qubit will be initialized
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubits_to_test</strong> (<em>int</em>) – The number of qubits in the quantum state to test. Each qubit will be initialized
 with random amplitudes, and the test will check that the amplitudes are correctly
-traced out for each qubit.</p>
+traced out for each qubit.</p></li>
+<li><p><strong>print_amplitudes</strong> (<em>bool</em>) – A boolean value to print or not to print the lists for the original and traced amplitudes</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>This function does not return any values. It performs an assertion to verify that
