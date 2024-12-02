@@ -731,28 +731,6 @@ class QuantumCircuit:
 
         return self.__circuit_operator
 
-    def load_qft_preset(self) -> None:
-        """
-        This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given.
-        """
-        curr_layer_index = 0
-        for qubit_index in range(self.__number_of_compatible_qubits):
-            # Add a hadamard gate at the start of each qubit axis
-            self.add_single_qubit_gate(qubit_index,curr_layer_index,'H')
-            self.add_layer()
-            curr_layer_index += 1
-            # Add controlled phase shift gates
-            for phase_gate_index in range(2, self.__number_of_compatible_qubits + 1 - qubit_index):
-                phase = (2 * np.pi)/ (2**phase_gate_index)
-                self.add_controlled_qubit_gate(qubit_index,curr_layer_index,qubit_index + phase_gate_index - 1,'P',phase)
-                self.add_layer()
-                curr_layer_index += 1
-
-        # Add Swap gates:
-        for qubit_index in range(self.__number_of_compatible_qubits):
-            if qubit_index < self.__number_of_compatible_qubits - 1 - qubit_index:
-                self.add_swap_gate(qubit_index,self.__number_of_compatible_qubits - 1 - qubit_index,curr_layer_index)
-
     def device_in_use(self) -> None:
         """
         This function prints the device in use by this quantum circuit.
@@ -790,3 +768,32 @@ class QuantumCircuit:
             Matrix with all of the gates.
         """
         return self.__circuit
+    
+class QFTCircuit(QuantumCircuit):
+    def __init__(self, number_of_qubits, num_of_layers = 1, device=None,dynamical=False):
+        super().__init__(number_of_qubits, num_of_layers, device)
+        if not dynamical:
+            self.load_qft_preset()
+
+    def load_qft_preset(self) -> None:
+        """
+        This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.
+        """
+        curr_layer_index = 0
+        num_of_qubits = self.get_number_of_compatible_qubits()
+        for qubit_index in range(num_of_qubits):
+            # Add a hadamard gate at the start of each qubit axis
+            self.add_single_qubit_gate(qubit_index,curr_layer_index,'H')
+            self.add_layer()
+            curr_layer_index += 1
+            # Add controlled phase shift gates
+            for phase_gate_index in range(2, num_of_qubits + 1 - qubit_index):
+                phase = (2 * np.pi)/ (2**phase_gate_index)
+                self.add_controlled_qubit_gate(qubit_index,curr_layer_index,qubit_index + phase_gate_index - 1,'P',phase)
+                self.add_layer()
+                curr_layer_index += 1
+
+        # Add Swap gates:
+        for qubit_index in range(num_of_qubits):
+            if qubit_index < num_of_qubits - 1 - qubit_index:
+                self.add_swap_gate(qubit_index,num_of_qubits - 1 - qubit_index,curr_layer_index)

@@ -1,6 +1,7 @@
 import numpy as np
 from qubit import Qubit
 from numpy.typing import NDArray
+from typing import Tuple,Self
 import matplotlib.pyplot as plt
 import random
 
@@ -143,7 +144,7 @@ class MultiQubit:
         if not tensor_str:
             tensor_str = "0"
             
-        print("Tensor product in basis state form:", tensor_str)
+        print("Tensor product in computational basis state form:", tensor_str)
     
     def get_number_of_qubits(self) -> int:
         """
@@ -380,6 +381,40 @@ class MultiQubit:
         if not 0 <= index < self.__number_of_qubits:
             raise ValueError("Index should be between 0 and number of qubits - 1.")
 
+    def __compute_proj_matrices(self,qubit_index:int) -> Tuple[np.ndarray[complex]]:
+        """
+        Computes projection matrices for a specific qubit in a multi-qubit system.
+
+        The method returns two projection matrices:
+        - First projects the selected qubit onto the |0⟩ state.
+        - Second projects the selected qubit onto the |1⟩ state.
+
+        Parameters
+        ----------
+        qubit_index : int
+            The index of the qubit to project (zero-based).
+
+        Returns
+        -------
+        Tuple[np.ndarray[complex]]
+            Two projection matrices: 
+            - proj_tensor_to_zero: projects the qubit to |0⟩.
+            - proj_tensor_to_one: projects the qubit to |1⟩.
+        """
+
+        proj_00_mat = np.array([[1,0],[0,0]])
+        proj_11_mat = np.array([[0,0],[0,1]])
+
+        # Idenity matrices for all the qubits we want to not change.
+        identity_mat_prev = np.identity(2**(qubit_index))
+        identity_mat_after = np.identity(2**(self.__number_of_qubits-qubit_index - 1))
+
+        # Compute the kornecker product of the matrix that projects a specific qubit:
+        proj_tensor_to_zero = np.kron(np.kron(identity_mat_prev,proj_00_mat),identity_mat_after)
+        proj_tensor_to_one = np.kron(np.kron(identity_mat_prev,proj_11_mat),identity_mat_after)
+
+        return proj_tensor_to_zero,proj_tensor_to_one
+
     def get_qubit(self,qubit_index:int) -> Qubit:
         """
         Returns the qubit we want to trace out from the quantum state of multiple qubits.
@@ -404,21 +439,58 @@ class MultiQubit:
         """
         # Check if valid qubit index was given:
         self.__valid_qubit_index(qubit_index)
-        proj_00_mat = np.array([[1,0],[0,0]])
-        proj_11_mat = np.array([[0,0],[0,1]])
-
-        # Idenity matrices for all the qubits we want to not change.
-        identity_mat_prev = np.identity(2**(qubit_index))
-        identity_mat_after = np.identity(2**(self.__number_of_qubits-qubit_index - 1))
-
-        # Compute the kornecker product of the matrix that project a specific qubit:
-        proj_tensor_to_zero = np.kron(np.kron(identity_mat_prev,proj_00_mat),identity_mat_after)
-        proj_tensor_to_one = np.kron(np.kron(identity_mat_prev,proj_11_mat),identity_mat_after)
-
+        
+        proj_tensor_to_zero,proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
 
         # We sum all the probabilties of the projected state and the result is the probability of the state we want to trace out.
         alpha = np.sqrt(np.sum(np.abs(proj_tensor_to_zero @ self.__tensor_vector)**2))
         beta = np.sqrt(np.sum(np.abs(proj_tensor_to_one @ self.__tensor_vector)**2))
         return Qubit(alpha,beta)
+    
+    def measure_qubit(self,qubit_index:int) -> Self:
+        """
+        This method measures a specified qubit inside a multi qubit quantum state and returns the new quantum state after the collapse.
+
+        Parameters
+        ----------
+        qubit_index : int
+            The qubit index we wish to measure.
+
+        Returns
+        -------
+        quantum_state : MultiQubit
+            The collapsed state after measuring a particular qubit.
+
+        Raises
+        ------
+        ValueError
+            If the qubit_index is not valid. Qubit index should be between 0 and number of qubit - 1 and an integer.
+
+        Examples
+        --------
+        >>> vector = np.full(16, 1/4)
+        >>> mt = MultiQubit(vector)
+        >>> mt.print_tensor_form()
+        >>> for i in range(4):
+        ...     mt = mt.measure_qubit(i)
+        ...     mt.print_tensor_form()
+        Output:
+        Tensor product in basis state form: 0.5|0000⟩ + 0.5|0001⟩ + 0.5|0010⟩ + 0.5|0011⟩
+        # We will see a new collapsed state after each consecutive measurement.
+        """
+        self.__valid_qubit_index(qubit_index)
+        proj_tensor_to_zero,proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
+        desired_qubit = self.get_qubit(qubit_index)
+        measured_state = desired_qubit.measure()
+        if measured_state == "0":
+            collapsed_state =  np.matmul(proj_tensor_to_zero,self.__tensor_vector)
+        else:
+            collapsed_state = np.matmul(proj_tensor_to_one,self.__tensor_vector)
+        
+        # Normalise the collapsed state:
+        norm_factor = np.sqrt(np.sum(np.abs(collapsed_state)**2))
+        collapsed_state /= norm_factor
+
+        return MultiQubit(collapsed_state)
 
 
