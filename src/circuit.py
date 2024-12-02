@@ -578,7 +578,7 @@ class QuantumCircuit:
 
         self.__circuit_is_computed = False
 
-    def apply_circuit(self, input_state: MultiQubit,layer_index:int=None) -> MultiQubit:
+    def apply_circuit(self, input_state: MultiQubit,layer_index: int=None) -> MultiQubit:
         """
         Apply the circuit operator to the input quantum state.
 
