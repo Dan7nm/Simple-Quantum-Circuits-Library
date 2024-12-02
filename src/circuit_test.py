@@ -170,7 +170,7 @@ def test_qft_matrix_output(qubits_to_test: int = 3) -> None:
     print(f"==== Total QFT Test runtime: {elapsed_time:.2f} seconds =======")
     print("=============== QFT tests passed! ===============")
 
-def test_tracing_out_qubit(qubits_to_test: int) -> None:
+def test_tracing_out_qubit(qubits_to_test: int,print_amplitudes:bool=False) -> None:
     """
     Tests the process of tracing out a qubit in a multi-qubit quantum state by comparing 
     the amplitudes of each qubit before and after the operation. The function generates 
@@ -183,6 +183,8 @@ def test_tracing_out_qubit(qubits_to_test: int) -> None:
         The number of qubits in the quantum state to test. Each qubit will be initialized
         with random amplitudes, and the test will check that the amplitudes are correctly 
         traced out for each qubit.
+    print_amplitudes : bool
+        A boolean value to print or not to print the lists for the original and traced amplitudes
 
     Returns
     -------
@@ -215,20 +217,24 @@ def test_tracing_out_qubit(qubits_to_test: int) -> None:
         beta /= np.sqrt(norm_factor) 
         q_state.add_qubit(Qubit(alpha,beta))
         qubits_original_ampitudes.append((alpha,beta))
-    print(qubits_original_ampitudes)
-    q_state.print_tensor_form()
-
+    
+    traced_out_amplitudes = []
     for qubit_index in range(qubits_to_test):
         qubit_to_check = q_state.get_qubit(qubit_index)
         alpha = qubit_to_check.get_alpha()
         beta = qubit_to_check.get_beta()
+        traced_out_amplitudes.append((alpha,beta))
         
         # Check if the original amplitudes of the qubit are the same as the traced out qubit:
         assert np.isclose(alpha, qubits_original_ampitudes[qubit_index][0], atol=EPSILON)
         assert np.isclose(beta, qubits_original_ampitudes[qubit_index][1], atol=EPSILON)
+    
+    # Print the amplitudes and traced out amplitudes:
+    if print_amplitudes:
+        print(f" Original qubits amplitudes {qubits_original_ampitudes}")
+        print(f" Traced out qubits amplitudes {traced_out_amplitudes}")
 
-
-    print("==== The traced out qubit's real amplitudes are the same as their original real amplitudes. ==== ")    
+    print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")    
     
 
 if __name__ == "__main__":

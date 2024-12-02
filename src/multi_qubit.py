@@ -285,6 +285,7 @@ class MultiQubit:
 
         # Show grid and the plot
         plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.xticks(rotation=90)  # Rotate state labels for better readability
         plt.show()
 
     def __valid_pos_val(self,value:int) -> None:
@@ -320,10 +321,8 @@ class MultiQubit:
 
         # Show grid and the plot
         plt.grid(axis='y', linestyle='--', alpha=0.6)
+        plt.xticks(rotation=90)  # Rotate state labels for better readability
         plt.show()
-
-
-
 
     def plot_amplitudes(self, plot_type: str = "bar") -> None:
         """
