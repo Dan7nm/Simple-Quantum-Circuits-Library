@@ -55,6 +55,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_qubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.get_tensor_vector"><code class="docutils literal notranslate"><span class="pre">MultiQubit.get_tensor_vector()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.measure"><code class="docutils literal notranslate"><span class="pre">MultiQubit.measure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.measure_qubit"><code class="docutils literal notranslate"><span class="pre">MultiQubit.measure_qubit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.plot_amplitudes"><code class="docutils literal notranslate"><span class="pre">MultiQubit.plot_amplitudes()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.plot_measurements"><code class="docutils literal notranslate"><span class="pre">MultiQubit.plot_measurements()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.plot_probabilities"><code class="docutils literal notranslate"><span class="pre">MultiQubit.plot_probabilities()</span></code></a></li>
@@ -208,6 +209,38 @@ in the given quantum state on the <cite>|0⟩</cite> and <cite>|1⟩</cite> stat
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.measure_qubit">
+<span class="sig-name descname"><span class="pre">measure_qubit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#multi_qubit.MultiQubit.measure_qubit" title="Link to this definition"></a></dt>
+<dd><p>This method measures a specified qubit inside a multi qubit quantum state and returns the new quantum state after the collapse.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qubit_index</strong> (<em>int</em>) – The qubit index we wish to measure.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>quantum_state</strong> – The collapsed state after measuring a particular qubit.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the qubit_index is not valid. Qubit index should be between 0 and number of qubit - 1 and an integer.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">mt</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">measure_qubit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="go">Output:</span>
+<span class="go">Tensor product in basis state form: 0.5|0000⟩ + 0.5|0001⟩ + 0.5|0010⟩ + 0.5|0011⟩</span>
+<span class="go"># We will see a new collapsed state after each consecutive measurement.</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
