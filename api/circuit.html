@@ -51,10 +51,6 @@
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gate.html">Gate Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Circuit Class</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#circuit.QFTCircuit"><code class="docutils literal notranslate"><span class="pre">QFTCircuit</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QFTCircuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">QFTCircuit.load_qft_preset()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#circuit.QuantumCircuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_controlled_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_controlled_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_layer()</span></code></a></li>
@@ -63,10 +59,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.device_in_use"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.device_in_use()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.draw_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.draw_circuit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.draw_circuit_mpl"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.draw_circuit_mpl()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_array()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_circuit_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_circuit_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_number_of_compatible_qubits"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_number_of_compatible_qubits()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_number_of_layers"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_number_of_layers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.load_qft_preset"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.load_qft_preset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.print_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.print_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_layer()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.remove_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.remove_single_qubit_gate()</span></code></a></li>
@@ -108,18 +106,6 @@
              
   <section id="module-circuit">
 <span id="circuit-class"></span><h1>Circuit Class<a class="headerlink" href="#module-circuit" title="Link to this heading"></a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="circuit.QFTCircuit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">QFTCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QFTCircuit" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#circuit.QuantumCircuit" title="circuit.QuantumCircuit"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuantumCircuit</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="circuit.QFTCircuit.load_qft_preset">
-<span class="sig-name descname"><span class="pre">load_qft_preset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QFTCircuit.load_qft_preset" title="Link to this definition"></a></dt>
-<dd><p>This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.</p>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">QuantumCircuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_qubits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_layers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit" title="Link to this definition"></a></dt>
@@ -282,6 +268,11 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.draw_circuit_mpl">
+<span class="sig-name descname"><span class="pre">draw_circuit_mpl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit.draw_circuit_mpl" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.get_array">
 <span class="sig-name descname"><span class="pre">get_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">_ScalarType_co</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.get_array" title="Link to this definition"></a></dt>
 <dd><p>This function returns the matrix with all of the gates.</p>
@@ -329,6 +320,12 @@
 <dd><p>This function returns the number of layers in this circuit.
 :returns: <strong>number_of_layers</strong> – The number of layers in the circuit.
 :rtype: int</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.load_qft_preset">
+<span class="sig-name descname"><span class="pre">load_qft_preset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.load_qft_preset" title="Link to this definition"></a></dt>
+<dd><p>This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.</p>
 </dd></dl>
 
 <dl class="py method">
