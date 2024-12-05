@@ -1,17 +1,14 @@
-# from circuit import QuantumCircuit,QFTCircuit
-# from qubit import Qubit
 from multi_qubit import MultiQubit
 import numpy as np
 import time
-
+from circuit import QuantumCircuit
 def main():
    start_time = time.perf_counter()
-   vector = np.full(16,1/4)
-   mt = MultiQubit(vector)
-   mt.print_tensor_form()
-   for i in range(4):
-       mt = mt.measure_qubit(i)
-       mt.print_tensor_form()
+   
+   circuit = QuantumCircuit(number_of_qubits=5)
+   circuit.load_qft_preset()
+   circuit.draw_circuit()
+
 
    end_time = time.perf_counter()
    run_time = end_time - start_time

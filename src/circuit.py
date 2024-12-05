@@ -5,6 +5,7 @@ import numpy as np
 from numpy.typing import NDArray
 from typing import Set
 import torch
+import matplotlib.pyplot as plt
 
 # Constants
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
@@ -700,7 +701,7 @@ class QuantumCircuit:
         for i, line in enumerate(circuit_lines):
             print(f'    q{i}: {"".join(line)}')
         
-        layers_indexes = [f"──{i}───" for i in range(self.__number_of_layers)]
+        layers_indexes = [f"──{i}───" if (i // 10) == 0 else f"──{i}──" for i in range(self.__number_of_layers)]
 
         print(f"layers: {''.join(layers_indexes)}")
 
@@ -769,12 +770,6 @@ class QuantumCircuit:
         """
         return self.__circuit
     
-class QFTCircuit(QuantumCircuit):
-    def __init__(self, number_of_qubits, num_of_layers = 1, device=None,dynamical=False):
-        super().__init__(number_of_qubits, num_of_layers, device)
-        if not dynamical:
-            self.load_qft_preset()
-
     def load_qft_preset(self) -> None:
         """
         This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.
@@ -797,3 +792,62 @@ class QFTCircuit(QuantumCircuit):
         for qubit_index in range(num_of_qubits):
             if qubit_index < num_of_qubits - 1 - qubit_index:
                 self.add_swap_gate(qubit_index,num_of_qubits - 1 - qubit_index,curr_layer_index)
+
+    def draw_circuit_mpl(self):
+        if self.__number_of_layers == 0 or self.__number_of_compatible_qubits == 0:
+            print("Empty circuit")
+            return
+
+        fig, ax = plt.subplots(figsize=(self.__number_of_layers * 1.5,self.__number_of_compatible_qubits * 0.8))
+
+        # Add horizontal lines for qubits (ascending order from top to bottom)
+        for i in range(self.__number_of_compatible_qubits):
+            ax.plot([0, self.__number_of_layers], [self.__number_of_compatible_qubits - 1 - i,self.__number_of_compatible_qubits - 1 - i], 'k-', lw=2)
+
+        for layer in range(self.__number_of_layers):
+            for qubit in range(self.__number_of_compatible_qubits):
+                gate = self.__circuit[layer][qubit]
+
+                if gate is None or gate.get_gate_type() == "I":
+                    # Identity gate: leave empty
+                    continue
+                elif gate.is_swap_gate():
+                    # Handle SWAP gate
+                    idx1 =self.__number_of_compatible_qubits - 1 - gate.get_control_index()
+                    idx2 =self.__number_of_compatible_qubits - 1 - gate.get_target_index()
+                    ax.plot([layer, layer], [idx1, idx2], 'k--')
+                    ax.text(layer, idx1, '\u2716', ha='center', va='center', fontsize=12)
+                    ax.text(layer, idx2, '\u2716', ha='center', va='center', fontsize=12)
+                elif gate.is_control_gate():
+                    # Handle controlled gate
+                    control_idx =self.__number_of_compatible_qubits - 1 - gate.get_control_index()
+                    target_idx =self.__number_of_compatible_qubits - 1 - gate.get_target_index()
+                    ax.plot([layer, layer], [control_idx, target_idx], 'k-')
+                    ax.text(layer, control_idx, '\u25CF', ha='center', va='center', fontsize=12)
+                    ax.text(layer, target_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
+                            bbox=dict(boxstyle='circle', facecolor='lightblue', edgecolor='black'))
+                else:
+                    # Single-qubit gate
+                    qubit_idx =self.__number_of_compatible_qubits - 1 - qubit
+                    ax.text(layer, qubit_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
+                            bbox=dict(boxstyle='circle', facecolor='lightblue', edgecolor='black'))
+
+        # Add layer labels
+        for layer in range(self.__number_of_layers):
+            ax.text(layer, -1, f'{layer}', ha='center', va='center', fontsize=10)
+
+        # Set axis limits and labels
+        ax.set_xlim(-0.5, self.__number_of_layers - 0.5)
+        ax.set_ylim(-0.5,self.__number_of_compatible_qubits - 0.5)
+        ax.set_yticks(range(self.__number_of_compatible_qubits))
+        ax.set_yticklabels([f'q{i}' for i in range(self.__number_of_compatible_qubits - 1, -1, -1)])
+        ax.set_xticks([])
+
+        # Remove spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+
+        plt.tight_layout()
+        plt.show()
