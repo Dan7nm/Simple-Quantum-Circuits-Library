@@ -5,11 +5,12 @@ from circuit import QuantumCircuit
 def main():
    start_time = time.perf_counter()
    
-   circuit = QuantumCircuit(number_of_qubits=3,num_of_layers=2)
-   circuit.load_qft_preset()
-   circuit.draw_circuit()
+   # Write code here:
+   
 
 
+
+   # Calculate the runtime:
    end_time = time.perf_counter()
    run_time = end_time - start_time
    print(f"===== Finished running in {run_time:.2f} seconds. =====")

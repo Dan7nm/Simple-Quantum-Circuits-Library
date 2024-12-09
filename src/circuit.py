@@ -906,3 +906,20 @@ class QuantumCircuit:
         gate = Gate()
         gate.set_measure_gate()
         self.__circuit[layer_index][qubit_index]=gate
+
+    def measure_all(self,input_state: MultiQubit) -> MultiQubit:
+        """
+        This method applies the circuit on the input state and measures the resulting state. The measured state will be the collapsed state of on of the possible states.
+
+        Parameters
+        ----------
+        input_state: MultiQubit
+            The input state is the state the circuit will be applied on and will be measured.
+
+        Returns
+        -------
+        result : MultiQubit
+            The collapsed state due to measurement.
+        """
+        result = self.apply_circuit(input_state)
+        return result.measure(return_as_str=False)

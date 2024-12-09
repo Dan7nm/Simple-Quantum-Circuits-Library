@@ -238,20 +238,32 @@ class MultiQubit:
         
         return interval_dict
 
-    def measure(self) -> str:
+    def measure(self,return_as_str: bool=True) -> str | Self:
         """
-        This function measures the state one time and returns the state to which the mesurement collapsed to.
+        This function measures the state one time and returns the state to which the mesurement collapsed to. The return type can be an str or a MultiQubit object.
+
+        Parameters
+        ----------
+        return_as_str : bool
+            Boolean argument. True if to return as a string and false a multiqubit object.
 
         Returns
         -------
-        out : str
-           The state to which the measurement collapsed to.
+        out_str : str
+           The state to which the measurement collapsed to in string format.
+        out_multiqubit : MultQubit
+            The state to which the measurement collapsed to as a MultiQubit object.
         """
         interval_dict = self.__init_state_intervals()
         rand_num = random.uniform(0,1)
         for interval,state in interval_dict.items():
+            # If the randomized number is in the current interval then we collapsed to the current state.
             if interval[0]<= rand_num <= interval[1]:
-                return state
+                # Return the collapsed state as a string or as a MultiQubit.  
+                if return_as_str:
+                    return state
+                else:
+                    return self.str_to_state(state)
 
     def plot_measurements(self,num_of_measurements: int = 10000) -> None:
         """
@@ -493,4 +505,25 @@ class MultiQubit:
 
         return MultiQubit(collapsed_state)
 
+    def str_to_state(self,input_str:str) -> Self:
+        """
+        This method converts a string which represents a single quantum state and returns the state as MultiQubit object.
 
+        Parameters
+        ----------
+        input_str : str
+            The input state as a string.
+
+        Returns
+        -------
+        output : MutliQubit
+            The input state as a MultiQubit objects.
+        """
+        # Convert the input string to the state index.
+        state_index = int(input_str,2)
+
+        # Initialize a vector for the state and set the amplitude of the desire state as one.
+        vector = np.zeros(2**self.__number_of_qubits)
+        vector[state_index] = 1
+
+        return MultiQubit(vector)
