@@ -836,7 +836,7 @@ class QuantumCircuit:
         ax.set_yticks(range(self.__number_of_compatible_qubits))
         ax.tick_params(axis='y', length=0)
         ax.set_yticklabels([f'q{i}:' for i in range(self.__number_of_compatible_qubits - 1, -1, -1)])
-        
+
         # Add layer labels:
         ax.set_xticks([layer for layer in range(self.__number_of_layers)])
         ax.tick_params(axis='x', length=0)
@@ -851,7 +851,8 @@ class QuantumCircuit:
         ax.set_xlabel("Layers", fontsize=12)
         ax.set_ylabel("Qubits", fontsize=12)
 
-        plt.tight_layout()
+        padding = 10 if self.__number_of_compatible_qubits > 6 else 1.08
+        plt.tight_layout(pad=padding)
         plt.show()
 
 

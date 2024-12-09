@@ -5,11 +5,8 @@ from circuit import QuantumCircuit
 def main():
    start_time = time.perf_counter()
    
-   circuit = QuantumCircuit(number_of_qubits=4,num_of_layers=2)
-   circuit.add_controlled_qubit_gate(0,0,1,"X")
-   circuit.add_controlled_qubit_gate(2,0,3,"Y")
-   circuit.add_swap_gate(0,3,1)
-   circuit.add_single_qubit_gate(1,1,"Z")
+   circuit = QuantumCircuit(number_of_qubits=3,num_of_layers=2)
+   circuit.load_qft_preset()
    circuit.draw_circuit()
 
 
