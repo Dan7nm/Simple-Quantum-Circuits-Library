@@ -59,7 +59,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.device_in_use"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.device_in_use()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.draw_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.draw_circuit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.draw_circuit_mpl"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.draw_circuit_mpl()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_array"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_array()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_circuit_operator_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_circuit_operator_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.get_number_of_compatible_qubits"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.get_number_of_compatible_qubits()</span></code></a></li>
@@ -257,20 +256,20 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.draw_circuit">
-<span class="sig-name descname"><span class="pre">draw_circuit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.draw_circuit" title="Link to this definition"></a></dt>
-<dd><p>Print a text-based visualization of the quantum circuit.</p>
+<span class="sig-name descname"><span class="pre">draw_circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matplotlib</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.draw_circuit" title="Link to this definition"></a></dt>
+<dd><p>Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.</p>
 <p>The visualization includes:
 - Horizontal lines (─) representing qubit wires
 - Single qubit gates with their type (H, X, Y, Z, P)
 - Control points (●) for controlled gates
 - Target points (⊕ for X gates, ◯ for others)
 - Swap gates (⨉)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>matplotlib</strong> (<em>bool</em>) – True for printing using matplotlib and false for CLI.</p>
+</dd>
+</dl>
 </dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="circuit.QuantumCircuit.draw_circuit_mpl">
-<span class="sig-name descname"><span class="pre">draw_circuit_mpl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit.draw_circuit_mpl" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.get_array">
