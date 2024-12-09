@@ -54,6 +54,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#circuit.QuantumCircuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_controlled_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_controlled_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_layer"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_measure_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_measure_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.add_swap_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.add_swap_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#circuit.QuantumCircuit.apply_circuit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuit.apply_circuit()</span></code></a></li>
@@ -184,6 +185,23 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>layer_index</strong> (<em>int</em>) – The index to which a layer will be added.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.QuantumCircuit.add_measure_gate">
+<span class="sig-name descname"><span class="pre">add_measure_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_measure_gate" title="Link to this definition"></a></dt>
+<dd><p>Add measure gate method adds a measure gate to the circuit in a specified layer and on a specified qubit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubit_index</strong> (<em>int</em>) – The index of the qubit to which the measure gate will be applied to.</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – The layer index to which the measure gate will be applied to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If qubit or layer index are invalid a ValueError will be raised.</p>
 </dd>
 </dl>
 </dd></dl>
