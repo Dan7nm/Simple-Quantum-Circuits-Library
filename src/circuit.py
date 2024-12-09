@@ -89,6 +89,9 @@ class QuantumCircuit:
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
+
+        # Set value for if the gate is regular or dynamic circuit:
+        self.__is_dynamic = False
     
     def add_single_qubit_gate(self, target_qubit: int, layer_index: int, gate_type: str, phi: float = 0.0) -> None:
         """
@@ -855,7 +858,6 @@ class QuantumCircuit:
         plt.tight_layout(pad=padding)
         plt.show()
 
-
     def draw_circuit(self,matplotlib:bool = True) -> None:
         """
         Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.
@@ -879,3 +881,28 @@ class QuantumCircuit:
             self.__draw_using_matplotlib()
         else:
             self.__draw_cli()
+
+    def add_measure_gate(self,qubit_index:int, layer_index: int) -> None:
+        """
+        Add measure gate method adds a measure gate to the circuit in a specified layer and on a specified qubit.
+
+        Parameters
+        ----------
+        qubit_index : int 
+            The index of the qubit to which the measure gate will be applied to.
+        layer_index : int
+            The layer index to which the measure gate will be applied to.
+
+        Raises
+        ------
+        ValueError
+            If qubit or layer index are invalid a ValueError will be raised.
+        """
+
+        self.__valid_qubit_index(qubit_index,layer_index,adding_gate=True)
+        self.__valid_layer_index(layer_index)
+
+        self.__is_dynamic = True
+        gate = Gate()
+        gate.set_measure_gate()
+        self.__circuit[layer_index][qubit_index]=gate

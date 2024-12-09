@@ -10,43 +10,44 @@ EPSILON = 1e-10
 
 class Gate:
     """
-    :ivar gate_matrix: A two by two matrix representing the gate operation.
-    :vartype gate_matrix: np.ndarray
-    :ivar gate_type: The gate type of this gate (e.g., I, X, Y, Z, H, SWAP)
-    :vartype: str
-    :ivar target_qubit: The index of a target qubit in case of a controlled gate.
-    :vartype target_qubit: int
-    :ivar control_qubit: The index of a control qubit in case of a controlled gate.
-    :vartype control_qubit: int
-    :ivar is_control_gate: Variable that stores a bolean value if the gate is a controlled gate or not.
-    :vartype is_control_gate: bool
-    :ivar is_swap_gate: Variable that stores a bolean value if the gate is a swap gate or not.
-    :vartype is_swap_gate: bool
-
     A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.
     
     The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
+    
+    Attributes
+    ----------
+    gate_matrix : np.ndarray
+        A 2x2 matrix representing the gate operation.
+    gate_type : str
+        The gate type of this gate (e.g., I, X, Y, Z, H, SWAP).
+    target_qubit : int
+        The index of the target qubit in case of a controlled gate.
+    control_qubit : int
+        The index of the control qubit in case of a controlled gate.
+    is_control_gate : bool
+        A boolean value indicating if the gate is a controlled gate.
+    is_swap_gate : bool
+        A boolean value indicating if the gate is a swap gate.
 
-    Example:
+    Example
     --------
-
-        >>> gate = Gate()
-        >>> gate.set_controlled_qubit_gate(1,2,"P",np.pi/2)
-        >>> gate.print_matrix()
-        >>> print(gate.get_control_index())
-        >>> print(gate.get_target_index())
-        >>> print(gate.is_control_gate())
-        Output:
-        [ 1.00 0.00 ]
-        [ 0.00 0.00+1.00j ]
-        1
-        2
-        True
+    >>> gate = Gate()
+    >>> gate.set_controlled_qubit_gate(1, 2, "P", np.pi/2)
+    >>> gate.print_matrix()
+    >>> print(gate.get_control_index())
+    >>> print(gate.get_target_index())
+    >>> print(gate.is_control_gate())
+    Output:
+    [ 1.00 0.00 ]
+    [ 0.00 0.00+1.00j ]
+    1
+    2
+    True
     """
 
     # Define gate matrices as class constants
-    __GATE_MATRICES = {
+    __gate_matrices = {
         'I': np.array([[1, 0], [0, 1]], dtype=complex),
         'X': np.array([[0, 1], [1, 0]], dtype=complex),
         'Y': np.array([[0, -1j], [1j, 0]], dtype=complex),
@@ -60,12 +61,13 @@ class Gate:
         
         The initial configuration represents the identity gate, with no control or target qubits set.
         """
-        self.__gate_matrix = np.identity(2, dtype=complex)
+        self.__gate_matrix = None
         self.__gate_type = "I"
         self.__target_qubit = None
         self.__control_qubit = None
         self.__is_control_gate = False
         self.__is_swap_gate = False
+        self.__is_measure_gate = False
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -191,9 +193,9 @@ class Gate:
         """
         if gate_type == 'P':
             return np.array([[1, 0], [0, np.exp(1j * phi)]], dtype=complex)
-        if gate_type not in self.__GATE_MATRICES:
-            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(self.__GATE_MATRICES.keys()) + ['P']}")
-        return self.__GATE_MATRICES[gate_type].copy()
+        if gate_type not in Gate.__gate_matrices:
+            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(Gate.__gate_matrices.keys()) + ['P']}")
+        return Gate.__gate_matrices[gate_type].copy()
 
     def __validate_indices(self, control_qubit: int, target_qubit: int) -> None:
         """
@@ -245,3 +247,20 @@ class Gate:
             return True
         else:
             return False
+        
+    def is_measure_gate(self) -> bool:
+        """
+        This methods returns a boolean value if the gate is a measure gate or not.
+
+        Returns
+        -------
+        return_val : bool
+            True if the gate is a measure gate and false otherwiss.
+        """
+        return self.__is_measure_gate()
+    
+    def set_measure_gate(self) -> None:
+        """
+        This method set this gate to be a measurement gate.
+        """
+        self.__is_measure_gate = True
