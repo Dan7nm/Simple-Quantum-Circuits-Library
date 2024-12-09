@@ -61,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.plot_probabilities"><code class="docutils literal notranslate"><span class="pre">MultiQubit.plot_probabilities()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.print_tensor_form"><code class="docutils literal notranslate"><span class="pre">MultiQubit.print_tensor_form()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.print_vector_form"><code class="docutils literal notranslate"><span class="pre">MultiQubit.print_vector_form()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multi_qubit.MultiQubit.str_to_state"><code class="docutils literal notranslate"><span class="pre">MultiQubit.str_to_state()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -199,14 +200,18 @@ in the given quantum state on the <cite>|0⟩</cite> and <cite>|1⟩</cite> stat
 
 <dl class="py method">
 <dt class="sig sig-object py" id="multi_qubit.MultiQubit.measure">
-<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#multi_qubit.MultiQubit.measure" title="Link to this definition"></a></dt>
-<dd><p>This function measures the state one time and returns the state to which the mesurement collapsed to.</p>
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_as_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Self</span></span></span><a class="headerlink" href="#multi_qubit.MultiQubit.measure" title="Link to this definition"></a></dt>
+<dd><p>This function measures the state one time and returns the state to which the mesurement collapsed to. The return type can be an str or a MultiQubit object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>out</strong> – The state to which the measurement collapsed to.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>return_as_str</strong> (<em>bool</em>) – Boolean argument. True if to return as a string and false a multiqubit object.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>out_str</strong> (<em>str</em>) – The state to which the measurement collapsed to in string format.</p></li>
+<li><p><strong>out_multiqubit</strong> (<em>MultQubit</em>) – The state to which the measurement collapsed to as a MultiQubit object.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -288,6 +293,23 @@ with their corresponding complex coefficients.</p>
 <dd><p>Print the vector representation of the quantum state.</p>
 <p>Displays the coefficients of the quantum state in the computational
 basis as a list of complex numbers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="multi_qubit.MultiQubit.str_to_state">
+<span class="sig-name descname"><span class="pre">str_to_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#multi_qubit.MultiQubit.str_to_state" title="Link to this definition"></a></dt>
+<dd><p>This method converts a string which represents a single quantum state and returns the state as MultiQubit object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_str</strong> (<em>str</em>) – The input state as a string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>output</strong> – The input state as a MultiQubit objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>MutliQubit</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
