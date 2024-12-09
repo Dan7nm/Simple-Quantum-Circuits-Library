@@ -17,6 +17,7 @@ INV_NUM_QUBITS = "The number of qubits should be atleast 1."
 INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
 INV_INIT_LAYERS = "Invalid number of layers. The number should be non zero positive integer."
 INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
+INV_BOOL = "The input value is not a boolean. Provide True or False as arguments."
 
 class QuantumCircuit:
     """
@@ -75,10 +76,15 @@ class QuantumCircuit:
         self.__valid_pos_val(num_of_layers)
 
         self.__number_of_compatible_qubits = number_of_qubits
-        self.__number_of_layers = num_of_layers
+        self.__number_of_layers = 0
 
-        # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
-        self.__circuit= np.full(((1,self.__number_of_compatible_qubits)),None,dtype=Gate)
+        # Initialize a circuit with the one layer with no gates (identity gate is counted as no gate)
+        self.__circuit= np.empty((0, number_of_qubits))
+
+        # Add additional layers as specified in number of layers:
+        for i in range(0,num_of_layers):
+            self.add_layer()
+
         self.__circuit_operator = np.identity(2 ** self.__number_of_compatible_qubits,dtype=np.complex128)
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
@@ -616,17 +622,7 @@ class QuantumCircuit:
         result_qubit_tensor = MultiQubit(result_vector)
         return result_qubit_tensor
     
-    def draw_circuit(self) -> None:
-        """
-        Print a text-based visualization of the quantum circuit.
-
-        The visualization includes:
-        - Horizontal lines (─) representing qubit wires
-        - Single qubit gates with their type (H, X, Y, Z, P)
-        - Control points (●) for controlled gates
-        - Target points (⊕ for X gates, ◯ for others)
-        - Swap gates (⨉)
-        """
+    def __draw_cli(self) -> None:
         if self.__number_of_layers == 0 or self.__number_of_compatible_qubits == 0:
             print("Empty circuit")
             return
@@ -793,7 +789,7 @@ class QuantumCircuit:
             if qubit_index < num_of_qubits - 1 - qubit_index:
                 self.add_swap_gate(qubit_index,num_of_qubits - 1 - qubit_index,curr_layer_index)
 
-    def draw_circuit_mpl(self):
+    def __draw_using_matplotlib(self):
         if self.__number_of_layers == 0 or self.__number_of_compatible_qubits == 0:
             print("Empty circuit")
             return
@@ -832,16 +828,18 @@ class QuantumCircuit:
                     ax.text(layer, qubit_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
                             bbox=dict(boxstyle='circle', facecolor='lightblue', edgecolor='black'))
 
-        # Add layer labels
-        for layer in range(self.__number_of_layers):
-            ax.text(layer, -1, f'{layer}', ha='center', va='center', fontsize=10)
-
         # Set axis limits and labels
         ax.set_xlim(-0.5, self.__number_of_layers - 0.5)
         ax.set_ylim(-0.5,self.__number_of_compatible_qubits - 0.5)
+
+        # Set qubits ticks:
         ax.set_yticks(range(self.__number_of_compatible_qubits))
-        ax.set_yticklabels([f'q{i}' for i in range(self.__number_of_compatible_qubits - 1, -1, -1)])
-        ax.set_xticks([])
+        ax.tick_params(axis='y', length=0)
+        ax.set_yticklabels([f'q{i}:' for i in range(self.__number_of_compatible_qubits - 1, -1, -1)])
+        
+        # Add layer labels:
+        ax.set_xticks([layer for layer in range(self.__number_of_layers)])
+        ax.tick_params(axis='x', length=0)
 
         # Remove spines
         ax.spines['top'].set_visible(False)
@@ -849,5 +847,34 @@ class QuantumCircuit:
         ax.spines['left'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
 
+        # Add labels to the axes
+        ax.set_xlabel("Layers", fontsize=12)
+        ax.set_ylabel("Qubits", fontsize=12)
+
         plt.tight_layout()
         plt.show()
+
+
+    def draw_circuit(self,matplotlib:bool = True) -> None:
+        """
+        Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.
+
+        The visualization includes:
+        - Horizontal lines (─) representing qubit wires
+        - Single qubit gates with their type (H, X, Y, Z, P)
+        - Control points (●) for controlled gates
+        - Target points (⊕ for X gates, ◯ for others)
+        - Swap gates (⨉)
+
+        Parameters
+        ----------
+        matplotlib : bool
+            True for printing using matplotlib and false for CLI.
+        """
+
+        if not isinstance(matplotlib,bool):
+            raise ValueError(INV_BOOL)
+        if matplotlib:
+            self.__draw_using_matplotlib()
+        else:
+            self.__draw_cli()
