@@ -19,6 +19,6 @@ Link to the project repository:
    :maxdepth: 2
    :caption: Contents:
 
-   quickstart
+   jupyter_notebook/quickstart.ipynb
    gates
    api

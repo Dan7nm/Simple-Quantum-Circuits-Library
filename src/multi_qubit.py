@@ -495,7 +495,7 @@ class MultiQubit:
         proj_tensor_to_zero,proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
         desired_qubit = self.get_qubit(qubit_index)
         measured_state = desired_qubit.measure()
-        if measured_state == "0":
+        if measured_state == 0:
             collapsed_state =  np.matmul(proj_tensor_to_zero,self.__tensor_vector)
         else:
             collapsed_state = np.matmul(proj_tensor_to_one,self.__tensor_vector)

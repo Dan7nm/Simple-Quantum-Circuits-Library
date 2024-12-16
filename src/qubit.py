@@ -141,7 +141,7 @@ class Qubit:
         """
         print(self.__qubit_vector)
 
-    def measure(self) -> str:
+    def measure(self) -> int:
         """
         Perform a measurement on a qubit.
 
@@ -154,8 +154,8 @@ class Qubit:
 
         Returns
         -------
-        str
-            The measurement result, either '0' or '1', collapsed state in the computational basis.
+        int
+            The measurement result, either 0 or 1, collapsed state in the computational basis.
 
         Notes
         -----
@@ -182,8 +182,8 @@ class Qubit:
 
         # If the random number is within the probability of measuring |0⟩, return '0'
         if 0 <= rand_num <= prob0:
-            return "0"
+            return 0
         
         # If the random number is within the probability of measuring |1⟩, return '1'
         if prob0 < rand_num <= 1:
-            return "1"
+            return 1

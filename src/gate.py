@@ -68,6 +68,7 @@ class Gate:
         self.__is_control_gate = False
         self.__is_swap_gate = False
         self.__is_measure_gate = False
+        self.__is_conditional_gate = False
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -121,8 +122,10 @@ class Gate:
         """
         Return the matrix representation of the gate.
 
-        :return: The matrix of the gate.
-        :rtype: NDArray[np.complex128]
+        Returns
+        -------
+        matrix : NDArray[np.complex128]
+            The matrix of the current get.
         """
         return self.__gate_matrix
     
@@ -257,10 +260,47 @@ class Gate:
         return_val : bool
             True if the gate is a measure gate and false otherwiss.
         """
-        return self.__is_measure_gate()
+        return self.__is_measure_gate
     
     def set_measure_gate(self) -> None:
         """
         This method set this gate to be a measurement gate.
         """
         self.__is_measure_gate = True
+
+    def is_conditional_gate(self) -> bool:
+        """
+        This methods returns a boolean value if the gate is a conditional gate or not.
+        
+        A conditional gate is a gate that acts on one qubits with an unitary operation if the classical bit input is one. Other wise the gate is just an identity gate. 
+
+        Returns
+        -------
+        return_val : bool
+            True if the gate is a measure gate and false otherwiss.
+        """
+        return self.__is_conditional_gate
+    
+    def set_conditional_gate(self) -> None:
+        """
+        This method sets this gate to be a a conditional gate.
+
+        A conditional gate is a gate that acts on one qubits with an unitary operation if the classical bit input is one. Other wise the gate is just an identity gate. 
+        """
+        self.__is_measure_gate = True
+
+    def conditional_gate_input(self,classical_bit:int,gate_type:str,phi:float=0.0) -> None:
+        """
+        This method recieves an input classical bit. If the input bit is one we apply the desired unitary operation otherwise we don't won't to change the qubit state applying the identity matrix.
+
+        Parameters
+        ----------
+        classical_bit : int
+            The input classical bit.
+        gate_type : str
+            The desired unitary opertion gate type.
+        """
+        if classical_bit:
+            self.set_single_qubit_gate(gate_type,phi)
+        else:
+            self.set_single_qubit_gate("I")

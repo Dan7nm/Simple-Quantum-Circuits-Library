@@ -630,16 +630,6 @@ class QuantumCircuit:
             print("Empty circuit")
             return
         
-        # Dictionary to map gate types to symbols
-        gate_symbols = {
-            'H': 'H',
-            'X': 'X',
-            'Y': 'Y',
-            'Z': 'Z',
-            'P': 'P',
-            'I': 'I'
-        }
-        
         # Build the circuit layer by layer
         circuit_lines = [[] for _ in range(self.__number_of_compatible_qubits)]
         
