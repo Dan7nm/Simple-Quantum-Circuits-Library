@@ -1,7 +1,8 @@
 import numpy as np
 from qubit import Qubit
 from numpy.typing import NDArray
-from typing import Tuple,Self
+from typing import Tuple
+from typing_extensions import Self
 import matplotlib.pyplot as plt
 import random
 
