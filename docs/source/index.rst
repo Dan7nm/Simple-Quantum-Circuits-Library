@@ -14,6 +14,8 @@ A small library that implements the basic quantum gates in quantum computing. Th
 Link to the project repository:
 `Github Repository <https://github.com/Dan7nm/Simple-Quantum-Circuits-Library>`_
 
+It is recommended to start with the SQCL Jupyter notebook to learn the fundamentals of working with this library.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
