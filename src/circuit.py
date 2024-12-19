@@ -3,9 +3,10 @@ from cell import QuantumCircuitCell
 from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
-from typing import Set
+from typing import Set,Any
 import torch
 import matplotlib.pyplot as plt
+from c_register import ClassicalRegister
 
 # Constants
 INV_QUBIT_INDEX = "The qubit index is invalid. The qubit index should be between 0 and number of qubits - 1."
@@ -95,18 +96,25 @@ class QuantumCircuit:
     
     def add_single_qubit_gate(self, target_qubit: int, layer_index: int, gate_type: str, phi: float = 0.0) -> None:
         """
-        Add a single qubit gate to the circuit.
+        Add a single-qubit gate to the circuit.
 
-        :param target_qubit: Index of the qubit to apply the gate to
-        :type target_qubit: int
-        :param layer_index: Index of the layer where the gate should be added
-        :type layer_index: int
-        :param gate_type: Type of quantum gate ('X', 'Y', 'Z', 'H', 'P')
-        :type gate_type: str
-        :param phi: Phase angle for phase gates (default: 0.0)
-        :type phi: float, optional
-        :raises ValueError: If qubit index or layer index is invalid, or if cell is occupied
+        Parameters
+        ----------
+        target_qubit : int
+            Index of the qubit to which the gate is applied.
+        layer_index : int
+            Index of the layer where the gate should be added.
+        gate_type : str
+            Type of quantum gate to apply. Supported types include 'X', 'Y', 'Z', 'H', and 'P'.
+        phi : float, optional
+            Phase angle for phase gates. Default is 0.0.
+
+        Raises
+        ------
+        ValueError
+            If the qubit index or layer index is invalid, or if the target cell is already occupied.
         """
+
         # Check if layer and qubit indexes are valid and the cell is empty
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(target_qubit,layer_index)
@@ -788,12 +796,9 @@ class QuantumCircuit:
             for qubit in range(self.__circuit_qubit_num):
                 gate = self.__circuit[layer][qubit]
 
-                if gate is None or gate.get_gate_type() == "I":
-                    # Identity gate: leave empty
+                if gate is None or gate.get_gate_type() == "I" or gate.is_classical_bit():
+                    # Skip cells with no gates
                     continue
-                elif gate.is_classical_bit():
-                    # Handle classical bit:
-                    pass
                 elif gate.is_swap_gate():
                     # Handle SWAP gate
                     idx1 =self.__circuit_qubit_num - 1 - gate.get_control_index()
@@ -868,9 +873,9 @@ class QuantumCircuit:
         else:
             self.__draw_cli()
 
-    def add_measure_gate(self,qubit_index:int, layer_index: int) -> None:
+    def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg: ClassicalRegister,c_reg_index: int) -> None:
         """
-        Add measure gate method adds a measure gate to the circuit in a specified layer and on a specified qubit.
+        Add measure gate method adds a measure gate to the circuit in a specified layer,on a specified qubit. After performing a measurement the collapsed state of a qubit is saved as a classical bit using the proivided classical register.
 
         Parameters
         ----------
@@ -878,11 +883,17 @@ class QuantumCircuit:
             The index of the qubit to which the measure gate will be applied to.
         layer_index : int
             The layer index to which the measure gate will be applied to.
+        c_reg : ClassicalRegister
+            The classical register object to which the classical bit will be stored.
+        c_reg_int : int
+            The index corresponding to the exact classical bit index in the classical register.
 
         Raises
         ------
         ValueError
             If qubit or layer index are invalid a ValueError will be raised.
+        ValueError
+            If the provided bit index is invalid. Should be between 0 and number of classical bit in the register
         """
 
         self.__valid_qubit_index(qubit_index,layer_index,adding_gate=True)
@@ -891,7 +902,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_measure_gate()
+        gate.set_measure_gate(qubit_index,c_reg,c_reg_index)
         self.__circuit[layer_index][qubit_index]=gate
 
         # We set all the cells after the measurement gate as classical bit cells.
@@ -973,12 +984,12 @@ class QuantumCircuit:
         # Fill all empty cells with identity gates or classical bits
         self.__fill_identity_gates()
         resulting_state = input_state
-        for layer in range(self.__number_of_layers):
-            resulting_state = self.__compute_dynamic_layer(resulting_state)
+        for layer_index in range(self.__number_of_layers):
+            resulting_state = self.__compute_dynamic_layer(resulting_state,self.__circuit[layer_index])
 
         return resulting_state
 
-    def __compute_dynamic_layer(self, input_state: MultiQubit) -> MultiQubit:
+    def __compute_dynamic_layer(self, input_state: MultiQubit,layer_arr: NDArray[Any]) -> MultiQubit:
         """
         Compute the combined operation of all gates in a single layer in a dynamical circuit. If we have a mid circuit measurments, apply those and return the resulting state.
 
@@ -986,15 +997,53 @@ class QuantumCircuit:
         ----------
         input_state : MultiQubit
             Input quantum state on which the layer acts.
+        layer_arr : np.ndarray[QuantumCircuitCell]
+            An array the contains all the gates in this layer
         
         Returns
         -------
         MultiQubit
             Output state after the running the layer on the input state.
         """
-        # TODO
-        pass
+        # First we check for measurement gates and perform measurement on specified qubits:
+        result_state = input_state
+        for qubit_index in range(self.__circuit_qubit_num):
+            cell = layer_arr[qubit_index]
+            if cell.is_measure_gate():
+                result_state = cell.measure(result_state)
+        
+        # Know we compute all other gates:
+            
 
-    def add_conditional_gate(self):
-        # TODO
-        pass
+    def add_conditional_gate(self,target_qubit:int,gate_type:str,phi:float,layer_index:int,c_reg:ClassicalRegister,c_reg_index:int) -> None:
+        """
+        This method adds a conditional gate and applies the specified unitary of the specified classical bit is one.
+        Parameters
+        ----------
+        qubit_index : int 
+            The index of the qubit to which the measure gate will be applied to.
+        layer_index : int
+            The layer index to which the measure gate will be applied to.
+        c_reg : ClassicalRegister
+            The classical register object to which the classical bit will be stored.
+        c_reg_int : int
+            The index corresponding to the exact classical bit index in the classical register.
+
+        Raises
+        ------
+        ValueError
+            If qubit or layer index are invalid a ValueError will be raised.
+        ValueError
+            If the provided bit index is invalid. Should be between 0 and number of classical bit in the register
+        """
+
+        self.__valid_qubit_index(target_qubit,layer_index,adding_gate=True)
+        self.__valid_layer_index(layer_index)
+
+        self.__is_dynamic = True
+        self.__circuit_is_computed = False
+        gate = QuantumCircuitCell()
+        gate.set_conditional_gate(gate_type,phi,c_reg,c_reg_index)
+        self.__circuit[layer_index][target_qubit]=gate
+        
+        self.__circuit_is_computed = False

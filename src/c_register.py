@@ -1,5 +1,7 @@
 import numpy as np
 
+INDEX_ERROR = "Index out of range. The index should be between 0 and number of classical bit - 1 in the classical register."
+
 class ClassicalRegister:
     """
     A class representing a classical register for quantum computation.
@@ -16,6 +18,7 @@ class ClassicalRegister:
             The number of bits in the register (default is 1).
         """
         self.__num_bits = num_bits
+        # Initializes the classical register with zeros.
         self.__c_reg = np.zeros(num_bits)
 
     def change_number_of_bits(self, num_bits: int) -> None:
@@ -60,7 +63,7 @@ class ClassicalRegister:
         if 0 <= index < self.__num_bits:
             return self.__c_reg[index]
         else:
-            raise IndexError("Index out of range")
+            raise IndexError(INDEX_ERROR)
 
     def __setitem__(self, index: int, value: int) -> None:
         """
@@ -87,4 +90,15 @@ class ClassicalRegister:
                 raise ValueError("Classical register can only hold values 0 or 1.")
             self.__c_reg[index] = value
         else:
-            raise IndexError("Index out of range")
+            raise IndexError(INDEX_ERROR)
+        
+    def get_bits_num(self)->int:
+        """
+        Returns number of classical bit in the classical register.
+
+        Returns
+        -------
+        int
+            The number of bits in the classical register
+        """
+        return self.__num_bits

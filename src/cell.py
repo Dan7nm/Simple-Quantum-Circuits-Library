@@ -1,12 +1,16 @@
 import numpy as np
 from qubit import Qubit
 from numpy.typing import NDArray
+from c_register import ClassicalRegister
+from multi_qubit import MultiQubit
+from typing import NewType
 
 # Constants
 INV_SINGLE_GATE_TYP = "Invalid single qubit gate type. Must be one of: "
 INV_INDEX = "Control and target qubit index should be non-negative."
 NOT_CTRL = "The action is invalid because the gate is a non-control gate."
 EPSILON = 1e-10
+
 
 class QuantumCircuitCell:
     """
@@ -55,6 +59,9 @@ class QuantumCircuitCell:
         self.__is_measure_gate = False
         self.__is_conditional_gate = False
         self.__is_classical_bit = False
+
+        self.__c_reg = None
+        self.__c_reg_index = 0
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -248,12 +255,31 @@ class QuantumCircuitCell:
         """
         return self.__is_measure_gate
     
-    def set_measure_gate(self) -> None:
+    def set_measure_gate(self,target_qubit:int,c_reg: ClassicalRegister,c_reg_index: int) -> None:
         """
-        This method set this gate to be a measurement gate.
+        The method sets this gate to be a measurement gate.
+
+        Parameters
+        ----------
+        target_qubit : int
+            The qubit index on which the measurement is performed.
+        c_reg : ClassicalRegister
+            The classical register object to which the classical bit will be stored.
+        c_reg_int : int
+            The index corresponding to the exact classical bit index in the classical register.
+
+        Raises
+        ------
+        ValueError
+            If the provided bit index is invalid. Should be between 0 and number of classical bit in the register
         """
         self.__is_measure_gate = True
         self.__gate_type = 'M'
+        # We set the measure gate as an idetity cause we perform the measurement using another method and we do not change the resulting state.
+        self.__gate_matrix = QuantumCircuitCell.__gate_matrices["I"]
+        self.__c_reg = c_reg
+        self.__c_reg_index = c_reg_index
+        self.__target_qubit = target_qubit
 
     def is_conditional_gate(self) -> bool:
         """
@@ -268,12 +294,23 @@ class QuantumCircuitCell:
         """
         return self.__is_conditional_gate
     
-    def set_conditional_gate(self) -> None:
+    def set_conditional_gate(self,gate_type: str,phi: float ,c_reg: ClassicalRegister,c_reg_index: int) -> None:
         """
         This method sets this gate to be a a conditional gate.
 
-        A conditional gate is a gate that acts on one qubits with an unitary operation if the classical bit input is one. Other wise the gate is just an identity gate. 
+        A conditional gate is a gate that acts on one qubit with an unitary operation if the classical bit is one in the specified classical register. Otherwise the gate will act as an ordinary identity gate. 
+
+        Parameters
+        ----------
+        c_reg : ClassicalRegister
+            The classical register object to which the classical bit will be stored.
+        c_reg_int : int
+            The index corresponding to the exact classical bit index in the classical register.
+
         """
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__c_reg = c_reg
+        self.__c_reg_index = c_reg_index
         self.__is_measure_gate = True
 
     def conditional_gate_input(self,classical_bit:int,gate_type:str,phi:float=0.0) -> None:
@@ -297,8 +334,9 @@ class QuantumCircuitCell:
         Set this cell to represent a classical bit.
         """
         self.__is_classical_bit = True
-        self.__gate_matrix = None  # Classical bits don't have a gate matrix
-        self.__gate_type = None   # Classical bits don't have a gate type
+        # We set the classical bit cell to be an idenity matrix because we to not want to change the quantum state if the specified qubit.
+        self.__gate_matrix = QuantumCircuitCell.__gate_matrices["I"]
+        self.__gate_type = "I"   
         self.__is_control_gate = False
         self.__is_swap_gate = False
         self.__is_measure_gate = False
@@ -314,3 +352,42 @@ class QuantumCircuitCell:
             True if the cell is a classical bit, False otherwise.
         """
         return self.__is_classical_bit
+    
+    def measure(self,input_state: MultiQubit) -> MultiQubit:
+        """
+        The method performs a measurment on the current qubit and saves the collapsed state in the classical register specified in measure gate initialization
+
+        Parameters
+        ----------
+        input_state : MultiQubit
+            The input quantum state on which the measurement will be performed.
+
+        Returns
+        -------
+        MultiQubit
+            The multi qubit quantum state of the whole system. We expect the non measured qubits to be intact.
+        
+        Raises
+        ------
+        ValueError
+            If the current gate is not a measurement gate.
+        """
+        if not self.__is_measure_gate():
+            raise ValueError("Invalid command. Can not perform a measurement on a non measurment gate.")
+        
+        collapsed_state ,bit = input_state.measure_qubit(self.__target_qubit)
+
+        # We save the collapsed state of the specific measured qubit in the classical register
+        self.__c_reg[self.__c_reg_index] = bit
+
+        return collapsed_state
+
+    def apply_conditional_gate(self) -> None:
+        """
+        This method updates the gate matrix depending on the value of the classical bit connected to this gate. If the classical bit is 1 we keep the matrix of the specified unitary gate otherwise the gate will not be applied and will act as if a identity gate.  
+        """
+        bit = self.__c_reg[self.__c_reg_index]
+
+        # If the bit is zero we revert the gate to be an identity gate otherwise the bit is one and we apply the desired unitary.
+        if not bit:
+            self.__gate_matrix = self.__get_gate_matrix('I')

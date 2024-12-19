@@ -460,9 +460,13 @@ class MultiQubit:
         beta = np.sqrt(np.sum(np.abs(proj_tensor_to_one @ self.__tensor_vector)**2))
         return Qubit(alpha,beta)
     
-    def measure_qubit(self,qubit_index:int) -> Self:
+    def measure_qubit(self, qubit_index: int) -> tuple[Self, int]:
         """
-        This method measures a specified qubit inside a multi qubit quantum state and returns the new quantum state after the collapse.
+        This method measures a specified qubit inside a multi-qubit quantum state and 
+        returns the new quantum state after the collapse along with the measured state (0 or 1).
+
+        This measurement is called a partial measurement and is equivalent to tracing out all 
+        other qubits and measuring the desired qubits without changing the other qubits.
 
         Parameters
         ----------
@@ -471,13 +475,15 @@ class MultiQubit:
 
         Returns
         -------
-        MultiQubit
-            The collapsed state after measuring a particular qubit.
+        tuple
+            A tuple containing:
+            - MultiQubit: The collapsed state after measuring a particular qubit.
+            - int: The measurement result (0 or 1).
 
         Raises
         ------
-        ValueError
-            If the qubit_index is not valid. Qubit index should be between 0 and number of qubit - 1 and an integer.
+            ValueError
+                If the qubit_index is not valid. Qubit index should be between 0 and number of qubits - 1 and an integer.
 
         Examples
         --------
@@ -485,26 +491,29 @@ class MultiQubit:
         >>> mt = MultiQubit(vector)
         >>> mt.print_tensor_form()
         >>> for i in range(4):
-        ...     mt = mt.measure_qubit(i)
+        ...     mt, outcome = mt.measure_qubit(i)
+        ...     print(f"Measured qubit {i}: {outcome}")
         ...     mt.print_tensor_form()
         Output:
         Tensor product in basis state form: 0.5|0000⟩ + 0.5|0001⟩ + 0.5|0010⟩ + 0.5|0011⟩
-        # We will see a new collapsed state after each consecutive measurement.
+        Measured qubit 0: 0
+        Tensor product in basis state form: ...
         """
         self.__valid_qubit_index(qubit_index)
-        proj_tensor_to_zero,proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
+        proj_tensor_to_zero, proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
         desired_qubit = self.get_qubit(qubit_index)
-        measured_state = desired_qubit.measure()
+        measured_state = desired_qubit.measure()  # Measure the desired qubit (returns 0 or 1)
+
         if measured_state == 0:
-            collapsed_state =  np.matmul(proj_tensor_to_zero,self.__tensor_vector)
+            collapsed_state = np.matmul(proj_tensor_to_zero, self.__tensor_vector)
         else:
-            collapsed_state = np.matmul(proj_tensor_to_one,self.__tensor_vector)
-        
-        # Normalise the collapsed state:
+            collapsed_state = np.matmul(proj_tensor_to_one, self.__tensor_vector)
+
+        # Normalize the collapsed state:
         norm_factor = np.sqrt(np.sum(np.abs(collapsed_state)**2))
         collapsed_state /= norm_factor
 
-        return MultiQubit(collapsed_state)
+        return MultiQubit(collapsed_state), measured_state
 
     def str_to_state(self,input_str:str) -> Self:
         """
