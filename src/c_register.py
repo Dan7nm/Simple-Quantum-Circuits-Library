@@ -4,29 +4,6 @@ class ClassicalRegister:
     """
     A class representing a classical register for quantum computation.
     
-    Attributes
-    ----------
-    __num_bits : int
-        The number of bits in the classical register.
-    __c_reg : numpy.ndarray
-        The array holding the values of the classical register, initialized to zero.
-
-    Methods
-    -------
-    __init__(self, num_bits: int = 1) -> None
-        Initializes the classical register with a given number of bits.
-    
-    change_number_of_bits(self, num_bits: int) -> None
-        Changes the number of bits in the classical register and resets its values.
-    
-    print_c_reg(self) -> None
-        Prints the current state of the classical register.
-    
-    __getitem__(self, index: int) -> int
-        Overloads the indexing operator to access specific elements of the register.
-    
-    __setitem__(self, index: int, value: int) -> None
-        Overloads the indexing operator to set specific elements of the register.
     """
     
     def __init__(self, num_bits: int = 1) -> None:

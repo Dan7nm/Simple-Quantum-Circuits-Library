@@ -14,21 +14,6 @@ class QuantumCircuitCell:
     
     The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
-    
-    Attributes
-    ----------
-    gate_matrix : np.ndarray
-        A 2x2 matrix representing the gate operation.
-    gate_type : str
-        The gate type of this gate (e.g., I, X, Y, Z, H, SWAP).
-    target_qubit : int
-        The index of the target qubit in case of a controlled gate.
-    control_qubit : int
-        The index of the control qubit in case of a controlled gate.
-    is_control_gate : bool
-        A boolean value indicating if the gate is a controlled gate.
-    is_swap_gate : bool
-        A boolean value indicating if the gate is a swap gate.
 
     Example
     --------

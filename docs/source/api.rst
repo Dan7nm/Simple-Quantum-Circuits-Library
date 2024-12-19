@@ -11,4 +11,5 @@ This page lists all the classes used in this library.
    api/cell
    api/circuit
    api/circuit_test
+   api/c_register
 

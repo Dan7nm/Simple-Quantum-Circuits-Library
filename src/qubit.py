@@ -143,26 +143,18 @@ class Qubit:
 
     def measure(self) -> int:
         """
-        Perform a measurement on a qubit.
+        Measure the qubit and return the collapsed state.
 
-        This method measures the qubit in the computational basis (|0⟩ and |1⟩) and returns the outcome based on the corresponding probabilities.
-        The probabilities are calculated from the squared magnitudes of the 
-        qubit's alpha (α) and beta (β) amplitudes.
-
-        The measurement outcome is determined by generating a random number 
-        and comparing it to the probability distribution of the qubit's states.
+        Simulates a measurement in the computational basis (0 state and 1 state) by calculating the probabilities of each state and using a random number in a uniform distribution on [0,1] interval to determine the outcome.
 
         Returns
         -------
         int
-            The measurement result, either 0 or 1, collapsed state in the computational basis.
+            The measurement result: 0 or 1.
 
         Notes
         -----
-        - The method assumes that the qubit is in a superposition of the form:
-        `|ψ⟩ = α|0⟩ + β|1⟩`, where α and β are the complex amplitudes.
-        - The probabilities of measuring |0⟩ and |1⟩ are given by `|α|^2` and `|β|^2`, respectively.
-        - The method uses a uniform random number generator to simulate the measurement process.
+        The probabilities of each state are determined by the amplitudes squared of each qubit.
 
         Example
         -------
@@ -170,7 +162,7 @@ class Qubit:
         >>> result = qubit.measure()
         >>> print(result)  # Output will be '0' with probability 0.36, or '1' with probability 0.64
         """
-        
+
         # Calculate the probability of measuring the state |0⟩
         prob0 = np.abs(self.__alpha)**2  # |α|^2 gives the probability of |0⟩
         
