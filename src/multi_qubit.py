@@ -222,7 +222,7 @@ class MultiQubit:
 
         Returns
         -------
-        out : dict
+        dict
             The dictionary with keys as intervals and it corresponding amplitudes 
         """
         interval_dict = {}
@@ -250,9 +250,9 @@ class MultiQubit:
 
         Returns
         -------
-        out_str : str
+        str
            The state to which the measurement collapsed to in string format.
-        out_multiqubit : MultQubit
+        MultQubit
             The state to which the measurement collapsed to as a MultiQubit object.
         """
         interval_dict = self.__init_state_intervals()
@@ -471,7 +471,7 @@ class MultiQubit:
 
         Returns
         -------
-        quantum_state : MultiQubit
+        MultiQubit
             The collapsed state after measuring a particular qubit.
 
         Raises
@@ -517,7 +517,7 @@ class MultiQubit:
 
         Returns
         -------
-        output : MutliQubit
+        MultiQubit
             The input state as a MultiQubit objects.
         """
         # Convert the input string to the state index.

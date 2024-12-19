@@ -492,7 +492,7 @@ class QuantumCircuit:
             
         Returns
         -------
-        out : Tensor    
+        Tensor    
             The unitary matrix representing the complete layer
         """
         processed_qubits: Set[int] = set()
@@ -527,7 +527,7 @@ class QuantumCircuit:
         
         Returns
         -------
-        matrix : Tensor
+        Tensor
             Matrix representing the combined operation of all gates in the layer.
         """
         # Get all gates in the current layer
@@ -691,7 +691,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        circuit_operator : NDarray
+        NDarray
             Matrix representing the entire circuit.
         """
         # Check that the circuit was computed before applying a state if not than we compute the circuit:
@@ -712,7 +712,7 @@ class QuantumCircuit:
         This function returns the number of layers in this circuit.
         Returns
         -------
-        number_of_layers : int
+        int
             The number of layers in the circuit.
         """ 
         return self.__number_of_layers
@@ -723,7 +723,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        number_of_compatible_qubits : int
+        int
             The number of qubit this circuit is compatible with.
         """
         return self.__circuit_qubit_num
@@ -734,7 +734,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        layers_array : NDArray
+        NDArray
             Matrix with all of the gates.
         """
         return self.__circuit
@@ -895,7 +895,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        result : MultiQubit
+        MultiQubit
             The collapsed state due to measurement.
         """
         result = self.run_circuit(input_state)
@@ -912,7 +912,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        mult_qubit : MultiQubit
+        MultiQubit
              Resulting quantum state after applying the circuit.
 
         Raises
@@ -951,7 +951,7 @@ class QuantumCircuit:
 
         Returns
         -------
-        result_state : MultiQubit
+        MultiQubit
             The result state after running the circuit on the input state. 
         """
         # Fill all empty cells with identity gates or classical bits
@@ -973,7 +973,7 @@ class QuantumCircuit:
         
         Returns
         -------
-        output_state : MultiQubit
+        MultiQubit
             Output state after the running the layer on the input state.
         """
         # TODO
