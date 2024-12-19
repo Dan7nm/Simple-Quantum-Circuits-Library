@@ -38,7 +38,7 @@ def qft_on_sine(number_of_qubits: int) -> None:
     # Load the QFT circuit and apply it.
     circuit = QuantumCircuit(number_of_qubits)
     circuit.load_qft_preset()
-    result = circuit.apply_circuit(mt)
+    result = circuit.run_circuit(mt)
 
     # Plot the amplitudes after QFT.
     result.plot_measurements()
@@ -111,7 +111,7 @@ def qft_on_gaussian(number_of_qubits: int, mu: float = 0, sigma: float = 1) -> N
     # Load the QFT circuit and apply it.
     circuit = QuantumCircuit(number_of_qubits)
     circuit.load_qft_preset()
-    result = circuit.apply_circuit(mt)
+    result = circuit.run_circuit(mt)
 
     # Plot the amplitudes after QFT.
     result.plot_probabilities()

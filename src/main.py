@@ -6,8 +6,10 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   
+   circuit = QuantumCircuit(3)
+   circuit.load_qft_preset()
 
+   circuit.draw_circuit()
 
 
    # Calculate the runtime:

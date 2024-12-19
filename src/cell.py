@@ -8,9 +8,9 @@ INV_INDEX = "Control and target qubit index should be non-negative."
 NOT_CTRL = "The action is invalid because the gate is a non-control gate."
 EPSILON = 1e-10
 
-class Gate:
+class QuantumCircuitCell:
     """
-    A class to represent a quantum gate, with options for single-qubit gates, controlled gates, and swap gates.
+    A class to represent a quantum circuit cell, with options for single-qubit gates, controlled gates, and swap gates, measurments.
     
     The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
@@ -32,7 +32,7 @@ class Gate:
 
     Example
     --------
-    >>> gate = Gate()
+    >>> gate = QuantumCircuitCell()
     >>> gate.set_controlled_qubit_gate(1, 2, "P", np.pi/2)
     >>> gate.print_matrix()
     >>> print(gate.get_control_index())
@@ -69,6 +69,7 @@ class Gate:
         self.__is_swap_gate = False
         self.__is_measure_gate = False
         self.__is_conditional_gate = False
+        self.__is_classical_bit = False
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -196,9 +197,9 @@ class Gate:
         """
         if gate_type == 'P':
             return np.array([[1, 0], [0, np.exp(1j * phi)]], dtype=complex)
-        if gate_type not in Gate.__gate_matrices:
-            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(Gate.__gate_matrices.keys()) + ['P']}")
-        return Gate.__gate_matrices[gate_type].copy()
+        if gate_type not in QuantumCircuitCell.__gate_matrices:
+            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(QuantumCircuitCell.__gate_matrices.keys()) + ['P']}")
+        return QuantumCircuitCell.__gate_matrices[gate_type].copy()
 
     def __validate_indices(self, control_qubit: int, target_qubit: int) -> None:
         """
@@ -304,3 +305,26 @@ class Gate:
             self.set_single_qubit_gate(gate_type,phi)
         else:
             self.set_single_qubit_gate("I")
+
+    def set_classical_bit(self) -> None:
+        """
+        Set this cell to represent a classical bit.
+        """
+        self.__is_classical_bit = True
+        self.__gate_matrix = None  # Classical bits don't have a gate matrix
+        self.__gate_type = None   # Classical bits don't have a gate type
+        self.__is_control_gate = False
+        self.__is_swap_gate = False
+        self.__is_measure_gate = False
+        self.__is_conditional_gate = False
+
+    def is_classical_bit(self) -> bool:
+        """
+        Check if this cell represents a classical bit.
+
+        Returns
+        -------
+        return_val : bool
+            True if the cell is a classical bit, False otherwise.
+        """
+        return self.__is_classical_bit
