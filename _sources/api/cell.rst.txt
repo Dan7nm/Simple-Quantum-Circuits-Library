@@ -1,10 +1,10 @@
 
 
-Gate Class
+Cell Class
 ----------
 
 
-.. automodule:: gate
+.. automodule:: cell
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,0 +1,1053 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQCL Quickstart Notebook &mdash; Simple Quantum Circuits Library  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quantum Gates" href="../gates.html" />
+    <link rel="prev" title="Simple Quantum Circuits Library" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Simple Quantum Circuits Library
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">SQCL Quickstart Notebook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Qubit-class">Qubit class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#MultiQubit-Class">MultiQubit Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Quantum-Circuit-Class">Quantum Circuit Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Quantum-Circuits-Tests">Quantum Circuits Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gates.html">Quantum Gates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Simple Quantum Circuits Library</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SQCL Quickstart Notebook</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/jupyter_notebook/quickstart.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="SQCL-Quickstart-Notebook">
+<h1>SQCL Quickstart Notebook<a class="headerlink" href="#SQCL-Quickstart-Notebook" title="Link to this heading"></a></h1>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading"></a></h2>
+<p>This jupyter notebook explains the fundamentals of using this quantum circuit library step by step.</p>
+</section>
+<section id="Prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#Prerequisites" title="Link to this heading"></a></h2>
+<p>This library uses numpy version earlier than 2 and pytorch. If numpy or pytorch is not installed on your system you can easily install them by using the following command:</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">numpy&lt;=2.0</span> <span class="pre">torch</span> <span class="pre">torchvision</span> <span class="pre">torchaudio</span></code></p>
+<p>If you are using google colab, click in the runtime tab on “change runtime type” and choose a gpu. The project will default to a gpu to run faster computations.</p>
+<p>Project initializiton script:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">google.colab</span>
+    <span class="k">if</span> <span class="s1">&#39;colab_cell_executed&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running setup for Google Colab...&quot;</span><span class="p">)</span>
+        <span class="o">%</span><span class="k">cd</span> ~
+        <span class="o">%</span><span class="k">cd</span> ./../content/
+        <span class="o">!</span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Dan7nm/Simple-Quantum-Circuits-Library.git
+        <span class="o">%</span><span class="k">cd</span> Simple-Quantum-Circuits-Library/src
+
+        <span class="c1"># Set the flag to indicate this cell has been executed</span>
+        <span class="n">colab_cell_executed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Colab setup has already been executed.&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s1">&#39;local_cell_executed&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running setup for local machine...&quot;</span><span class="p">)</span>
+        <span class="c1"># run this line</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s2">&quot;../../../src/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python path:&quot;</span><span class="p">,</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+        <span class="n">local_cell_executed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python directory was already initialized.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Python directory was already initialized
+</pre></div></div>
+</div>
+</section>
+<section id="Qubit-class">
+<h2>Qubit class<a class="headerlink" href="#Qubit-class" title="Link to this heading"></a></h2>
+<p>This class constructs a single qubit. The constructer of this class is given two complex numbers, alpha and beta, which are the amplitudes of the zero state and one state respectively. Let’s construct a zero state ,a one state qubits and a qubit with equal amplitudes:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qubit</span> <span class="kn">import</span> <span class="n">Qubit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">beta</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">beta</span><span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<p>Note that the amplitudes have to respect the normalization of the quantum state otherwise the class will throw an error.</p>
+<p>Now let’s print the qubit in different forms to show the quantum state of the qubit:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tensor form more readable:</span>
+<span class="n">q0</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+<span class="n">q1</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+<span class="n">q2</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+<span class="c1"># Vector form for debugging and backend of the library.</span>
+<span class="n">q0</span><span class="o">.</span><span class="n">print_vector_form</span><span class="p">()</span>
+<span class="n">q1</span><span class="o">.</span><span class="n">print_vector_form</span><span class="p">()</span>
+<span class="n">q2</span><span class="o">.</span><span class="n">print_vector_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Qubit state is 1.00|0⟩
+Qubit state is 1.00|1⟩
+Qubit state is 0.71|0⟩ + 0.71|1⟩
+[1 0]
+[0 1]
+[0.70710678 0.70710678]
+</pre></div></div>
+</div>
+<p>We can change the amplitudes using the set amplitudes method. Remember to respect the normalization condition.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q2</span><span class="o">.</span><span class="n">set_amplitudes</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">beta</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>There are also getter function for the amplitudes and for the qubit vector.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">q2</span><span class="o">.</span><span class="n">get_alpha</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q2</span><span class="o">.</span><span class="n">get_beta</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">q2</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1
+0
+[1 0]
+</pre></div></div>
+</div>
+<p>We can measure a qubit using the measure method. By measuring we collapse to one of the two qubit states. The state to which the qubit collapsed is then returned by the method. Let’s se an example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize a qubit with 1/4 to collapse to the zero state and 3/4 to collpase to one state:</span>
+<span class="n">q2</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Print the qubit:</span>
+<span class="n">q2</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+
+<span class="c1"># Perform a measurment:</span>
+<span class="n">q2</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Qubit state is 0.50|0⟩ + 0.87|1⟩
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1
+</pre></div></div>
+</div>
+<p>If we rerun the cell above mutliple times we will get zero state with probability 1/4 and one state with probability 3/4.</p>
+</section>
+<section id="MultiQubit-Class">
+<h2>MultiQubit Class<a class="headerlink" href="#MultiQubit-Class" title="Link to this heading"></a></h2>
+<p>This class let’s you construct a tensor product of multiple qubits, used later as an input to the quantum circuit. Let’s construct a MultiQubit object:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multi_qubit</span> <span class="kn">import</span> <span class="n">MultiQubit</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>Now let’s add a few qubits to this tensor product:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>As before in a single qubit case, we can print the tensor product of multiple qubits in tensor form and in vector form:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_vector_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: |011⟩
+The vector of the tensor product is: [0 0 0 1 0 0 0 0]
+</pre></div></div>
+</div>
+<p>This class also has getters for the tensor product vector and the number of qubits in the tensor product:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">mt</span><span class="o">.</span><span class="n">get_number_of_qubits</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mt</span><span class="o">.</span><span class="n">get_tensor_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3
+[0 0 0 1 0 0 0 0]
+</pre></div></div>
+</div>
+<p>We can perform a measurment on the tensor product of qubits and collapse to one of the states. The measurement is simulated using a randomized number in a uniform distributation between 0 and 1. Each state has it’s own interval between 0 and 1. The randomized number determines the interval and the state we collapsed to. Let’s show an example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize a two qubit tensor with equal probability for each state:</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s print the state:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="c1"># Perform a mesurement:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">measure</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: 0.5|00⟩ + 0.5|01⟩ + 0.5|10⟩ + 0.5|11⟩
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;10&#39;
+</pre></div></div>
+</div>
+<p>We can plot the probabilites and amplitudes for each states directly from the state amplitudes:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize a qunatum state using two qubits with different amplitudes:</span>
+<span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+
+<span class="c1"># Print the state:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="c1"># Plot the quantum state amplitudes using a bar:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">plot_amplitudes</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the quantum state amplitudes using a line (Use full for large quantum states):</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">plot_amplitudes</span><span class="p">(</span><span class="n">plot_type</span><span class="o">=</span><span class="s2">&quot;line&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the quantum state probabilities:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">plot_probabilities</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: 0.5|00⟩ + 0.866|10⟩
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_24_1.png" src="../_images/jupyter_notebook_quickstart_24_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_24_2.png" src="../_images/jupyter_notebook_quickstart_24_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_24_3.png" src="../_images/jupyter_notebook_quickstart_24_3.png" />
+</div>
+</div>
+<p>We can simulate multiple measurements as discussed before. We plot the measurements in a graph. We can set the number of measurements, the higher the number the closer we will get the actual probability distribution:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the measurements:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">plot_measurements</span><span class="p">(</span><span class="n">num_of_measurements</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_26_0.png" src="../_images/jupyter_notebook_quickstart_26_0.png" />
+</div>
+</div>
+<p>Another useful feature of this class is tracing out a qubit. Using the get_qubit method we can give the method the desired qubit index and the method will return a Qubit object with it’s amplitudes. This is usefull in quantum dynamical circuits where we want to measure a single qubit in a multi qubit quantum state. Let’s show an example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Trace out the first qubit:</span>
+<span class="n">first_qubit</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">get_qubit</span><span class="p">(</span><span class="n">qubit_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Print the qubit state:</span>
+<span class="n">first_qubit</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+
+<span class="c1"># Trace out the second qubit:</span>
+<span class="n">second_qubit</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">get_qubit</span><span class="p">(</span><span class="n">qubit_index</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Print the qubit state:</span>
+<span class="n">second_qubit</span><span class="o">.</span><span class="n">print_qubit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Qubit state is 0.50|0⟩ + 0.87|1⟩
+Qubit state is 1.00|0⟩
+</pre></div></div>
+</div>
+<p>We can see the traced out qubits have the same amplitudes as we initialized them before without saving the original qubit amplitudes. Note that the traced out qubits will only have the same probability and any phases will be lost due to this implementation. This is not a worry cause we only need the probabilities.</p>
+<p>The following method measures the multi qubit quantum state on a specific qubit and returns the collapsed state. Lets show two examples:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize a quantum state of two qubits with equal amplitudes:</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="c1"># Perform a measurement on the first qubit:</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">measure_qubit</span><span class="p">(</span><span class="n">qubit_index</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: 0.5|00⟩ + 0.5|01⟩ + 0.5|10⟩ + 0.5|11⟩
+Tensor product in computational basis state form: 0.7071|10⟩ + 0.7071|11⟩
+</pre></div></div>
+</div>
+<p>If we run the cell a couple of times we will get the first qubit in 0 state with 1/2 probabilty and 1 state with the same probability as expected. Let’s show another example of 4 qubits where each qubit is measured consecutively.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize 4 qubits with equal amplitudes:</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="c1"># Measure each qubit in order and print the collapsed state:</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">mt</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">measure_qubit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: 0.25|0000⟩ + 0.25|0001⟩ + 0.25|0010⟩ + 0.25|0011⟩ + 0.25|0100⟩ + 0.25|0101⟩ + 0.25|0110⟩ + 0.25|0111⟩ + 0.25|1000⟩ + 0.25|1001⟩ + 0.25|1010⟩ + 0.25|1011⟩ + 0.25|1100⟩ + 0.25|1101⟩ + 0.25|1110⟩ + 0.25|1111⟩
+Tensor product in computational basis state form: 0.3536|1000⟩ + 0.3536|1001⟩ + 0.3536|1010⟩ + 0.3536|1011⟩ + 0.3536|1100⟩ + 0.3536|1101⟩ + 0.3536|1110⟩ + 0.3536|1111⟩
+Tensor product in computational basis state form: 0.5|1000⟩ + 0.5|1001⟩ + 0.5|1010⟩ + 0.5|1011⟩
+Tensor product in computational basis state form: 0.7071|1000⟩ + 0.7071|1001⟩
+Tensor product in computational basis state form: |1000⟩
+</pre></div></div>
+</div>
+</section>
+<section id="Quantum-Circuit-Class">
+<h2>Quantum Circuit Class<a class="headerlink" href="#Quantum-Circuit-Class" title="Link to this heading"></a></h2>
+<p>The QuantumCircuit class allows for building a quantum circuit. By adding and removing a quantum gates on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates or swap gates.</p>
+<p>Let’s construct a quantum circuit object with 3 qubits and add a NOT gate to the first qubit. The constructer recieves the number of qubits in the circuit. Then we use add_single_qubit_gate method which recieves target_qubit, layer_index, gate type and phase as arguments. Gate types are: I - identity gate, X - X Gate, Y - Y gate, Z - Z gate, H - Hadamard gate.</p>
+<p>Note that the target index and layer index are counted from 0.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">number_of_qubits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now let’s visualize the circuit to see the construction. You can specify true for visualizing in matplotlib or false for CLI. Matplotlib is reccomended and will be used by default.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_36_0.png" src="../_images/jupyter_notebook_quickstart_36_0.png" />
+</div>
+</div>
+<p>The quantum circuit class initializes a two dimensional array. Every row of the array corresponds to each layer and every column to every gates in that layer. When we apply the circuit on an input or want to print the total unitary operation on the input state, the class computes all of the gate matrices into one unitary matrix.</p>
+<p>Let’s print this circuit’s final matrix:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">print_operator_matrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j]
+ [0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j]
+ [0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j]
+ [0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j]
+ [1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+ [0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+ [0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+ [0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]]
+</pre></div></div>
+</div>
+<p>Now let’s introduce how we can apply the circuit on an input state. Note that the input state which is a tensor product must have the same number of qubits as the circuit otherwise a ValueError will be raised. Here’s an example:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize a quantum state of 011:</span>
+<span class="n">vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">(</span><span class="n">vector</span><span class="o">=</span><span class="n">vector</span><span class="p">)</span>
+<span class="c1"># Print the input quantum state:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The input state:&quot;</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The output state:&quot;</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The input state:
+Tensor product in computational basis state form: |011⟩
+The output state:
+Tensor product in computational basis state form: |111⟩
+</pre></div></div>
+</div>
+<p>We took the 011 state and got the 111 state which is what we expect to see with a NOT gate acting on a qubit.</p>
+<p>If we want to reset the circuit to the intial state we can use the following method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">reset_circuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_42_0.png" src="../_images/jupyter_notebook_quickstart_42_0.png" />
+</div>
+</div>
+<p>The circuit is now reset as expected.</p>
+<p>Now let’s introduce controlled gates. To add a controlled gate, use the add_controlled_qubit_gate method and we apply on the input state:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">add_controlled_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>  <span class="c1"># Add a controlled-X gate with control on qubit 1 and target qubit 0 in layer 0</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="c1"># The input state:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="c1"># Output state</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_44_0.png" src="../_images/jupyter_notebook_quickstart_44_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: |011⟩
+Tensor product in computational basis state form: |111⟩
+</pre></div></div>
+</div>
+<p>The number after the circle shows the qubit index to which it’s connected. This is used for situations where many control qubits are in the same layer for easier readability.</p>
+<p>Now let’s introduce the swap gates which are constructed in a similar fashion such as the controlled qubit gate.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">reset_circuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_swap_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="c1"># The input state:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="c1"># Output state</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_46_0.png" src="../_images/jupyter_notebook_quickstart_46_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: |011⟩
+Tensor product in computational basis state form: |110⟩
+</pre></div></div>
+</div>
+<p>Note that when given indexes with an already gate assigned to that index, a ValueError will be raised.</p>
+<p>We can add layers to this quantum circuit and similarly also remove layers using these methods:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">add_layer</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;Y&quot;</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="c1"># The input state:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input state:&quot;</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="c1"># The output state:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output state:&quot;</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_48_0.png" src="../_images/jupyter_notebook_quickstart_48_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Input state:
+Tensor product in computational basis state form: |011⟩
+Output state:
+Tensor product in computational basis state form: 1j|111⟩
+</pre></div></div>
+</div>
+<p>We also can define to which layer we want to apply the state (By default we apply the input state on the whole circuit):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="c1"># The input state:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input state:&quot;</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="c1"># The output state:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output state:&quot;</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_50_0.png" src="../_images/jupyter_notebook_quickstart_50_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Input state:
+Tensor product in computational basis state form: |011⟩
+Output state:
+Tensor product in computational basis state form: 1j|111⟩
+</pre></div></div>
+</div>
+<p>Removing layers is done this way (you can specify which layer to remove, if no layer is specified then the last layer will be removed):</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">remove_layer</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_52_0.png" src="../_images/jupyter_notebook_quickstart_52_0.png" />
+</div>
+</div>
+<p>To remove specific two qubit gate we can use the following method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">remove_two_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_54_0.png" src="../_images/jupyter_notebook_quickstart_54_0.png" />
+</div>
+</div>
+<p>Now let’s add a single qubit gate with a phase and show how to remove it:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">add_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="n">circuit</span><span class="o">.</span><span class="n">remove_single_qubit_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_56_0.png" src="../_images/jupyter_notebook_quickstart_56_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_56_1.png" src="../_images/jupyter_notebook_quickstart_56_1.png" />
+</div>
+</div>
+<p>Now for the crown jewel of this library the Quantum Fourier Transform. The library has built in preset of qft circuit by the number of qubits:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">load_qft_preset</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+
+<span class="c1"># The input state:</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="c1"># Output state</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_58_0.png" src="../_images/jupyter_notebook_quickstart_58_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Tensor product in computational basis state form: |011⟩
+Tensor product in computational basis state form: 0.3536|000⟩ - (0.25-0.25j)|001⟩ - 0.3536j|010⟩ + (0.25+0.25j)|011⟩ - 0.3536|100⟩ + (0.25-0.25j)|101⟩ + 0.3536j|110⟩ - (0.25+0.25j)|111⟩
+</pre></div></div>
+</div>
+<p>The qft matrix we see is:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit</span><span class="o">.</span><span class="n">print_operator_matrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 3.53553391e-01+0.j          3.53553391e-01+0.j
+   3.53553391e-01+0.j          3.53553391e-01+0.j
+   3.53553391e-01+0.j          3.53553391e-01+0.j
+   3.53553391e-01+0.j          3.53553391e-01+0.j        ]
+ [ 3.53553391e-01+0.j          2.50000000e-01+0.25j
+   2.16489014e-17+0.35355339j -2.50000000e-01+0.25j
+  -3.53553391e-01+0.j         -2.50000000e-01-0.25j
+  -2.16489014e-17-0.35355339j  2.50000000e-01-0.25j      ]
+ [ 3.53553391e-01+0.j          2.16489014e-17+0.35355339j
+  -3.53553391e-01+0.j         -2.16489014e-17-0.35355339j
+   3.53553391e-01+0.j          2.16489014e-17+0.35355339j
+  -3.53553391e-01+0.j         -2.16489014e-17-0.35355339j]
+ [ 3.53553391e-01+0.j         -2.50000000e-01+0.25j
+  -2.16489014e-17-0.35355339j  2.50000000e-01+0.25j
+  -3.53553391e-01+0.j          2.50000000e-01-0.25j
+   2.16489014e-17+0.35355339j -2.50000000e-01-0.25j      ]
+ [ 3.53553391e-01+0.j         -3.53553391e-01+0.j
+   3.53553391e-01+0.j         -3.53553391e-01+0.j
+   3.53553391e-01+0.j         -3.53553391e-01+0.j
+   3.53553391e-01+0.j         -3.53553391e-01+0.j        ]
+ [ 3.53553391e-01+0.j         -2.50000000e-01-0.25j
+   2.16489014e-17+0.35355339j  2.50000000e-01-0.25j
+  -3.53553391e-01+0.j          2.50000000e-01+0.25j
+  -2.16489014e-17-0.35355339j -2.50000000e-01+0.25j      ]
+ [ 3.53553391e-01+0.j         -2.16489014e-17-0.35355339j
+  -3.53553391e-01+0.j          2.16489014e-17+0.35355339j
+   3.53553391e-01+0.j         -2.16489014e-17-0.35355339j
+  -3.53553391e-01+0.j          2.16489014e-17+0.35355339j]
+ [ 3.53553391e-01+0.j          2.50000000e-01-0.25j
+  -2.16489014e-17-0.35355339j -2.50000000e-01-0.25j
+  -3.53553391e-01+0.j         -2.50000000e-01+0.25j
+   2.16489014e-17+0.35355339j  2.50000000e-01+0.25j      ]]
+</pre></div></div>
+</div>
+<p>This is unreadable because of floating inaccuracies and large matrix. In the next section we implement circuit tests to see if the resulting matrix corresponds to the expected qunatum fourier transform matrix.</p>
+<p>Here’s another example of a qft circuit on a 5 qubit system, showing that the qft circuit can be loaded on any number of qubits:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">q0</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">q1</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mt</span> <span class="o">=</span> <span class="n">MultiQubit</span><span class="p">()</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q0</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">add_qubit</span><span class="p">(</span><span class="n">q1</span><span class="p">)</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">number_of_qubits</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">load_qft_preset</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw_circuit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input State:&quot;</span><span class="p">)</span>
+<span class="n">mt</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">run_circuit</span><span class="p">(</span><span class="n">mt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Output State:&quot;</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">print_tensor_form</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_62_0.png" src="../_images/jupyter_notebook_quickstart_62_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Input State:
+Tensor product in computational basis state form: |10011⟩
+Output State:
+Tensor product in computational basis state form: 0.1768|00000⟩ - (0.147+0.09821j)|00001⟩ + (0.06765+0.1633j)|00010⟩ + (0.03449-0.1734j)|00011⟩ - (0.125-0.125j)|00100⟩ + (0.1734-0.03449j)|00101⟩ - (0.1633+0.06765j)|00110⟩ + (0.09821+0.147j)|00111⟩ - 0.1768j|01000⟩ - (0.09821-0.147j)|01001⟩ + (0.1633-0.06765j)|01010⟩ - (0.1734+0.03449j)|01011⟩ + (0.125+0.125j)|01100⟩ - (0.03449+0.1734j)|01101⟩ - (0.06765-0.1633j)|01110⟩ + (0.147-0.09821j)|01111⟩ - 0.1768|10000⟩ + (0.147+0.09821j)|10001⟩ - (0.06765+0.1633j)|10010⟩ - (0.03449-0.1734j)|10011⟩ + (0.125-0.125j)|10100⟩ - (0.1734-0.03449j)|10101⟩ + (0.1633+0.06765j)|10110⟩ - (0.09821+0.147j)|10111⟩ + 0.1768j|11000⟩ + (0.09821-0.147j)|11001⟩ - (0.1633-0.06765j)|11010⟩ + (0.1734+0.03449j)|11011⟩ - (0.125+0.125j)|11100⟩ + (0.03449+0.1734j)|11101⟩ + (0.06765-0.1633j)|11110⟩ - (0.147-0.09821j)|11111⟩
+</pre></div></div>
+</div>
+</section>
+<section id="Quantum-Circuits-Tests">
+<h2>Quantum Circuits Tests<a class="headerlink" href="#Quantum-Circuits-Tests" title="Link to this heading"></a></h2>
+<p>We saw before that large matrices are unreadable for us. In such case we implement tests which compare the computed matrix with the expected matrix from theory.</p>
+<p>First let’s check if the computed QFT matrix is as expected. From theory the expected value of each cell i,j in the QFT matrix is as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+QFT_{m,n} = \frac{1}{\sqrt{N}} e^{\frac{i 2\pi}{N} \cdot mn} ; N = 2^{\text{number of qubits}}
+\end{equation}\]</div>
+<p>This function compares between the ouput matrices of this library and theory on 2 to a specified number of qubits as input and outputs the runtime:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the test functions:</span>
+<span class="kn">from</span> <span class="nn">circuit_test</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">test_qft_matrix_output</span><span class="p">(</span><span class="n">qubits_to_test</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+===== QFT test with 2 qubits runtime: 0.00 ======
+===== QFT test with 3 qubits runtime: 0.00 ======
+===== QFT test with 4 qubits runtime: 0.00 ======
+===== QFT test with 5 qubits runtime: 0.01 ======
+===== QFT test with 6 qubits runtime: 0.01 ======
+===== QFT test with 7 qubits runtime: 0.03 ======
+===== QFT test with 8 qubits runtime: 0.27 ======
+==== Total QFT Test runtime: 0.63 seconds =======
+=============== QFT tests passed! ===============
+</pre></div></div>
+</div>
+<p>Another example is the sine function. We know that the classical Fourier Transform of a sine function gives us two delta of dirac functions. The qft_on_sine function plots a normalized sine function ampitudes, then plots measurements of the resulting state and lastly compares to the expected fourier transform result. Let’s show this in use:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">qft_on_sine</span><span class="p">(</span><span class="n">number_of_qubits</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_66_0.png" src="../_images/jupyter_notebook_quickstart_66_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/jupyter_notebook_quickstart_66_1.png" src="../_images/jupyter_notebook_quickstart_66_1.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+=== QFT Test on a Sine function passed ===
+=== The runtime of QFT on a sine function is: 1.78 seconds ===
+
+</pre></div></div>
+</div>
+<p>Another test checks the correctness of the traced out qubits from a multi qubit quantum state. The test initializes a specified number of qubits with normalized and random amplitudes and save the original amplitudes for each qubit. Then we initialize the tensor product of these qubits. Then we trace out each qubit and compare the traced out qubit’s amplitudes to the corresponding original qubit. Let’s see this in action:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_tracing_out_qubit</span><span class="p">(</span><span class="n">qubits_to_test</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">print_amplitudes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ Original qubits amplitudes [(0.9678715978193544, 0.2514449644248415), (0.5703237432307374, 0.8214200070045043)]
+ Traced out qubits amplitudes [(0.9678715978193544, 0.2514449644248415), (0.5703237432307373, 0.8214200070045042)]
+==== The traced out qubits real amplitudes are the same as their original real amplitudes. ====
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Simple Quantum Circuits Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../gates.html" class="btn btn-neutral float-right" title="Quantum Gates" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Dan Nemirovski.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

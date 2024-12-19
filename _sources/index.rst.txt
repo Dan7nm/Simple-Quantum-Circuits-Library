@@ -9,16 +9,17 @@ Simple Quantum Circuits Library
 Introduction
 ============
 
-A small library that implements the basic quantum gates in quantum computing. The library allows to build simple quantum circuits and provides a built-in curcuit in the form of quantum fourier transform.
+A small library that implements the basic quantum gates in quantum computing. The library allows to build simple quantum circuits and provides a built-in circuit in the form of quantum fourier transform.
 
 Link to the project repository:
 `Github Repository <https://github.com/Dan7nm/Simple-Quantum-Circuits-Library>`_
 
+It is recommended to start with the SQCL Jupyter notebook to learn the fundamentals of working with this library.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   quickstart
+   jupyter_notebook/quickstart.ipynb
    gates
    api

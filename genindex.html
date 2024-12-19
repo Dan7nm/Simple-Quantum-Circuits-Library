@@ -15,6 +15,7 @@
       <script src="_static/documentation_options.js?v=5929fcd5"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -41,7 +42,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter_notebook/quickstart.html">SQCL Quickstart Notebook</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gates.html">Quantum Gates</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a></li>
 </ul>
@@ -91,23 +92,23 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/circuit.html#circuit.QuantumCircuit.add_conditional_gate">add_conditional_gate() (circuit.QuantumCircuit method)</a>
+</li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.add_controlled_qubit_gate">add_controlled_qubit_gate() (circuit.QuantumCircuit method)</a>
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.add_layer">add_layer() (circuit.QuantumCircuit method)</a>
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.add_measure_gate">add_measure_gate() (circuit.QuantumCircuit method)</a>
 </li>
-      <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.add_qubit">add_qubit() (multi_qubit.MultiQubit method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.add_qubit">add_qubit() (multi_qubit.MultiQubit method)</a>
+</li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.add_single_qubit_gate">add_single_qubit_gate() (circuit.QuantumCircuit method)</a>
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.add_swap_gate">add_swap_gate() (circuit.QuantumCircuit method)</a>
 </li>
-      <li><a href="api/circuit.html#circuit.QuantumCircuit.apply_circuit">apply_circuit() (circuit.QuantumCircuit method)</a>
-</li>
-      <li><a href="api/gate.html#gate.Gate.apply_matrix">apply_matrix() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.apply_matrix">apply_matrix() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -116,14 +117,30 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
+    c_register
+
+      <ul>
+        <li><a href="api/c_register.html#module-c_register">module</a>
+</li>
+      </ul></li>
+      <li>
+    cell
+
+      <ul>
+        <li><a href="api/cell.html#module-cell">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/c_register.html#c_register.ClassicalRegister.change_number_of_bits">change_number_of_bits() (c_register.ClassicalRegister method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
     circuit
 
       <ul>
         <li><a href="api/circuit.html#module-circuit">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     circuit_test
 
@@ -131,7 +148,9 @@
         <li><a href="api/circuit_test.html#module-circuit_test">module</a>
 </li>
       </ul></li>
-      <li><a href="api/gate.html#gate.Gate.control_qubit">control_qubit (gate.Gate attribute)</a>
+      <li><a href="api/c_register.html#c_register.ClassicalRegister">ClassicalRegister (class in c_register)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.conditional_gate_input">conditional_gate_input() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -151,19 +170,6 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    gate
-
-      <ul>
-        <li><a href="api/gate.html#module-gate">module</a>
-</li>
-      </ul></li>
-      <li><a href="api/gate.html#gate.Gate">Gate (class in gate)</a>
-</li>
-      <li><a href="api/gate.html#gate.Gate.gate_matrix">gate_matrix (gate.Gate attribute)</a>
-</li>
-      <li><a href="api/gate.html#gate.Gate.gate_type">gate_type (gate.Gate attribute)</a>
-</li>
       <li><a href="api/qubit.html#qubit.Qubit.get_alpha">get_alpha() (qubit.Qubit method)</a>
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.get_array">get_array() (circuit.QuantumCircuit method)</a>
@@ -172,14 +178,14 @@
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.get_circuit_operator_matrix">get_circuit_operator_matrix() (circuit.QuantumCircuit method)</a>
 </li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.get_control_index">get_control_index() (cell.QuantumCircuitCell method)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.get_gate_type">get_gate_type() (cell.QuantumCircuitCell method)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.get_matrix">get_matrix() (cell.QuantumCircuitCell method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/gate.html#gate.Gate.get_control_index">get_control_index() (gate.Gate method)</a>
-</li>
-      <li><a href="api/gate.html#gate.Gate.get_gate_type">get_gate_type() (gate.Gate method)</a>
-</li>
-      <li><a href="api/gate.html#gate.Gate.get_matrix">get_matrix() (gate.Gate method)</a>
-</li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.get_number_of_compatible_qubits">get_number_of_compatible_qubits() (circuit.QuantumCircuit method)</a>
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.get_number_of_layers">get_number_of_layers() (circuit.QuantumCircuit method)</a>
@@ -188,7 +194,7 @@
 </li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.get_qubit">get_qubit() (multi_qubit.MultiQubit method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.get_target_index">get_target_index() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.get_target_index">get_target_index() (cell.QuantumCircuitCell method)</a>
 </li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.get_tensor_vector">get_tensor_vector() (multi_qubit.MultiQubit method)</a>
 </li>
@@ -200,19 +206,19 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/gate.html#gate.Gate.is_control_gate">is_control_gate (gate.Gate attribute)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_classical_bit">is_classical_bit() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#id0">is_control_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_conditional_gate">is_conditional_gate() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.is_measure_gate">is_measure_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_control_gate">is_control_gate() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/gate.html#gate.Gate.is_single_qubit_gate">is_single_qubit_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_measure_gate">is_measure_gate() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.is_swap_gate">is_swap_gate (gate.Gate attribute)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_single_qubit_gate">is_single_qubit_gate() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#id1">is_swap_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.is_swap_gate">is_swap_gate() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -242,11 +248,13 @@
     module
 
       <ul>
+        <li><a href="api/c_register.html#module-c_register">c_register</a>
+</li>
+        <li><a href="api/cell.html#module-cell">cell</a>
+</li>
         <li><a href="api/circuit.html#module-circuit">circuit</a>
 </li>
         <li><a href="api/circuit_test.html#module-circuit_test">circuit_test</a>
-</li>
-        <li><a href="api/gate.html#module-gate">gate</a>
 </li>
         <li><a href="api/multi_qubit.html#module-multi_qubit">multi_qubit</a>
 </li>
@@ -284,7 +292,9 @@
 </li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.plot_probabilities">plot_probabilities() (multi_qubit.MultiQubit method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.print_matrix">print_matrix() (gate.Gate method)</a>
+      <li><a href="api/c_register.html#c_register.ClassicalRegister.print_c_reg">print_c_reg() (c_register.ClassicalRegister method)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.print_matrix">print_matrix() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -314,6 +324,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell">QuantumCircuitCell (class in cell)</a>
+</li>
       <li>
     qubit
 
@@ -339,6 +351,8 @@
 </li>
       <li><a href="api/circuit.html#circuit.QuantumCircuit.reset_circuit">reset_circuit() (circuit.QuantumCircuit method)</a>
 </li>
+      <li><a href="api/circuit.html#circuit.QuantumCircuit.run_circuit">run_circuit() (circuit.QuantumCircuit method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -347,15 +361,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/qubit.html#qubit.Qubit.set_amplitudes">set_amplitudes() (qubit.Qubit method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.set_controlled_qubit_gate">set_controlled_qubit_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_classical_bit">set_classical_bit() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.set_measure_gate">set_measure_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_conditional_gate">set_conditional_gate() (cell.QuantumCircuitCell method)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_controlled_qubit_gate">set_controlled_qubit_gate() (cell.QuantumCircuitCell method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/gate.html#gate.Gate.set_single_qubit_gate">set_single_qubit_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_measure_gate">set_measure_gate() (cell.QuantumCircuitCell method)</a>
 </li>
-      <li><a href="api/gate.html#gate.Gate.set_swap_gate">set_swap_gate() (gate.Gate method)</a>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_single_qubit_gate">set_single_qubit_gate() (cell.QuantumCircuitCell method)</a>
+</li>
+      <li><a href="api/cell.html#cell.QuantumCircuitCell.set_swap_gate">set_swap_gate() (cell.QuantumCircuitCell method)</a>
 </li>
       <li><a href="api/multi_qubit.html#multi_qubit.MultiQubit.str_to_state">str_to_state() (multi_qubit.MultiQubit method)</a>
 </li>
@@ -365,12 +383,10 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/gate.html#gate.Gate.target_qubit">target_qubit (gate.Gate attribute)</a>
+      <li><a href="api/circuit_test.html#circuit_test.test_qft_matrix_output">test_qft_matrix_output() (in module circuit_test)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/circuit_test.html#circuit_test.test_qft_matrix_output">test_qft_matrix_output() (in module circuit_test)</a>
-</li>
       <li><a href="api/circuit_test.html#circuit_test.test_tracing_out_qubit">test_tracing_out_qubit() (in module circuit_test)</a>
 </li>
   </ul></td>

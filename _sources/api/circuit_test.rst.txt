@@ -1,7 +1,7 @@
 
 
-Circuit Test Class
-------------------
+Circuit Test Functions
+----------------------
 
 
 .. automodule:: circuit_test
