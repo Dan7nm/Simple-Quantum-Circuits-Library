@@ -52,6 +52,7 @@
 <li class="toctree-l2"><a class="reference internal" href="multi_qubit.html">Multi Qubit Class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Cell Class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cell.QuantumCircuitCell"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.apply_conditional_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.apply_conditional_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.apply_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.apply_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.conditional_gate_input"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.conditional_gate_input()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.get_control_index"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.get_control_index()</span></code></a></li>
@@ -64,6 +65,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.is_measure_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.is_measure_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.is_single_qubit_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.is_single_qubit_gate()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.is_swap_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.is_swap_gate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.measure"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.measure()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.print_matrix"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.print_matrix()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.set_classical_bit"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.set_classical_bit()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#cell.QuantumCircuitCell.set_conditional_gate"><code class="docutils literal notranslate"><span class="pre">QuantumCircuitCell.set_conditional_gate()</span></code></a></li>
@@ -131,6 +133,12 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 <span class="go">True</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="cell.QuantumCircuitCell.apply_conditional_gate">
+<span class="sig-name descname"><span class="pre">apply_conditional_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.apply_conditional_gate" title="Link to this definition"></a></dt>
+<dd><p>This method updates the gate matrix depending on the value of the classical bit connected to this gate. If the classical bit is 1 we keep the matrix of the specified unitary gate otherwise the gate will not be applied and will act as if a identity gate.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cell.QuantumCircuitCell.apply_matrix">
 <span class="sig-name descname"><span class="pre">apply_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="qubit.html#qubit.Qubit" title="qubit.Qubit"><span class="pre">Qubit</span></a></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.apply_matrix" title="Link to this definition"></a></dt>
@@ -304,6 +312,26 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="cell.QuantumCircuitCell.measure">
+<span class="sig-name descname"><span class="pre">measure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><span class="pre">MultiQubit</span></a></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.measure" title="Link to this definition"></a></dt>
+<dd><p>The method performs a measurment on the current qubit and saves the collapsed state in the classical register specified in measure gate initialization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_state</strong> (<a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit"><em>MultiQubit</em></a>) – The input quantum state on which the measurement will be performed.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The multi qubit quantum state of the whole system. We expect the non measured qubits to be intact.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="multi_qubit.html#multi_qubit.MultiQubit" title="multi_qubit.MultiQubit">MultiQubit</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the current gate is not a measurement gate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="cell.QuantumCircuitCell.print_matrix">
 <span class="sig-name descname"><span class="pre">print_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.print_matrix" title="Link to this definition"></a></dt>
 <dd><p>Print the gate matrix with formatted complex values.</p>
@@ -318,9 +346,17 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cell.QuantumCircuitCell.set_conditional_gate">
-<span class="sig-name descname"><span class="pre">set_conditional_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.set_conditional_gate" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_conditional_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><span class="pre">ClassicalRegister</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.set_conditional_gate" title="Link to this definition"></a></dt>
 <dd><p>This method sets this gate to be a a conditional gate.</p>
-<p>A conditional gate is a gate that acts on one qubits with an unitary operation if the classical bit input is one. Other wise the gate is just an identity gate.</p>
+<p>A conditional gate is a gate that acts on one qubit with an unitary operation if the classical bit is one in the specified classical register. Otherwise the gate will act as an ordinary identity gate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c_reg</strong> (<a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><em>ClassicalRegister</em></a>) – The classical register object to which the classical bit will be stored.</p></li>
+<li><p><strong>c_reg_int</strong> (<em>int</em>) – The index corresponding to the exact classical bit index in the classical register.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -344,8 +380,20 @@ or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cell.QuantumCircuitCell.set_measure_gate">
-<span class="sig-name descname"><span class="pre">set_measure_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.set_measure_gate" title="Link to this definition"></a></dt>
-<dd><p>This method set this gate to be a measurement gate.</p>
+<span class="sig-name descname"><span class="pre">set_measure_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><span class="pre">ClassicalRegister</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#cell.QuantumCircuitCell.set_measure_gate" title="Link to this definition"></a></dt>
+<dd><p>The method sets this gate to be a measurement gate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_qubit</strong> (<em>int</em>) – The qubit index on which the measurement is performed.</p></li>
+<li><p><strong>c_reg</strong> (<a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><em>ClassicalRegister</em></a>) – The classical register object to which the classical bit will be stored.</p></li>
+<li><p><strong>c_reg_int</strong> (<em>int</em>) – The index corresponding to the exact classical bit index in the classical register.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the provided bit index is invalid. Should be between 0 and number of classical bit in the register</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

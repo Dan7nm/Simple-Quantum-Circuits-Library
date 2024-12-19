@@ -163,8 +163,25 @@
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_conditional_gate">
-<span class="sig-name descname"><span class="pre">add_conditional_gate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.QuantumCircuit.add_conditional_gate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">add_conditional_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><span class="pre">ClassicalRegister</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_conditional_gate" title="Link to this definition"></a></dt>
+<dd><p>This method adds a conditional gate and applies the specified unitary of the specified classical bit is one.
+:param qubit_index: The index of the qubit to which the measure gate will be applied to.
+:type qubit_index: int
+:param layer_index: The layer index to which the measure gate will be applied to.
+:type layer_index: int
+:param c_reg: The classical register object to which the classical bit will be stored.
+:type c_reg: ClassicalRegister
+:param c_reg_int: The index corresponding to the exact classical bit index in the classical register.
+:type c_reg_int: int</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – If qubit or layer index are invalid a ValueError will be raised.</p></li>
+<li><p><strong>ValueError</strong> – If the provided bit index is invalid. Should be between 0 and number of classical bit in the register</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_controlled_qubit_gate">
@@ -201,17 +218,22 @@ The new layer is initialized with None values (identity gates).</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_measure_gate">
-<span class="sig-name descname"><span class="pre">add_measure_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_measure_gate" title="Link to this definition"></a></dt>
-<dd><p>Add measure gate method adds a measure gate to the circuit in a specified layer and on a specified qubit.</p>
+<span class="sig-name descname"><span class="pre">add_measure_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubit_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><span class="pre">ClassicalRegister</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_reg_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_measure_gate" title="Link to this definition"></a></dt>
+<dd><p>Add measure gate method adds a measure gate to the circuit in a specified layer,on a specified qubit. After performing a measurement the collapsed state of a qubit is saved as a classical bit using the proivided classical register.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>qubit_index</strong> (<em>int</em>) – The index of the qubit to which the measure gate will be applied to.</p></li>
 <li><p><strong>layer_index</strong> (<em>int</em>) – The layer index to which the measure gate will be applied to.</p></li>
+<li><p><strong>c_reg</strong> (<a class="reference internal" href="c_register.html#c_register.ClassicalRegister" title="c_register.ClassicalRegister"><em>ClassicalRegister</em></a>) – The classical register object to which the classical bit will be stored.</p></li>
+<li><p><strong>c_reg_int</strong> (<em>int</em>) – The index corresponding to the exact classical bit index in the classical register.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If qubit or layer index are invalid a ValueError will be raised.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If qubit or layer index are invalid a ValueError will be raised.</p></li>
+<li><p><strong>ValueError</strong> – If the provided bit index is invalid. Should be between 0 and number of classical bit in the register</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -219,18 +241,18 @@ The new layer is initialized with None values (identity gates).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="circuit.QuantumCircuit.add_single_qubit_gate">
 <span class="sig-name descname"><span class="pre">add_single_qubit_gate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_qubit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gate_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#circuit.QuantumCircuit.add_single_qubit_gate" title="Link to this definition"></a></dt>
-<dd><p>Add a single qubit gate to the circuit.</p>
+<dd><p>Add a single-qubit gate to the circuit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the qubit to apply the gate to</p></li>
-<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be added</p></li>
-<li><p><strong>gate_type</strong> (<em>str</em>) – Type of quantum gate (‘X’, ‘Y’, ‘Z’, ‘H’, ‘P’)</p></li>
-<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase angle for phase gates (default: 0.0)</p></li>
+<li><p><strong>target_qubit</strong> (<em>int</em>) – Index of the qubit to which the gate is applied.</p></li>
+<li><p><strong>layer_index</strong> (<em>int</em>) – Index of the layer where the gate should be added.</p></li>
+<li><p><strong>gate_type</strong> (<em>str</em>) – Type of quantum gate to apply. Supported types include ‘X’, ‘Y’, ‘Z’, ‘H’, and ‘P’.</p></li>
+<li><p><strong>phi</strong> (<em>float</em><em>, </em><em>optional</em>) – Phase angle for phase gates. Default is 0.0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If qubit index or layer index is invalid, or if cell is occupied</p>
+<dd class="field-even"><p><strong>ValueError</strong> – If the qubit index or layer index is invalid, or if the target cell is already occupied.</p>
 </dd>
 </dl>
 </dd></dl>
