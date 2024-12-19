@@ -6,9 +6,11 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   circuit = QuantumCircuit(3)
-   circuit.load_qft_preset()
-
+   circuit = QuantumCircuit(3,num_of_layers=3)
+   circuit.add_controlled_qubit_gate(0,0,1,"X")
+   circuit.add_measure_gate(0,1)
+   circuit.add_measure_gate(2,2)
+   circuit.add_single_qubit_gate(2,0,"Z")
    circuit.draw_circuit()
 
 

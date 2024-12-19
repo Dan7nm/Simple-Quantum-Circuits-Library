@@ -79,7 +79,7 @@ class QuantumCircuit:
         self.__number_of_layers = 0
 
         # Initialize a circuit with the one layer with no gates (identity gate is counted as no gate)
-        self.__circuit= np.empty((0, number_of_qubits))
+        self.__circuit= np.empty((0, number_of_qubits),dtype=QuantumCircuitCell)
 
         # Add additional layers as specified in number of layers:
         for i in range(0,num_of_layers):
@@ -770,8 +770,19 @@ class QuantumCircuit:
         fig, ax = plt.subplots(figsize=(self.__number_of_layers * 1.5,self.__circuit_qubit_num * 0.8))
 
         # Add horizontal lines for qubits (ascending order from top to bottom)
-        for i in range(self.__circuit_qubit_num):
-            ax.plot([0, self.__number_of_layers], [self.__circuit_qubit_num - 1 - i,self.__circuit_qubit_num - 1 - i], 'k-', lw=2)
+        for qubit_index in range(self.__circuit_qubit_num):
+            for layer_index in range(self.__number_of_layers):
+                cell = self.__circuit[layer_index][qubit_index]
+                # Plot classical bits lines
+                if cell is not None and cell.is_measure_gate():
+                    y_pos = self.__circuit_qubit_num - 1 - qubit_index
+                    dist = 0.05
+                    ax.plot([layer_index, self.__number_of_layers], [y_pos + dist, y_pos + dist], 'k-', lw=1)
+                    ax.plot([layer_index, self.__number_of_layers], [y_pos - dist, y_pos - dist], 'k-', lw=1)
+                    break
+                # Plot qubit lines:
+                else:
+                    ax.plot([layer_index, layer_index+1], [self.__circuit_qubit_num - 1 - qubit_index,self.__circuit_qubit_num - 1 - qubit_index], 'k-', lw=1)
 
         for layer in range(self.__number_of_layers):
             for qubit in range(self.__circuit_qubit_num):
@@ -780,6 +791,9 @@ class QuantumCircuit:
                 if gate is None or gate.get_gate_type() == "I":
                     # Identity gate: leave empty
                     continue
+                elif gate.is_classical_bit():
+                    # Handle classical bit:
+                    pass
                 elif gate.is_swap_gate():
                     # Handle SWAP gate
                     idx1 =self.__circuit_qubit_num - 1 - gate.get_control_index()
@@ -796,10 +810,12 @@ class QuantumCircuit:
                     ax.text(layer, target_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
                             bbox=dict(boxstyle='square,pad=0.7', facecolor='white', edgecolor='black'))
                 else:
-                    # Single-qubit gate
+                    # Single-qubit gate or measure gate
                     qubit_idx =self.__circuit_qubit_num - 1 - qubit
-                    ax.text(layer, qubit_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
-                            bbox=dict(boxstyle='square,pad=0.7', facecolor='white', edgecolor='black'))
+                    gate_color = 'lightgreen' if gate.is_measure_gate() else 'white'
+                    ax.text(layer, qubit_idx, gate.get_gate_type(), 
+                    ha='center', va='center', fontsize=12,
+                            bbox=dict(boxstyle='square,pad=0.7', facecolor=gate_color, edgecolor='black'))
 
         # Set axis limits and labels
         ax.set_xlim(-0.5, self.__number_of_layers - 0.5)
@@ -882,7 +898,7 @@ class QuantumCircuit:
         for index in range(layer_index + 1,self.__number_of_layers):
             cell = QuantumCircuitCell()
             cell.set_classical_bit()
-            self.__circuit[index][qubit_index]
+            self.__circuit[index][qubit_index] = cell
 
     def measure_all(self,input_state: MultiQubit) -> MultiQubit:
         """
@@ -958,7 +974,7 @@ class QuantumCircuit:
         self.__fill_identity_gates()
         resulting_state = input_state
         for layer in range(self.__number_of_layers):
-            resulting_state = self.__compute_dynamic_circuit(resulting_state)
+            resulting_state = self.__compute_dynamic_layer(resulting_state)
 
         return resulting_state
 

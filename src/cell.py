@@ -12,7 +12,7 @@ class QuantumCircuitCell:
     """
     A class to represent a quantum circuit cell, with options for single-qubit gates, controlled gates, and swap gates, measurments.
     
-    The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP), a controlled qubit gate, 
+    The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP,M), a controlled qubit gate, 
     or a swap gate, allowing for versatile operations on qubits in a quantum system.
 
     Example
@@ -253,6 +253,7 @@ class QuantumCircuitCell:
         This method set this gate to be a measurement gate.
         """
         self.__is_measure_gate = True
+        self.__gate_type = 'M'
 
     def is_conditional_gate(self) -> bool:
         """
