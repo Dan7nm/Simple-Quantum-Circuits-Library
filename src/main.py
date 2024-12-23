@@ -13,7 +13,8 @@ def main():
    circuit.add_measure_gate(0,1,c_reg,0)
    circuit.add_measure_gate(2,2,c_reg,1)
    circuit.add_single_qubit_gate(2,0,"Z")
-   circuit.draw_circuit()
+   circuit.draw_circuit(draw_type='Mpl')
+
 
 
    # Calculate the runtime:

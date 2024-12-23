@@ -18,7 +18,7 @@ INV_NUM_QUBITS = "The number of qubits should be atleast 1."
 INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
 INV_INIT_LAYERS = "Invalid number of layers. The number should be non zero positive integer."
 INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
-INV_BOOL = "The input value is not a boolean. Provide True or False as arguments."
+INV_DRAW = "The argument is invalid. Use 'mpl' or 'cli'."
 
 class QuantumCircuit:
     """
@@ -779,18 +779,7 @@ class QuantumCircuit:
 
         # Add horizontal lines for qubits (ascending order from top to bottom)
         for qubit_index in range(self.__circuit_qubit_num):
-            for layer_index in range(self.__number_of_layers):
-                cell = self.__circuit[layer_index][qubit_index]
-                # Plot classical bits lines
-                if cell is not None and cell.is_measure_gate():
-                    y_pos = self.__circuit_qubit_num - 1 - qubit_index
-                    dist = 0.05
-                    ax.plot([layer_index, self.__number_of_layers], [y_pos + dist, y_pos + dist], 'k-', lw=1)
-                    ax.plot([layer_index, self.__number_of_layers], [y_pos - dist, y_pos - dist], 'k-', lw=1)
-                    break
-                # Plot qubit lines:
-                else:
-                    ax.plot([layer_index, layer_index+1], [self.__circuit_qubit_num - 1 - qubit_index,self.__circuit_qubit_num - 1 - qubit_index], 'k-', lw=1)
+            ax.plot([0, self.__number_of_layers], [self.__circuit_qubit_num - 1 - qubit_index,self.__circuit_qubit_num - 1 - qubit_index], 'k-', lw=1)
 
         for layer in range(self.__number_of_layers):
             for qubit in range(self.__circuit_qubit_num):
@@ -849,7 +838,7 @@ class QuantumCircuit:
         plt.tight_layout(pad=padding)
         plt.show()
 
-    def draw_circuit(self,matplotlib:bool = True) -> None:
+    def draw_circuit(self,draw_type:str = "mpl") -> None:
         """
         Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.
 
@@ -862,16 +851,19 @@ class QuantumCircuit:
 
         Parameters
         ----------
-        matplotlib : bool
-            True for printing using matplotlib and false for CLI.
+        draw_type : str
+            String to specify how to draw the circuit. "mpl" for Matplotlib and "cli" for command line.
         """
 
-        if not isinstance(matplotlib,bool):
-            raise ValueError(INV_BOOL)
-        if matplotlib:
+        if not isinstance(draw_type,str):
+            raise ValueError("The input is invalid should be a string.")
+        draw_type = draw_type.lower()
+        if draw_type == "mpl":
             self.__draw_using_matplotlib()
-        else:
+        elif draw_type == "cli":
             self.__draw_cli()
+        else:
+            raise ValueError(INV_DRAW)
 
     def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg: ClassicalRegister,c_reg_index: int) -> None:
         """
