@@ -384,11 +384,11 @@ class QuantumCircuit:
 
     def __compute_single_qubit_gates(self, layer_gates: NDArray) -> torch.Tensor:
         """
-        This function  computes all single qubit gates in one layer.
+        This method  computes all single qubit gates in one layer.
 
         :param layer_gates: An array of all gates in the layer we want to compute.
         :type layer_gates: NDArray
-        :return: The function returns the unitary matrix of that layer
+        :return: The method returns the unitary matrix of that layer
         :rtype: Tensor
         """
         result_matrix = torch.tensor([1],dtype=torch.complex128,device=self.__device)
@@ -448,7 +448,7 @@ class QuantumCircuit:
 
         :param layer_gates: An array of all gates in the layer we want to compute.
         :type layer_gates: NDArray
-        :return: The function returns the unitary matrix of that layer
+        :return: The method returns the unitary matrix of that layer
         :rtype: NDArray
         """
         result_matrix = torch.eye(2 ** self.__circuit_qubit_num,dtype=torch.complex128,device=self.__device)
@@ -732,7 +732,7 @@ class QuantumCircuit:
 
     def get_circuit_operator_matrix(self) -> NDArray[np.complex128]:
         """
-        This function returns the final computed matrix of the entire circuit:
+        This method returns the final computed matrix of the entire circuit:
 
         Returns
         -------
@@ -748,13 +748,13 @@ class QuantumCircuit:
 
     def device_in_use(self) -> None:
         """
-        This function prints the device in use by this quantum circuit.
+        This method prints the device in use by this quantum circuit.
         """
         print(f"The device computing device used in this circuit: {self.__device}")
 
     def get_number_of_layers(self) -> int:
         """
-        This function returns the number of layers in this circuit.
+        This method returns the number of layers in this circuit.
 
         Returns
         -------
@@ -765,7 +765,7 @@ class QuantumCircuit:
 
     def get_number_of_compatible_qubits(self) -> int:
         """
-        This function returns the number of qubits this circuit is compatible with.
+        This method returns the number of qubits this circuit is compatible with.
 
         Returns
         -------
@@ -776,7 +776,7 @@ class QuantumCircuit:
     
     def get_array(self) -> NDArray:
         """
-        This function returns the matrix with all of the gates.
+        This method returns the matrix with all of the gates.
 
         Returns
         -------
@@ -1108,3 +1108,25 @@ class QuantumCircuit:
         if not isinstance(classical_register,ClassicalRegister):
             raise ValueError(INV_C_REG)
         self.__classical_register = classical_register
+
+    def get_quantum_state(self) -> MultiQubit:
+        """
+        This method returns the input quantum state of this circuit.
+
+        Returns
+        -------
+        MultiQubit
+            The input quantum state.
+        """ 
+        return self.__quantum_state
+    
+    def get_classical_register(self) -> ClassicalRegister:
+        """
+        This method returns the classical register of this circuit.
+
+        Returns
+        -------
+        ClassicalRegister
+            The classical register of the circuit.
+        """ 
+        return self.__classical_register
