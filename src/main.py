@@ -7,15 +7,16 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   c_reg = ClassicalRegister(2)
-   circuit = QuantumCircuit(3,num_of_layers=3)
-   circuit.add_controlled_qubit_gate(0,0,1,"X")
-   circuit.add_measure_gate(0,1,c_reg,0)
-   circuit.add_measure_gate(2,2,c_reg,1)
-   circuit.add_single_qubit_gate(2,0,"Z")
-   circuit.draw_circuit(draw_type='Mpl')
-
-
+   mt = MultiQubit(np.full(4,1/2))
+   creg = ClassicalRegister(2)
+   mt.print_tensor_form()
+   circuit = QuantumCircuit(mt,creg)
+   circuit.add_measure_gate(0,0,0)
+   circuit.add_measure_gate(1,0,1)
+   circuit.draw_circuit()
+   result = circuit.run_circuit()
+   result.print_tensor_form()
+   creg.print_c_reg()
 
    # Calculate the runtime:
    end_time = time.perf_counter()

@@ -372,7 +372,7 @@ class QuantumCircuitCell:
         ValueError
             If the current gate is not a measurement gate.
         """
-        if not self.__is_measure_gate():
+        if not self.__is_measure_gate:
             raise ValueError("Invalid command. Can not perform a measurement on a non measurment gate.")
         
         collapsed_state ,bit = input_state.measure_qubit(self.__target_qubit)

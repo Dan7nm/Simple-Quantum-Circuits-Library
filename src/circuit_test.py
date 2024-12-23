@@ -6,7 +6,7 @@ import time
 import random
 
 EPSILON = 1e-16
-QUBITS_TO_TEST = 2
+QUBITS_TO_TEST = 6
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -36,9 +36,9 @@ def qft_on_sine(number_of_qubits: int) -> None:
     mt.plot_amplitudes(plot_type='line')
 
     # Load the QFT circuit and apply it.
-    circuit = QuantumCircuit(number_of_qubits)
+    circuit = QuantumCircuit(mt)
     circuit.load_qft_preset()
-    result = circuit.run_circuit(mt)
+    result = circuit.run_circuit()
 
     # Plot the amplitudes after QFT.
     result.plot_measurements()
@@ -109,9 +109,9 @@ def qft_on_gaussian(number_of_qubits: int, mu: float = 0, sigma: float = 1) -> N
     mt.plot_amplitudes(plot_type="line")
 
     # Load the QFT circuit and apply it.
-    circuit = QuantumCircuit(number_of_qubits)
+    circuit = QuantumCircuit(mt)
     circuit.load_qft_preset()
-    result = circuit.run_circuit(mt)
+    result = circuit.run_circuit()
 
     # Plot the amplitudes after QFT.
     result.plot_probabilities()
@@ -145,9 +145,12 @@ def test_qft_matrix_output(qubits_to_test: int = 3) -> None:
 
     for num_qubits in range(2, qubits_to_test + 1):
         start_time_qft = time.perf_counter()
+        vector = np.zeros(2**num_qubits)
+        vector[0] = 1
+        mt = MultiQubit(vector)
 
         # Load the QFT circuit and get its matrix representation.
-        circuit = QuantumCircuit(num_qubits)
+        circuit = QuantumCircuit(mt)
         circuit.load_qft_preset()
         qft_matrix = circuit.get_circuit_operator_matrix()
 
@@ -241,6 +244,6 @@ if __name__ == "__main__":
     # Run tests.
     # qft_on_sine(QUBITS_TO_TEST)
     # qft_on_gaussian(QUBITS_TO_TEST,mu=0,sigma=0.1)
-    # test_qft_matrix_output(QUBITS_TO_TEST)
-    test_tracing_out_qubit(QUBITS_TO_TEST)
+    test_qft_matrix_output(QUBITS_TO_TEST)
+    # test_tracing_out_qubit(QUBITS_TO_TEST)
     print("=============== All tests passed! ===============")

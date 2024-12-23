@@ -3,7 +3,7 @@ from cell import QuantumCircuitCell
 from multi_qubit import MultiQubit
 import numpy as np
 from numpy.typing import NDArray
-from typing import Set,Any
+from typing import Set,Any,Tuple
 import torch
 import matplotlib.pyplot as plt
 from c_register import ClassicalRegister
@@ -98,13 +98,13 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,quantum_state: MultiQubit, classical_register:ClassicalRegister, num_of_layers: int = 1, device=None) -> None:
+    def __init__(self,quantum_state: MultiQubit, classical_register:ClassicalRegister = None, num_of_layers: int = 1, device=None) -> None:
         # Select a device to compute the matrices:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # Assign the classical register and the quantum state to the circuit
         self.__quantum_state = quantum_state
-        if not isinstance(classical_register,ClassicalRegister):
+        if classical_register is not None and not isinstance(classical_register,ClassicalRegister):
             raise ValueError(INV_C_REG)
         self.__classical_register = classical_register
 
@@ -396,6 +396,9 @@ class QuantumCircuit:
         for gate in layer_gates:
             # Check if current gate is a single qubit gate.
             if gate.is_single_qubit_gate():
+                # If conditional gate we want to update the gate matrix depending on the classical register bit.
+                if gate.is_conditional_gate():
+                    gate.apply_conditional_gate()
                 gate_matrix = torch.tensor(gate.get_matrix(),dtype=torch.complex128, device=self.__device)
 
                 # Compute the kronecker product of all single qubit gates
@@ -560,22 +563,27 @@ class QuantumCircuit:
             
         return result_matrix
 
-    def __compute_layer(self, layer_index: int) -> torch.Tensor:
+    def __compute_layer(self,input_state:MultiQubit,layer_index: int) -> Tuple[torch.Tensor,MultiQubit]:
         """
         Compute the combined operation of all gates in a single layer.
 
         Parameters
         ----------
+        input_state : MultiQubit
+            The input state on which the layer acts upon.
         layer_index : int
             Index of the layer to compute.
         
         Returns
         -------
-        Tensor
-            Matrix representing the combined operation of all gates in the layer.
+        Tuple[torch.Tensor,MultiQubit]
+            A tuple of a Matrix representing the combined operation of all gates in the layer and the resulting MultiQubit.
         """
         # Get all gates in the current layer
         layer_gates = self.__circuit[layer_index]
+
+        # Check for measurement gates and peform a measurement if needed:
+        input_state = self.__compute_measurement_gates(input_state,layer_gates)
 
         result_matrix = torch.eye(2 ** self.__circuit_qubit_num, dtype= torch.complex128,device=self.__device)
         
@@ -586,42 +594,53 @@ class QuantumCircuit:
         controlled_gates_matrix = self.__compute_controlled_gates(layer_gates)
 
         # Compute all swap gates in this layer:
-        swap_gates_matrices = self.__compute_swap_gates(layer_gates=layer_gates)
+        swap_gates_matrices = self.__compute_swap_gates(layer_gates)
 
         # Multiply all the computed matrices
         result_matrix = result_matrix @ single_qubit_gates_matrix @ controlled_gates_matrix @ swap_gates_matrices
+
+        # Multiply the input state on the resulting matrix:
+        input_state_tensor = torch.from_numpy(input_state.get_tensor_vector())
+        result_tensor = result_matrix @ input_state_tensor.to(torch.complex128)
+        result_state = MultiQubit(result_tensor.cpu().numpy())
              
-        return result_matrix
+        return result_matrix,result_state
         
-    def __compute_non_dynamic_circuit(self,layer_index: int = None) -> None:
+    def __compute_circuit(self,layer_index: int = None) -> MultiQubit:
         """
-        Compute the final unitary matrix representing the entire non dynamical circuit. The final unitary matrix allows us to act on an input quantum state and get the state after running through the circuit. If now layer index is given the whole circuit will be computed by default.
+        The method computes the circuit. If the circuit is dynamic we apply the operator of each layer on the previous layer quantum state to the desired layer index. By default we run the whole circuit. If the circuit is non dynamic we compute the whole circuit unitary matrix and save for later use if we want to rerun the circuit on a different state.
 
         This method:
         1. Fills empty cells with identity gates
-        2. Computes the matrix for each layer
-        3. Multiplies all layer matrices to get the final circuit operator
+        2. Computes the each layer of the circuit.
+        3. Multiplies all layer matrices to get the final circuit operator or applies each layer on the input state if the circuit is dynamic.
 
         Parameters
         ----------
         layer_index: int
             The layer to index indicating to which layer we want to compute. None by default indicating to compute the whole circuit.
 
+        Returns
+        -------
+        MultiQubit
+            THe computed quantum state.
+
         Raises
         ------
         ValueError
             If the layer index is not valid
-
         """
         layers_to_compute = (self.__number_of_layers if layer_index is None else layer_index + 1)
         # Check if the layer index is valid:
         self.__valid_layer_index(layers_to_compute - 1)
         # First fill all empty cells with identity gates
         self.__fill_identity_gates()
+
         computed_layers = torch.eye(2 ** self.__circuit_qubit_num,dtype=torch.complex128,device=self.__device)
         # Multiply the matrices of each layer to compute the final matrix of the whole circuit.
+        current_state = self.__quantum_state
         for layer_index in range(layers_to_compute):
-            layer_matrix = self.__compute_layer(layer_index)
+            layer_matrix,current_state = self.__compute_layer(current_state,layer_index)
             computed_layers = torch.matmul(computed_layers,layer_matrix)
 
         self.__circuit_operator = computed_layers.cpu().numpy()
@@ -629,6 +648,9 @@ class QuantumCircuit:
         # Update that the circuit was computed only if we computed all layers:
         if layer_index is None or layers_to_compute == self.__number_of_layers:
             self.__circuit_is_computed = True
+
+        # Return the computed state:
+        return current_state
 
     def reset_circuit(self) -> None:
         """
@@ -740,7 +762,7 @@ class QuantumCircuit:
         """
         # Check that the circuit was computed before applying a state if not than we compute the circuit:
         if not self.__circuit_is_computed:
-            self.__compute_non_dynamic_circuit()
+            self.__compute_circuit()
             self.__circuit_is_computed = True
 
         return self.__circuit_operator
@@ -906,7 +928,7 @@ class QuantumCircuit:
         else:
             raise ValueError(INV_DRAW)
 
-    def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg: ClassicalRegister,c_reg_index: int) -> None:
+    def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg_index: int) -> None:
         """
         Add measure gate method adds a measure gate to the circuit in a specified layer,on a specified qubit. After performing a measurement the collapsed state of a qubit is saved as a classical bit using the proivided classical register.
 
@@ -916,10 +938,8 @@ class QuantumCircuit:
             The index of the qubit to which the measure gate will be applied to.
         layer_index : int
             The layer index to which the measure gate will be applied to.
-        c_reg : ClassicalRegister
-            The classical register object to which the classical bit will be stored.
         c_reg_int : int
-            The index corresponding to the exact classical bit index in the classical register.
+            The index in the classical register to save the collapsed state.
 
         Raises
         ------
@@ -935,7 +955,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_measure_gate(qubit_index,c_reg,c_reg_index)
+        gate.set_measure_gate(qubit_index,self.__classical_register,c_reg_index)
         self.__circuit[layer_index][qubit_index]=gate
 
     def measure_all(self) -> MultiQubit:
@@ -966,70 +986,17 @@ class QuantumCircuit:
         ValueError
             If the layer index is not valid.
         """
-        
-        # Check if the circuit is dynamic or non dynamic and act accordingly
-        if self.__is_dynamic:
-            return self.__compute_dynamic_circuit(self.__quantum_state)
-            
-        else:
-            # Check if the circuit was computed before. If not we compute the circuit otherwise the circuit was already computed and there is no need to compute it again. 
-            if not self.__circuit_is_computed:
-                self.__compute_circuit()
-
+        # If the circuit is computed and is not dynamic we apply the input state in the computed operator.
+        if self.__circuit_is_computed and not self.__is_dynamic:
             qubit_tensor_vector = self.__quantum_state.get_tensor_vector()
             result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
             result_qubit_tensor = MultiQubit(result_vector)
             return result_qubit_tensor
-        
-    def __compute_dynamic_circuit(self,input_state: MultiQubit) -> MultiQubit:
-        """
-        The method recieves an input quantum state and computes the dynamic circuit with all the mid circuit measurements and returns the final quantum state. 
+         # If the circuit is not computed we compute the circuit and return the resulting state.
+        else:
+            return self.__compute_circuit()
 
-        Parameters
-        ----------
-        input_state : MultiQubit
-            The input quantum state to run the circuit and mid circuit measurements on.
-
-        Returns
-        -------
-        MultiQubit
-            The result state after running the circuit on the input state. 
-        """
-        # Fill all empty cells with identity gates or classical bits
-        self.__fill_identity_gates()
-        resulting_state = input_state
-        for layer_index in range(self.__number_of_layers):
-            resulting_state = self.__compute_dynamic_layer(resulting_state,self.__circuit[layer_index])
-
-        return resulting_state
-
-    def __compute_dynamic_layer(self, input_state: MultiQubit,layer_arr: NDArray[Any]) -> MultiQubit:
-        """
-        Compute the combined operation of all gates in a single layer in a dynamical circuit. If we have a mid circuit measurments, apply those and return the resulting state.
-
-        Parameters
-        ----------
-        input_state : MultiQubit
-            Input quantum state on which the layer acts.
-        layer_arr : np.ndarray[QuantumCircuitCell]
-            An array the contains all the gates in this layer
-        
-        Returns
-        -------
-        MultiQubit
-            Output state after the running the layer on the input state.
-        """
-        # First we check for measurement gates and perform measurement on specified qubits:
-        result_state = input_state
-        for qubit_index in range(self.__circuit_qubit_num):
-            cell = layer_arr[qubit_index]
-            if cell.is_measure_gate():
-                result_state = cell.measure(result_state)
-        
-        # Know we compute all other gates:
-            
-
-    def add_conditional_gate(self,target_qubit:int,gate_type:str,phi:float,layer_index:int,c_reg:ClassicalRegister,c_reg_index:int) -> None:
+    def add_conditional_gate(self,target_qubit:int,gate_type:str,phi:float,layer_index:int,c_reg_index:int) -> None:
         """
         This method adds a conditional gate and applies the specified unitary of the specified classical bit is one.
         Parameters
@@ -1038,10 +1005,8 @@ class QuantumCircuit:
             The index of the qubit to which the measure gate will be applied to.
         layer_index : int
             The layer index to which the measure gate will be applied to.
-        c_reg : ClassicalRegister
-            The classical register object to which the classical bit will be stored.
-        c_reg_int : int
-            The index corresponding to the exact classical bit index in the classical register.
+        c_reg_index : int
+            The index in the classical register that will be used as conditional bit.
 
         Raises
         ------
@@ -1057,7 +1022,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_conditional_gate(gate_type,phi,c_reg,c_reg_index)
+        gate.set_conditional_gate(gate_type,phi,self.__classical_register,c_reg_index)
         self.__circuit[layer_index][target_qubit]=gate
         
         self.__circuit_is_computed = False
@@ -1123,3 +1088,23 @@ class QuantumCircuit:
             The classical register of the circuit.
         """ 
         return self.__classical_register
+
+    def __compute_measurement_gates(self,input_state:MultiQubit,layer_gates: NDArray) -> MultiQubit:
+        """
+        If there are measurement gates in the layer we perform a measurement and return the resulting MultiQubit state.
+
+        Parameters
+        ----------
+        input_state : MultiQubit
+            The input state on which we perform the measurement.
+
+        Returns
+        -------
+        MultiQubit
+            The resulting MultiQubit state.
+        """
+        curr_state = input_state
+        for gate in layer_gates:
+            if gate.is_measure_gate():
+                curr_state = gate.measure(curr_state)
+        return curr_state
