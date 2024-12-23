@@ -80,15 +80,14 @@ class QuantumCircuit:
     >>> mt.add_qubit(q0)
     >>> mt.add_qubit(q0)
     >>> mt.print_tensor_form()
-    >>> circuit = Circuit(mt)
+    >>> circuit = QuantumCircuit(mt)
     >>> circuit.add_controlled_qubit_gate(0,0,1,"X")
     >>> circuit.add_layer()
     >>> circuit.add_single_qubit_gate(3,1,"X")
     >>> circuit.add_single_qubit_gate(0,1,"X")
     >>> circuit.add_swap_gate(2,4,0)
-    >>> circuit.compute_circuit()
-    >>> circuit.draw_circuit()
-    >>> result = circuit.apply_circuit()
+    >>> circuit.draw_circuit("mpl")
+    >>> result = circuit.run_circuit()
     >>> result.print_tensor_form()
     Tensor product in basis state form: |11100⟩
     Circuit Diagram:
@@ -939,12 +938,6 @@ class QuantumCircuit:
         gate.set_measure_gate(qubit_index,c_reg,c_reg_index)
         self.__circuit[layer_index][qubit_index]=gate
 
-        # We set all the cells after the measurement gate as classical bit cells.
-        for index in range(layer_index + 1,self.__number_of_layers):
-            cell = QuantumCircuitCell()
-            cell.set_classical_bit()
-            self.__circuit[index][qubit_index] = cell
-
     def measure_all(self) -> MultiQubit:
         """
         This method applies the circuit on the input state and measures the resulting state. The measured state will be the collapsed state of on of the possible states.
@@ -981,7 +974,7 @@ class QuantumCircuit:
         else:
             # Check if the circuit was computed before. If not we compute the circuit otherwise the circuit was already computed and there is no need to compute it again. 
             if not self.__circuit_is_computed:
-                self.__compute_non_dynamic_circuit()
+                self.__compute_circuit()
 
             qubit_tensor_vector = self.__quantum_state.get_tensor_vector()
             result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
