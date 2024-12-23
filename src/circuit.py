@@ -19,11 +19,42 @@ INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the 
 INV_INIT_LAYERS = "Invalid number of layers. The number should be non zero positive integer."
 INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
 INV_DRAW = "The argument is invalid. Use 'mpl' or 'cli'."
+INV_Q_STATE = "The input is invalid. The input should be a multiqubit object."
+INV_C_REG = "The input is invalid. The input should be a classical register object."
 
 class QuantumCircuit:
     """
-    :ivar number_of_compatible_qubits: Number of qubits in this circuit.
-    :vartype number_of_compatible_qubits: int
+    Attributes
+    ----------
+    quantum_state : MultiQubit
+        The quantum state of the circuit represented as a MultiQubit object.
+        
+    classical_register : ClassicalRegister
+        The classical register associated with the circuit, represented as a ClassicalRegister object.
+        
+    num_of_layers : int, optional
+        The number of layers in the circuit. Default is 1.
+        
+    device : torch.device, optional
+        The device to be used for computation. Defaults to 'cuda' if available, otherwise 'cpu'.
+        
+    circuit_qubit_num : int
+        The number of qubits in the quantum state.
+        
+    number_of_layers : int
+        The current number of layers in the circuit.
+        
+    circuit : numpy.ndarray
+        The circuit represented as an empty array with shape (0, number_of_qubits), which stores the gates applied to the quantum state.
+        
+    circuit_operator : numpy.ndarray
+        The matrix representing the circuit operator, initialized to the identity matrix of size 2^n, where n is the number of qubits.
+        
+    circuit_is_computed : bool
+        A flag indicating whether the circuit has been computed (False by default).
+        
+    is_dynamic : bool
+        A flag indicating whether the circuit is dynamic (False by default).
 
     A class to represent a quantum circuit using quantum gates.
 
@@ -68,24 +99,30 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,number_of_qubits: int, num_of_layers: int = 1, device=None) -> None:
+    def __init__(self,quantum_state: MultiQubit, classical_register:ClassicalRegister, num_of_layers: int = 1, device=None) -> None:
         # Select a device to compute the matrices:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        
+        # Assign the classical register and the quantum state to the circuit
+        self.__quantum_state = quantum_state
+        if not isinstance(classical_register,ClassicalRegister):
+            raise ValueError(INV_C_REG)
+        self.__classical_register = classical_register
 
-        # Check if valid inputs:
-        self.__valid_pos_val(number_of_qubits)
-        self.__valid_pos_val(num_of_layers)
-
-        self.__circuit_qubit_num = number_of_qubits
+        self.__circuit_qubit_num = quantum_state.get_number_of_qubits()
         self.__number_of_layers = 0
 
+        # Check if valid inputs:
+        self.__valid_pos_val(num_of_layers)
+
         # Initialize a circuit with the one layer with no gates (identity gate is counted as no gate)
-        self.__circuit= np.empty((0, number_of_qubits),dtype=QuantumCircuitCell)
+        self.__circuit= np.empty((0, self.__circuit_qubit_num),dtype=QuantumCircuitCell)
 
         # Add additional layers as specified in number of layers:
         for i in range(0,num_of_layers):
             self.add_layer()
 
+        # Initialize the circuit operator as an identity on all qubits.
         self.__circuit_operator = np.identity(2 ** self.__circuit_qubit_num,dtype=np.complex128)
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
@@ -718,6 +755,7 @@ class QuantumCircuit:
     def get_number_of_layers(self) -> int:
         """
         This function returns the number of layers in this circuit.
+
         Returns
         -------
         int
@@ -853,8 +891,12 @@ class QuantumCircuit:
         ----------
         draw_type : str
             String to specify how to draw the circuit. "mpl" for Matplotlib and "cli" for command line.
-        """
 
+        Raises
+        ------
+        ValueError
+            If the input is not a string and not 'mpl' or 'cli'.
+        """
         if not isinstance(draw_type,str):
             raise ValueError("The input is invalid should be a string.")
         draw_type = draw_type.lower()
@@ -903,31 +945,21 @@ class QuantumCircuit:
             cell.set_classical_bit()
             self.__circuit[index][qubit_index] = cell
 
-    def measure_all(self,input_state: MultiQubit) -> MultiQubit:
+    def measure_all(self) -> MultiQubit:
         """
         This method applies the circuit on the input state and measures the resulting state. The measured state will be the collapsed state of on of the possible states.
-
-        Parameters
-        ----------
-        input_state: MultiQubit
-            The input state is the state the circuit will be applied on and will be measured.
 
         Returns
         -------
         MultiQubit
             The collapsed state due to measurement.
         """
-        result = self.run_circuit(input_state)
+        result = self.run_circuit(self.__quantum_state)
         return result.measure(return_as_str=False)
     
-    def run_circuit(self, input_state: MultiQubit) -> MultiQubit:
+    def run_circuit(self) -> MultiQubit:
         """
         Run the the whole circuit on the input quantum state. The method runs both on dynamical and non dynamical circuits and returns the final state. 
-
-        Parameters
-        ----------
-        input_state : MultiQubit
-            New quantum state to use as input.
 
         Returns
         -------
@@ -941,20 +973,17 @@ class QuantumCircuit:
         ValueError
             If the layer index is not valid.
         """
-        # Check that the number of qubits is correct.
-        if input_state.get_number_of_qubits() != self.__circuit_qubit_num:
-            raise ValueError(INV_INPUT)
         
         # Check if the circuit is dynamic or non dynamic and act accordingly
         if self.__is_dynamic:
-            return self.__compute_dynamic_circuit(input_state)
+            return self.__compute_dynamic_circuit(self.__quantum_state)
             
         else:
             # Check if the circuit was computed before. If not we compute the circuit otherwise the circuit was already computed and there is no need to compute it again. 
             if not self.__circuit_is_computed:
                 self.__compute_non_dynamic_circuit()
 
-            qubit_tensor_vector = input_state.get_tensor_vector()
+            qubit_tensor_vector = self.__quantum_state.get_tensor_vector()
             result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
             result_qubit_tensor = MultiQubit(result_vector)
             return result_qubit_tensor
@@ -1039,3 +1068,43 @@ class QuantumCircuit:
         self.__circuit[layer_index][target_qubit]=gate
         
         self.__circuit_is_computed = False
+
+    def change_input_state(self,input_state:MultiQubit) -> None:
+        """
+        This methods allows to change the input state to another quantum state.
+
+        Raises
+        ------
+        ValueError
+            If the input state isn't the same dimension as this circuit.
+        """
+        # Check that the number of qubits is correct.
+        self.__check_valid_quantum_state(input_state)
+        if input_state.get_number_of_qubits() != self.__circuit_qubit_num:
+            raise ValueError(INV_INPUT)
+        self.__quantum_state = input_state    
+
+    def __check_valid_quantum_state(self,input_state:MultiQubit) -> None:
+        """
+        Checks if the input is a multiqubit class.
+
+        Raises
+        ------
+        ValueError 
+            If the input is not a multiqubit object
+        """
+        if not isinstance(input_state,MultiQubit):
+            raise ValueError(INV_Q_STATE)
+        
+    def change_classical_register(self,classical_register:ClassicalRegister) ->None:
+        """
+        This methods allows to change the classical register to another classical register object.
+
+        Raises
+        ------
+        ValueError
+            If the input is not a classical register object.
+        """
+        if not isinstance(classical_register,ClassicalRegister):
+            raise ValueError(INV_C_REG)
+        self.__classical_register = classical_register
