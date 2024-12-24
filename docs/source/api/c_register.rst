@@ -4,7 +4,7 @@ Classical Register Class
 ------------------------
 
 
-.. automodule:: c_register
+.. autoclass:: c_register.ClassicalRegister
    :members:
    :undoc-members:
    :show-inheritance:

@@ -4,7 +4,7 @@ Cell Class
 ----------
 
 
-.. automodule:: cell
+.. autoclass:: cell.QuantumCircuitCell
    :members:
    :undoc-members:
    :show-inheritance:

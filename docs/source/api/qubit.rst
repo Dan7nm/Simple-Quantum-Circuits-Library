@@ -3,7 +3,7 @@ Qubit Class
 -----------
 
 
-.. automodule:: qubit
+.. autoclass:: qubit.Qubit
    :members:
    :undoc-members:
    :show-inheritance:

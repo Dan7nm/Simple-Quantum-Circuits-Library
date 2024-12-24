@@ -4,7 +4,7 @@ Circuit Class
 -------------
 
 
-.. automodule:: circuit
+.. autoclass:: circuit.QuantumCircuit
    :members:
    :undoc-members:
    :show-inheritance:
