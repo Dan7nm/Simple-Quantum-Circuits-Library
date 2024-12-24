@@ -24,53 +24,55 @@ INV_C_REG = "The input is invalid. The input should be a classical register obje
 
 class QuantumCircuit:
     """
-    Attributes
-    ----------
-    quantum_state : MultiQubit
-        The quantum state of the circuit represented as a MultiQubit object.
-        
-    classical_register : ClassicalRegister
-        The classical register associated with the circuit, represented as a ClassicalRegister object.
-        
-    num_of_layers : int, optional
-        The number of layers in the circuit. Default is 1.
-        
-    device : torch.device, optional
-        The device to be used for computation. Defaults to 'cuda' if available, otherwise 'cpu'.
-        
-    circuit_qubit_num : int
-        The number of qubits in the quantum state.
-        
-    number_of_layers : int
-        The current number of layers in the circuit.
-        
-    circuit : numpy.ndarray
-        The circuit represented as an empty array with shape (0, number_of_qubits), which stores the gates applied to the quantum state.
-        
-    circuit_operator : numpy.ndarray
-        The matrix representing the circuit operator, initialized to the identity matrix of size 2^n, where n is the number of qubits.
-        
-    circuit_is_computed : bool
-        A flag indicating whether the circuit has been computed (False by default).
-        
-    is_dynamic : bool
-        A flag indicating whether the circuit is dynamic (False by default).
-
     A class to represent a quantum circuit using quantum gates.
 
     The QuantumCircuit class allows for building a quantum circuit, by adding and removing a quantum gate on every qubit at each vertical and horizontal axis. Every iteration from left to right is described by layers. Each layer is compromised of a tensor product of single qubit gates or controlled gates.
 
     Steps for circuit building:
-    ---------------------------
-
     1. Initializes a first empty layer without any gates.
     2. Adds single qubit gates and control gates. Build a two dimensional array. Every row of the array represents a layer and every column represents a gate on that particular qubit. If no gate is chosen the identity gate will be the default gate.
     3. Move to the next layer and repeat step 2.
     4. After finishing designing the whole circuit we compute the final matrix. This is done by computing the Krorecker product in each layer and multiplying all the matrices of all layers.
 
+    
+    Parameters
+    ----------
+    input_state : MultiQubit
+        The initial quantum state of the system.
+    classical_register : ClassicalRegister, optional
+        A classical register to store measurement results. Defaults to `None`.
+    num_of_layers : int, optional
+        The number of layers in the quantum circuit. Defaults to 1.
+    device : optional
+        The computation device to run the circuit on (e.g., 'cpu', 'gpu'). Defaults to `None`.
+        
 
-    Example Usage:
-    --------------
+    Attributes
+    ----------
+    quantum_state : MultiQubit
+        The quantum state of the circuit represented as a MultiQubit object.
+    classical_register : ClassicalRegister
+        The classical register associated with the circuit, represented as a ClassicalRegister object.   
+    num_of_layers : int, optional
+        The number of layers in the circuit. Default is 1. 
+    device : torch.device, optional
+        The device to be used for computation. Defaults to 'cuda' if available, otherwise 'cpu'.  
+    circuit_qubit_num : int
+        The number of qubits in the quantum state.  
+    number_of_layers : int
+        The current number of layers in the circuit.  
+    circuit : numpy.ndarray
+        The circuit represented as an empty array with shape (0, number_of_qubits), which stores the gates applied to the quantum state.   
+    circuit_operator : numpy.ndarray
+        The matrix representing the circuit operator, initialized to the identity matrix of size 2^n, where n is the number of qubits.
+    circuit_is_computed : bool
+        A flag indicating whether the circuit has been computed (False by default).
+    is_dynamic : bool
+        A flag indicating whether the circuit is dynamic (False by default).
+
+        
+    Examples
+    --------
     >>> q0 = Qubit(1,0)
     >>> q1 = Qubit(0,1)
     >>> mt = MultiQubit()
@@ -98,17 +100,17 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,quantum_state: MultiQubit, classical_register:ClassicalRegister = None, num_of_layers: int = 1, device=None) -> None:
+    def __init__(self,input_state: MultiQubit, classical_register:ClassicalRegister = None, num_of_layers: int = 1, device=None) -> None:
         # Select a device to compute the matrices:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
         # Assign the classical register and the quantum state to the circuit
-        self.__quantum_state = quantum_state
+        self.__quantum_state = input_state
         if classical_register is not None and not isinstance(classical_register,ClassicalRegister):
             raise ValueError(INV_C_REG)
         self.__classical_register = classical_register
 
-        self.__circuit_qubit_num = quantum_state.get_number_of_qubits()
+        self.__circuit_qubit_num = input_state.get_number_of_qubits()
         self.__number_of_layers = 0
 
         # Check if valid inputs:
@@ -811,23 +813,22 @@ class QuantumCircuit:
         This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.
         """
         curr_layer_index = 0
-        num_of_qubits = self.get_number_of_compatible_qubits()
-        for qubit_index in range(num_of_qubits):
+        for qubit_index in range(self.__circuit_qubit_num):
             # Add a hadamard gate at the start of each qubit axis
             self.add_single_qubit_gate(qubit_index,curr_layer_index,'H')
             self.add_layer()
             curr_layer_index += 1
             # Add controlled phase shift gates
-            for phase_gate_index in range(2, num_of_qubits + 1 - qubit_index):
+            for phase_gate_index in range(2, self.__circuit_qubit_num + 1 - qubit_index):
                 phase = (2 * np.pi)/ (2**phase_gate_index)
                 self.add_controlled_qubit_gate(qubit_index,curr_layer_index,qubit_index + phase_gate_index - 1,'P',phase)
                 self.add_layer()
                 curr_layer_index += 1
 
         # Add Swap gates:
-        for qubit_index in range(num_of_qubits):
-            if qubit_index < num_of_qubits - 1 - qubit_index:
-                self.add_swap_gate(qubit_index,num_of_qubits - 1 - qubit_index,curr_layer_index)
+        for qubit_index in range(self.__circuit_qubit_num):
+            if qubit_index < self.__circuit_qubit_num - 1 - qubit_index:
+                self.add_swap_gate(qubit_index,self.__circuit_qubit_num - 1 - qubit_index,curr_layer_index)
 
     def __draw_using_matplotlib(self):
         if self.__number_of_layers == 0 or self.__circuit_qubit_num == 0:
@@ -1108,3 +1109,11 @@ class QuantumCircuit:
             if gate.is_measure_gate():
                 curr_state = gate.measure(curr_state)
         return curr_state
+    
+    def load_dynamic_qft_preset(self) -> None:
+        """
+        This method loads a prebuild dynamic Quantum Fourier Transform circuit.
+        """
+        curr_layer_index = 0
+        for qubit_index in range(self.__circuit_qubit_num):
+            pass
