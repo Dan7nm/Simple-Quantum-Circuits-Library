@@ -1150,4 +1150,40 @@ class QuantumCircuit:
                 self.add_layer()
                 curr_layer_index += 1
 
+    def run_many(self, num_of_runs:int = 1000) -> MultiQubit:
+        """
+        This method runs the circuit multiple times and returns quantum state which probabilities are defined by the number of states we got at every run of the circuit.
+        This is useful in the case of dynamic circuit where we get only a one state and we want to return the original state before the collapse.
+
+        Parameters
+        ----------
+        num_of_runs : int
+            The number of times to run the circuit. Is 10000 by default.
+
+        Returns
+        -------
+        MultiQubit
+            The quantum state with probabilities we mentioned above.
+        """
+
+        # vector that counts how many times each state we collapsed to each state.
+        count_vector = np.zeros(2**self.__circuit_qubit_num)
+
+        for run in range(num_of_runs):
+            collapsed_state = self.run_circuit()
+            state_vector = collapsed_state.get_tensor_vector()
+
+            # Return the index of corresponding to the collapsed state
+            state_index = np.where(state_vector == 1)[0][0]
+
+            count_vector[state_index] += 1
+
+        count_vector /= num_of_runs
+        count_vector = np.sqrt(count_vector)
+
+        return MultiQubit(count_vector)
+        
+        
+
+        
             

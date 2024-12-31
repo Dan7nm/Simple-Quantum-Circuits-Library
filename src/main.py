@@ -12,12 +12,16 @@ def main():
    vector[0]=1
    mt = MultiQubit(vector)
    c_reg = ClassicalRegister(qubit_num)
-   mt.print_tensor_form()
+   # mt.print_tensor_form()
    circuit = QuantumCircuit(mt,c_reg)
    circuit.load_dynamic_qft_preset()
-   circuit.draw_circuit()
+   result = circuit.run_many(5000)
+   result.plot_probabilities()
+
+   circuit.reset_circuit()
+   circuit.load_qft_preset()
    result = circuit.run_circuit()
-   result.print_tensor_form()
+   result.plot_probabilities()
 
    # Calculate the runtime:
    end_time = time.perf_counter()

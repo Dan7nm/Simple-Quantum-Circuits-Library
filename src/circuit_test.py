@@ -237,7 +237,10 @@ def test_tracing_out_qubit(qubits_to_test: int,print_amplitudes:bool=False) -> N
         print(f" Original qubits amplitudes {qubits_original_ampitudes}")
         print(f" Traced out qubits amplitudes {traced_out_amplitudes}")
 
-    print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")    
+    print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")   
+
+def compare_dynamic_qft(qubits_to_test: int)->None:
+    pass  
     
 
 if __name__ == "__main__":
