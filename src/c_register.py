@@ -102,3 +102,9 @@ class ClassicalRegister:
             The number of bits in the classical register
         """
         return self.__num_bits
+    
+    def reset(self)->None:
+        """
+        Resets the all of the bits in the classical register to zero.
+        """
+        self.__c_reg = np.zeros(self.__num_bits)

@@ -175,7 +175,7 @@ class QuantumCircuitCell:
             formatted_row.append(']')
             print(" ".join(formatted_row))
 
-    def __get_gate_matrix(self, gate_type: str, phi: float) -> NDArray[np.complex128]:
+    def __get_gate_matrix(self, gate_type: str, phi: float=0.0) -> NDArray[np.complex128]:
         """
         Retrieve the gate matrix based on the specified type, including phase gate support.
 
@@ -311,7 +311,8 @@ class QuantumCircuitCell:
         self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
-        self.__is_measure_gate = True
+        self.__gate_type = gate_type
+        self.__is_conditional_gate = True
 
     def conditional_gate_input(self,classical_bit:int,gate_type:str,phi:float=0.0) -> None:
         """
