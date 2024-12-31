@@ -21,6 +21,7 @@ INV_POS_VAL = "The value is invalid. The value should be a positive non zero int
 INV_DRAW = "The argument is invalid. Use 'mpl' or 'cli'."
 INV_Q_STATE = "The input is invalid. The input should be a multiqubit object."
 INV_C_REG = "The input is invalid. The input should be a classical register object."
+INV_NUM_C_REG = "Invalid Number of bits in the classical register."
 
 class QuantumCircuit:
     """
@@ -100,7 +101,7 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,input_state: MultiQubit, classical_register:ClassicalRegister = None, num_of_layers: int = 1, device=None) -> None:
+    def __init__(self,input_state: MultiQubit, classical_register: ClassicalRegister= None, num_of_layers: int = 1, device= None) -> None:
         # Select a device to compute the matrices:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
@@ -152,6 +153,7 @@ class QuantumCircuit:
         ValueError
             If the qubit index or layer index is invalid, or if the target cell is already occupied.
         """
+        gate_type = gate_type.upper()
 
         # Check if layer and qubit indexes are valid and the cell is empty
         self.__valid_layer_index(layer_index)
@@ -179,6 +181,8 @@ class QuantumCircuit:
         :type phi: float, optional
         :raises ValueError: If qubit indices or layer index is invalid, or if cells are occupied
         """
+        gate_type = gate_type.upper()
+        
         # Check that the control qubit and target qubits are different:
         if target_qubit == control_qubit:
             raise ValueError(INV_CTRL_TARG)
@@ -997,7 +1001,7 @@ class QuantumCircuit:
         else:
             return self.__compute_circuit()
 
-    def add_conditional_gate(self,target_qubit:int,gate_type:str,phi:float,layer_index:int,c_reg_index:int) -> None:
+    def add_conditional_gate(self,target_qubit:int,layer_index:int,c_reg_index:int,gate_type:str,phi:float=0) -> None:
         """
         This method adds a conditional gate and applies the specified unitary of the specified classical bit is one.
         Parameters
@@ -1016,6 +1020,7 @@ class QuantumCircuit:
         ValueError
             If the provided bit index is invalid. Should be between 0 and number of classical bit in the register
         """
+        gate_type = gate_type.upper()
 
         self.__valid_qubit_index(target_qubit,layer_index,adding_gate=True)
         self.__valid_layer_index(layer_index)
@@ -1112,8 +1117,37 @@ class QuantumCircuit:
     
     def load_dynamic_qft_preset(self) -> None:
         """
-        This method loads a prebuild dynamic Quantum Fourier Transform circuit.
+        This method loads a prebuild dynamic Quantum Fourier Transform circuit. If the initialized classical register doesn't have the correct amount of bits we raise an error.
+
+        Raises
+        ------
+        ValueError
+            If the classical register has different number of bits than the number of qubits in the circuit.
+
         """
+        # Check number of bits in the classical register
+        if self.__classical_register.get_bits_num() != self.__circuit_qubit_num:
+            raise ValueError(INV_NUM_C_REG)
+        
+        # Reset the classical register to avoid bugs.
+        self.__classical_register.reset()        
+
         curr_layer_index = 0
         for qubit_index in range(self.__circuit_qubit_num):
-            pass
+            # Add Hadamrd gate and measure gate.
+            self.add_single_qubit_gate(qubit_index,curr_layer_index,"H")
+            self.add_layer()
+            curr_layer_index += 1
+            self.add_measure_gate(qubit_index,curr_layer_index,qubit_index)
+            first_phase_qubit_idx = qubit_index + 1
+
+            for phase_gate_index in range(2, self.__circuit_qubit_num + 1 - qubit_index):
+                phase = (2 * np.pi)/ (2**phase_gate_index)
+                self.add_conditional_gate(first_phase_qubit_idx,curr_layer_index,qubit_index,"P",phase)
+                first_phase_qubit_idx += 1
+            
+            if (qubit_index + 1) < self.__circuit_qubit_num:
+                self.add_layer()
+                curr_layer_index += 1
+
+            
