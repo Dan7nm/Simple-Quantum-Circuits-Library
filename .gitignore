@@ -1,0 +1,7 @@
+qft_sim_venv
+__pycache__/qubit.cpython-312.pyc
+.DS_Store
+docs/build/
+__pycache__
+.ipynb_checkpoints
+qft_venv
