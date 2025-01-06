@@ -569,9 +569,40 @@ class MultiQubit:
             collapsed_state = self.measure()
             states_dict[collapsed_state] += 1
         
-        states_list = list(states_dict.keys())
         probs_list = np.array(list(states_dict.values())) / num_of_measurements
-
         amplitudes = np.sqrt(probs_list)
 
         return MultiQubit(amplitudes)
+    
+    def measure_multiple_dict(self,num_of_measurements: int = 10000) -> dict[str,int]:
+        """
+        This function measures a specified number of times. Then returns a python dictianary with the states as keys and number of times we collapsed to that state.
+
+        Parameters
+        ----------
+        number_of_measurements : int
+            The number of times to measure the entire circuit.
+
+        Returns
+        -------
+        dict[str,int]
+            The dicitonary with how many times we collapsed to that state.
+
+        Raises
+        ------
+        ValueError
+            Raises a value error if the the given value is not a positive integer. 
+        ValueError 
+            If the resulted state from multiple measurments is not normalized.
+        """
+        self.__valid_pos_val(value= num_of_measurements)
+
+        # Initialize dictionary to stores the states and number of times we collapsed to that state.
+        states_dict = {format(state_index, f"0{self.__number_of_qubits}b"): 0
+               for state_index in range(2**self.__number_of_qubits)}
+    
+        for _ in range(num_of_measurements):
+            collapsed_state = self.measure()
+            states_dict[collapsed_state] += 1
+
+        return states_dict
