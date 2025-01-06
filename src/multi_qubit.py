@@ -1,7 +1,7 @@
 import numpy as np
 from qubit import Qubit
 from numpy.typing import NDArray
-from typing import Tuple
+from typing import Tuple,List,Dict
 from typing_extensions import Self
 import matplotlib.pyplot as plt
 import random
@@ -215,14 +215,14 @@ class MultiQubit:
         if not abs(sum - 1) <= EPSILON:
             raise ValueError(INV_VEC)
         
-    def __init_state_intervals(self) -> dict:
+    def __init_state_intervals(self) -> Dict[Tuple[float,float],float]:
         """
         This method returns a dictionary with the intervals and it's states.
         Using those intervals we can now to which state the measurement collapsed.
 
         Returns
         -------
-        dict
+        Dict[Tuple[float,float],float]
             The dictionary with keys as intervals and it corresponding amplitudes 
         """
         interval_dict = {}
@@ -574,7 +574,7 @@ class MultiQubit:
 
         return MultiQubit(amplitudes)
     
-    def measure_multiple_dict(self,num_of_measurements: int = 10000) -> dict[str,int]:
+    def measure_multiple_dict(self,num_of_measurements: int = 10000) -> Dict[str,int]:
         """
         This function measures a specified number of times. Then returns a python dictianary with the states as keys and number of times we collapsed to that state.
 
@@ -607,7 +607,7 @@ class MultiQubit:
 
         return states_dict
     
-    def return_random_variable(self, num_of_measurements: int = 10000) -> list[int]:
+    def return_random_variable(self, num_of_measurements: int = 10000) -> List[int]:
         """
         Perform a specified number of quantum state measurements and return the results as a list of integers.
 
