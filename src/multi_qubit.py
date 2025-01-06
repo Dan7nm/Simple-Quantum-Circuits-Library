@@ -642,6 +642,7 @@ class MultiQubit:
         
         for _ in range(num_of_measurements):
             collapsed_state = self.measure()
-            random_variable_list.append(int(collapsed_state))
+            print(collapsed_state)
+            random_variable_list.append(int(collapsed_state,2))
 
         return random_variable_list
