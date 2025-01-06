@@ -281,7 +281,7 @@ class MultiQubit:
         states_dict = {format(state_index, f"0{self.__number_of_qubits}b"): 0
                for state_index in range(2**self.__number_of_qubits)}
     
-        for measurements in range(num_of_measurements):
+        for _ in range(num_of_measurements):
             collapsed_state = self.measure()
             states_dict[collapsed_state] += 1
         
@@ -290,7 +290,7 @@ class MultiQubit:
 
         # Plot
         plt.figure(figsize=(10, 6))
-        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
+        plt.bar(states_list, probs_list, color='lightblue', alpha=1,edgecolor="black")
 
         # Add labels and title
         plt.xlabel('Quantum States', fontsize=12)
@@ -326,7 +326,7 @@ class MultiQubit:
         probs_list = [abs(amplitude)**2 for amplitude in self.__tensor_vector]
         # Plot
         plt.figure(figsize=(10, 6))
-        plt.bar(states_list, probs_list, color='blue', alpha=0.7)
+        plt.bar(states_list, probs_list, color='lightblue', alpha=1,edgecolor="black")
 
         # Add labels and title
         plt.xlabel('Quantum States', fontsize=12)
@@ -358,9 +358,9 @@ class MultiQubit:
         plt.figure(figsize=(10, 6))
 
         if plot_type == "bar":
-            plt.bar(states_list, amplitude_list, color='blue', alpha=0.7)
+            plt.bar(states_list, amplitude_list, color='lightblue', alpha=1,edgecolor="black")
         elif plot_type == "line":
-            plt.plot(states_list, amplitude_list, color='blue', marker='o', linestyle='-', markersize=5, alpha=0.7)
+            plt.plot(states_list, amplitude_list, color='lightblue', marker='o', linestyle='-', markersize=5, alpha=0.7)
         else:
             raise ValueError("Invalid plot_type. Choose either 'bar' or 'line'.")
 
