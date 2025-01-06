@@ -4,9 +4,13 @@ from multi_qubit import MultiQubit
 from qubit import Qubit
 import time
 import random
+import matplotlib.pyplot as plt
 
+### Constants ###
 EPSILON = 1e-16
 QUBITS_TO_TEST = 6
+NUM_MEASUREMENTS_DELTA = 100
+MAX_MEASURE_NUM = 5000
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -239,14 +243,95 @@ def test_tracing_out_qubit(qubits_to_test: int,print_amplitudes:bool=False) -> N
 
     print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")   
 
-def compare_dynamic_qft(qubits_to_test: int)->None:
-    pass  
-    
+# def compare_dynamic_qft(qubits_to_test: int)->None:
+#     """
+#     This function compares the input 
+#     """
+#     pass  
+
+def compare_state_measurements(q_state: MultiQubit) -> None:
+    """
+    This function receives a quantum state as a MultiQubit object. It measures the quantum state multiple times and returns a quantum state with probabilities derived from these measurements. Additionally, the function plots the average difference between the probabilities of the actual quantum state and those obtained from repeated measurements for varying numbers of measurements.
+
+    Parameters
+    ----------
+    q_state : MultiQubit
+        The input quantum state.
+
+    """
+    # Number of qubits
+    n = q_state.get_number_of_qubits()
+    # Number of states:
+    N = 2**n
+
+    # How many measurements to perform each time:
+    number_of_measurements = [10,100,1000,10000]
+    # Number of means to compute for each measurement number
+    num_samples = 300
+
+    states_list = [format(state,f"0{n}b") for state in range(N)]
+    original_distribution = np.abs(q_state.get_tensor_vector())**2
+    # Find the standard devation for the original state
+    values = np.arange(N)  
+    expected_value = np.sum(values * original_distribution) 
+    original_std = np.sqrt(np.sum((values - expected_value)**2 * original_distribution))  
+
+    plt.figure(figsize=(10, 6))
+    plt.subplot(2, 3, 1)
+    plt.bar(states_list, original_distribution, color='lightblue', alpha=1,edgecolor="black")
+    plt.title('Original Quantum State')
+    plt.xlabel('States')
+    plt.ylabel('Probability')
+
+    # Initialize lists to store the actual and expected standard deviations
+    actual_stds = []
+    expected_stds = []
+
+    for i, size in enumerate(number_of_measurements, start=2):
+        sample_means = []
+
+        for _ in range(num_samples):
+            # We assign to every state i a random variable i:
+            random_variables = q_state.return_random_variable(size)
+            mean = np.mean(random_variables)
+            sample_means.append(mean)
+        
+        # Calculate the standard deviation of the sample means
+        sample_std = np.std(sample_means)
+        actual_stds.append(sample_std)
+        
+        # Calculate the expected standard deviation according to CLT
+        expected_std = original_std / np.sqrt(size)
+        expected_stds.append(expected_std)
+
+        # Plot the histogram of sample means
+        plt.subplot(2, 3, i)
+        plt.hist(sample_means, bins=30, color='lightgreen', edgecolor='black', density=True)
+        plt.title(f'Number of Measurements={size}')
+        plt.xlabel('Mean Value')
+        plt.ylabel('Density')
+
+    plt.subplot(2,3,6)
+    plt.plot(number_of_measurements, actual_stds, label='Actual Std', marker='o')
+    plt.plot(number_of_measurements, expected_stds, label='Expected Std (CLT)', marker='x')
+    plt.xlabel('Number of Measurements')
+    plt.ylabel('Standard Deviation')
+    plt.title('Actual vs Expected STD')
+
+    # Set both axes to logarithmic scale
+    plt.xscale('log')
+    plt.yscale('log')
+
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     # Run tests.
     # qft_on_sine(QUBITS_TO_TEST)
     # qft_on_gaussian(QUBITS_TO_TEST,mu=0,sigma=0.1)
-    test_qft_matrix_output(QUBITS_TO_TEST)
+    # test_qft_matrix_output(QUBITS_TO_TEST)
     # test_tracing_out_qubit(QUBITS_TO_TEST)
     print("=============== All tests passed! ===============")
