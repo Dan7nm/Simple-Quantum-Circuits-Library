@@ -606,3 +606,42 @@ class MultiQubit:
             states_dict[collapsed_state] += 1
 
         return states_dict
+    
+    def return_random_variable(self, num_of_measurements: int = 10000) -> list[int]:
+        """
+        Perform a specified number of quantum state measurements and return the results as a list of integers.
+
+        This method simulates `num_of_measurements` measurements of the quantum state, collapsing it to 
+        one of its basis states during each measurement. The collapsed states are returned as integers.
+
+        Parameters
+        ----------
+        num_of_measurements : int, optional
+            The number of measurements to perform (default is 10000).
+
+        Returns
+        -------
+        list[int]
+            A list of integers representing the collapsed states from the measurements.
+
+        Raises
+        ------
+        ValueError
+            If `num_of_measurements` is not a valid positive integer, as determined by the internal 
+            `__valid_pos_val` method.
+
+        Notes
+        -----
+        - The method calls `self.measure()` to perform each measurement and determine the collapsed state.
+        - The results are appended to a list, which is then returned.
+        """
+        self.__valid_pos_val(value=num_of_measurements)
+
+        # Initialize list to store the collapsed states
+        random_variable_list = []
+        
+        for _ in range(num_of_measurements):
+            collapsed_state = self.measure()
+            random_variable_list.append(int(collapsed_state))
+
+        return random_variable_list
