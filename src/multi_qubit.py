@@ -35,7 +35,7 @@ class MultiQubit:
     Tensor product in basis state form: |01⟩
     """
 
-    def __init__(self, vector: NDArray[np.complex128]=np.array([])) -> None:
+    def __init__(self, vector: NDArray[np.complex128]=np.array([]),qubits_num:int=None) -> None:
         """
         Initialize an empty QubitTensor object.
 
@@ -45,11 +45,26 @@ class MultiQubit:
         :param __tensor_vector: Vector representation of the quantum state.
         :type __tensor_vector: NDArray[np.complex128]
         """
-        # Check if the given vector is normalized:
-        self.__valid_amplitudes(vector)
-        self.__tensor_vector = vector
-        vector_len = len(self.__tensor_vector)
-        self.__number_of_qubits = int(np.log2(vector_len) if vector_len > 0 else 0)
+        if qubits_num is None:
+            # Check if the given vector is normalized:
+            self.__valid_amplitudes(vector)
+            self.__tensor_vector = vector
+            vector_len = len(self.__tensor_vector)
+            self.__number_of_qubits = int(np.log2(vector_len) if vector_len > 0 else 0)
+        else:
+            if not isinstance(qubits_num, int) or qubits_num < 1:
+                raise ValueError("Number of qubits must be a positive integer for random initialization.")
+            self.__number_of_qubits = qubits_num
+            self.randomize()
+            self.__valid_amplitudes(self.__tensor_vector) # Ensure the randomized vector is normalized
+
+    def randomize(self):
+        """Initialize the state vector with random normalized complex amplitudes."""
+        real = np.random.rand(2**self.__number_of_qubits)
+        imag = np.random.rand(2**self.__number_of_qubits)
+        z = real+1j*imag
+        normal_coeff = np.sqrt(np.sum(np.abs(z)**2))
+        self.__tensor_vector=z/normal_coeff
 
     def add_qubit(self, new_qubit: Qubit) -> None:
         """
