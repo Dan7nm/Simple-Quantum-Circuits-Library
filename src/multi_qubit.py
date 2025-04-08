@@ -660,3 +660,25 @@ class MultiQubit:
             random_variable_list.append(int(collapsed_state,2))
 
         return random_variable_list
+
+    def get_probabilities(self) ->Dict:
+        """Return a dictionary of quantum state probabilities.
+
+        The keys of the dictionary are binary string representations of the
+        quantum states, and the values are their corresponding probabilities.
+
+        Returns
+        -------
+        Dict
+            A dictionary where keys are binary strings representing the
+            quantum states (e.g., '00', '01', '10', '11' for a 2-qubit system)
+            and values are the probabilities (float) of those states.
+
+        """
+        probabilities = np.abs(self.__tensor_vector)**2
+        prob_dict = dict()
+        for state in range(2**self.__number_of_qubits):
+            key = format(state,f"0{self.__number_of_qubits}b")
+            prob_dict[key]=probabilities[state]
+
+        return prob_dict
