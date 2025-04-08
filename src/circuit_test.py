@@ -6,6 +6,7 @@ from qubit import Qubit
 import time
 import random
 import matplotlib.pyplot as plt
+from typing import Dict
 
 ### Constants ###
 EPSILON = 1e-16
@@ -243,6 +244,54 @@ def test_tracing_out_qubit(qubits_to_test: int,print_amplitudes:bool=False) -> N
         print(f" Traced out qubits amplitudes {traced_out_amplitudes}")
 
     print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")   
+
+def cross_entropy(expected_state: MultiQubit ,predicted_state: MultiQubit):
+    """
+    Calculate the cross-entropy between two quantum states.
+
+    Parameters
+    ----------
+    expected_state : MultiQubit
+        The MultiQubit object representing the expected probability distribution.
+    predicted_state : MultiQubit
+        The MultiQubit object representing the predicted probability distribution.
+
+    Returns
+    -------
+    float
+        The cross-entropy value between the two quantum states.
+        Returns ``float('inf')`` if the predicted distribution has zero
+        probability (or a probability less than EPSILON) for a state with a
+        non-zero probability (greater than EPSILON) in the expected distribution.
+
+    Notes
+    -----
+    The cross-entropy H(p, q) between two probability distributions p and q
+    is defined as:
+
+    .. math::
+        H(p, q) = - \sum_{x} p(x) \log(q(x))
+
+    where p(x) is the probability of state x in the expected distribution,
+    and q(x) is the probability of state x in the predicted distribution.
+    A small epsilon value is used to handle potential log(0) errors.
+
+    """
+    expected_probs: Dict[str, float] = expected_state.get_probabilities()
+    predicted_probs: Dict[str, float] = predicted_state.get_probabilities()
+    cross_entropy_value = 0.0
+
+    for state, expected_prob in expected_probs.items():
+        if state in predicted_probs:
+            predicted_prob = predicted_probs[state]
+            if predicted_prob > EPSILON:
+                cross_entropy_value -= expected_prob * np.log(predicted_prob)
+            elif expected_prob > EPSILON:
+                return float('inf') 
+        elif expected_prob > EPSILON:
+            return float('inf') 
+
+    return cross_entropy_value
 
 if __name__ == "__main__":
     # Run tests.
