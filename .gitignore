@@ -5,6 +5,7 @@ docs/build/
 __pycache__
 .ipynb_checkpoints
 qft_venv
+myenv
 
 # Don't add graphs
 *.png
