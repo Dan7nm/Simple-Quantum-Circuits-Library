@@ -85,12 +85,11 @@ class MultiQubit:
         else:
             self.__number_of_qubits = 0
             self.__tensor_vector = np.array([])
-            
 
     def randomize(self):
         """Initialize the state vector with random normalized complex amplitudes."""
-        real = np.random.rand(2**self.__number_of_qubits)
-        imag = np.random.rand(2**self.__number_of_qubits)
+        real = np.random.normal(0,1,2**self.__number_of_qubits)
+        imag = np.random.normal(0,1,2**self.__number_of_qubits)
         z = real+1j*imag
         normal_coeff = np.sqrt(np.sum(np.abs(z)**2))
         self.__tensor_vector=z/normal_coeff
