@@ -35,28 +35,57 @@ class MultiQubit:
     Tensor product in basis state form: |01⟩
     """
 
-    def __init__(self, vector: NDArray[np.complex128]=np.array([]),qubits_num:int=None) -> None:
+    def __init__(self, vector: NDArray[np.complex128]=np.array([]), qubits_num: int=None) -> None:
         """
-        Initialize an empty QubitTensor object.
+        Initialize a MultiQubit object.
 
-        The tensor product starts with no qubits and an empty tensor vector.
-        Qubits can be added using the add_qubit method.
+        Allows initialization either by providing a quantum state vector or by
+        specifying the number of qubits for random initialization.
 
-        :param __tensor_vector: Vector representation of the quantum state.
-        :type __tensor_vector: NDArray[np.complex128]
+        Parameters
+        ----------
+        vector : NDArray[np.complex128], optional
+            A numpy array representing the quantum state vector.
+            Must be normalized. Defaults to an empty array.
+        qubits_num : int, optional
+            The number of qubits for random state initialization.
+            Must be a positive integer. Defaults to None.
+
+        Raises
+        ------
+        ValueError
+            If both `vector` and `qubits_num` are provided.
+            If `qubits_num` is not a positive integer.
+            If the provided `vector` is not normalized.
         """
-        if qubits_num is None:
-            # Check if the given vector is normalized:
-            self.__valid_amplitudes(vector)
+
+        # Case 1: Initialize with a quantum state vector
+        if vector.size > 0:
+            if qubits_num is not None:
+                raise ValueError("Cannot specify both 'vector' and 'qubits_num'. Please choose one initialization method.")
+            
+            self.__valid_amplitudes(vector)  
             self.__tensor_vector = vector
+            
             vector_len = len(self.__tensor_vector)
+            if vector_len > 0 and (np.log2(vector_len) % 1 != 0):
+                raise ValueError("Invalid vector length. Must be a power of 2.")
             self.__number_of_qubits = int(np.log2(vector_len) if vector_len > 0 else 0)
-        else:
+
+        # Case 2: Initialize with a specified number of qubits (for random state)
+        elif qubits_num is not None:
             if not isinstance(qubits_num, int) or qubits_num < 1:
                 raise ValueError("Number of qubits must be a positive integer for random initialization.")
+            
             self.__number_of_qubits = qubits_num
-            self.randomize()
-            self.__valid_amplitudes(self.__tensor_vector) # Ensure the randomized vector is normalized
+            self.randomize()  
+            self.__valid_amplitudes(self.__tensor_vector) 
+        
+        # Case 3: No arguments provided, initialize to default (empty or |0> for 1 qubit)
+        else:
+            self.__number_of_qubits = 0
+            self.__tensor_vector = np.array([])
+            
 
     def randomize(self):
         """Initialize the state vector with random normalized complex amplitudes."""
