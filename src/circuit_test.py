@@ -13,6 +13,7 @@ EPSILON = 1e-16
 QUBITS_TO_TEST = 6
 NUM_MEASUREMENTS_DELTA = 100
 MAX_MEASURE_NUM = 5000
+NUM_OF_RUNS = 1000
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -245,7 +246,7 @@ def test_tracing_out_qubit(qubits_to_test: int,print_amplitudes:bool=False) -> N
 
     print("==== The traced out qubits real amplitudes are the same as their original real amplitudes. ==== ")   
 
-def cross_entropy(expected_state: MultiQubit ,predicted_state: MultiQubit):
+def cross_entropy(expected_state: MultiQubit ,predicted_state: MultiQubit) -> float:
     """
     Calculate the cross-entropy between two quantum states.
 
@@ -293,10 +294,36 @@ def cross_entropy(expected_state: MultiQubit ,predicted_state: MultiQubit):
 
     return cross_entropy_value
 
+def cmp_dynamic_qft(qubits_num:int) -> None:
+    rand_state = MultiQubit(qubits_num=qubits_num)
+    classical_reg = ClassicalRegister(num_bits=qubits_num)
+    regular_circuit = QuantumCircuit(input_state=rand_state,classical_register=classical_reg)
+    dynamic_circuit = QuantumCircuit(input_state=rand_state,classical_register=classical_reg)
+    regular_circuit.load_qft_preset()
+    dynamic_circuit.load_dynamic_qft_preset()
+    cross_entropy_lst = []
+    run_number_lst = []
+    reg_output_state = regular_circuit.run_circuit()
+    for run_number in range(10, NUM_OF_RUNS + 1, 50):
+        run_number_lst.append(run_number)
+        print(run_number)
+        dyn_output_state = dynamic_circuit.run_many(run_number)
+        cross_entropy_val = cross_entropy(reg_output_state,dyn_output_state)
+        cross_entropy_lst.append(cross_entropy_val)
+
+    plot_cross_entropy(run_number_lst,cross_entropy_lst,qubits_num)
+
+def plot_cross_entropy(run_number_lst,cross_entropy_lst,qubits_num):
+    plt.figure(figsize=(10, 6))
+    plt.plot(run_number_lst, cross_entropy_lst, marker='o')
+    plt.xlabel('Number of Runs for Dynamic Circuit')
+    plt.ylabel('Cross-Entropy')
+    plt.title(f'Cross-Entropy vs. Number of Runs ({qubits_num} Qubits)')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+
 if __name__ == "__main__":
-    # Run tests.
-    # qft_on_sine(QUBITS_TO_TEST)
-    # qft_on_gaussian(QUBITS_TO_TEST,mu=0,sigma=0.1)
-    # test_qft_matrix_output(QUBITS_TO_TEST)
-    # test_tracing_out_qubit(QUBITS_TO_TEST)
+    cmp_dynamic_qft(3)
     print("=============== All tests passed! ===============")

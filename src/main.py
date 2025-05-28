@@ -7,21 +7,20 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   qubit_num = 5
-   vector = np.zeros(2**qubit_num)
-   vector[0]=1
-   mt = MultiQubit(vector)
-   c_reg = ClassicalRegister(qubit_num)
+   mt = MultiQubit(qubits_num=3)
    # mt.print_tensor_form()
-   circuit = QuantumCircuit(mt,c_reg)
-   circuit.load_dynamic_qft_preset()
-   result = circuit.run_many(5000)
-   result.plot_probabilities()
+   classical_reg = ClassicalRegister(3)
+   dynamic_circuit = QuantumCircuit(mt,classical_register=classical_reg)
+   reg_circuit = QuantumCircuit(mt)
+   reg_circuit.load_qft_preset()
+   dynamic_circuit.load_dynamic_qft_preset()
+   reg_res = reg_circuit.run_circuit()
+   dyn_res = dynamic_circuit.run_many(10000)
+   reg_res.plot_probabilities()
+   dyn_res.plot_probabilities()
 
-   circuit.reset_circuit()
-   circuit.load_qft_preset()
-   result = circuit.run_circuit()
-   result.plot_probabilities()
+
+   
 
    # Calculate the runtime:
    end_time = time.perf_counter()

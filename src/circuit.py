@@ -1174,7 +1174,7 @@ class QuantumCircuit:
             state_vector = collapsed_state.get_tensor_vector()
 
             # Return the index of corresponding to the collapsed state
-            state_index = np.where(state_vector == 1)[0][0]
+            state_index = np.where(state_vector != 0)[0][0]
 
             count_vector[state_index] += 1
 
