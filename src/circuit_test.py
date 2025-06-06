@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from typing import Dict
 
 ### Constants ###
-EPSILON = 1e-16
 QUBITS_TO_TEST = 6
 NUM_MEASUREMENTS_DELTA = 100
 MAX_MEASURE_NUM = 5000
@@ -278,13 +277,15 @@ def cross_entropy(expected_state: MultiQubit ,predicted_state: MultiQubit) -> fl
     A small epsilon value is used to handle potential log(0) errors.
 
     """
+    epsilon = 1e-16
+
     expected_probs: Dict[str, float] = expected_state.get_probabilities()
     predicted_probs: Dict[str, float] = predicted_state.get_probabilities()
     cross_entropy_value = 0.0
 
     for state, expected_prob in expected_probs.items():
         predicted_prob = predicted_probs.get(state, 0.0)
-        predicted_prob = max(predicted_prob, EPSILON)
+        predicted_prob = max(predicted_prob, epsilon)
         cross_entropy_value -= expected_prob * np.log(predicted_prob)
 
     return cross_entropy_value    
@@ -316,7 +317,7 @@ def cmp_dynamic_qft(qubits_num:int,number_of_runs: int,step: int) -> None:
     cross_entropy_lst = []
     run_number_lst = []
     reg_output_state = regular_circuit.run_circuit()
-    for run_number in range(1, number_of_runs, 50):
+    for run_number in range(1, number_of_runs, step):
         run_number_lst.append(run_number)
         print(f"Run number: {run_number}")
         dyn_output_state = dynamic_circuit.run_many(run_number)
@@ -358,6 +359,6 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
 
 if __name__ == "__main__":
     # cmp_states(qubits_num=7,number_of_runs=3000)
-    cmp_dynamic_qft(qubits_num=5,number_of_runs=500,step=10)
+    cmp_dynamic_qft(qubits_num=7,number_of_runs=2000,step=50)
 
     print("=============== All tests passed! ===============")

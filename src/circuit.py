@@ -829,10 +829,12 @@ class QuantumCircuit:
                 self.add_layer()
                 curr_layer_index += 1
 
+        self.remove_layer(curr_layer_index)  # Remove the last empty layer
+
         # Add Swap gates:
-        for qubit_index in range(self.__circuit_qubit_num):
-            if qubit_index < self.__circuit_qubit_num - 1 - qubit_index:
-                self.add_swap_gate(qubit_index,self.__circuit_qubit_num - 1 - qubit_index,curr_layer_index)
+        # for qubit_index in range(self.__circuit_qubit_num):
+        #     if qubit_index < self.__circuit_qubit_num - 1 - qubit_index:
+        #         self.add_swap_gate(qubit_index,self.__circuit_qubit_num - 1 - qubit_index,curr_layer_index)
 
     def __draw_using_matplotlib(self):
         if self.__number_of_layers == 0 or self.__circuit_qubit_num == 0:
