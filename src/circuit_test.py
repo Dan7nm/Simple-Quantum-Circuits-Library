@@ -332,30 +332,73 @@ def cmp_dynamic_qft(qubits_num:int,number_of_runs: int,step: int) -> None:
 
 
 def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val):
-    plt.figure(figsize=(10, 6))
-    plt.plot(run_number_lst, cross_entropy_lst, marker='o', label='Measured Cross-Entropy')
+    plt.figure(figsize=(12, 8))
+    
+    # Convert to numpy arrays for easier manipulation
+    runs = np.array(run_number_lst)
+    cross_entropies = np.array(cross_entropy_lst)
+    
+    # Calculate cross-entropy above minimum for fitting
+    cross_entropy_above_min = cross_entropies - min_entropy_val
+    
+    # Plot measured cross-entropy
+    plt.plot(runs, cross_entropies, marker='o', markersize=6, linewidth=2, 
+             label='Measured Cross-Entropy', color='blue', alpha=0.8)
 
     # Add a horizontal line for the true entropy
-    plt.axhline(y=min_entropy_val, color='r', linestyle='--', label=f'Minimum Entropy: {min_entropy_val:.4f}')
+    plt.axhline(y=min_entropy_val, color='r', linestyle='--', linewidth=2,
+                label=f'Minimum Entropy: {min_entropy_val:.4f}')
+
+    # Fit 1/sqrt(n) curve to cross-entropy above minimum
+    # We fit: cross_entropy_above_min = A / sqrt(runs) + noise
+    # Using least squares: A = sum(cross_entropy_above_min * sqrt(runs)) / sum(runs^0)
+    
+    # Remove points where cross_entropy is at minimum to avoid division issues
+    valid_indices = cross_entropy_above_min > EPSILON
+    if np.sum(valid_indices) > 1:  # Need at least 2 points for fitting
+        runs_fit = runs[valid_indices]
+        ce_fit = cross_entropy_above_min[valid_indices]
+        
+        # Fit coefficient A for the model: ce = A/sqrt(n) + min_entropy
+        sqrt_runs_fit = np.sqrt(runs_fit)
+        A_coefficient = np.sum(ce_fit * sqrt_runs_fit) / np.sum(runs_fit**0)
+        
+        # Generate smooth curve for plotting
+        runs_smooth = np.linspace(runs[0], runs[-1], 200)
+        fitted_curve = A_coefficient / np.sqrt(runs_smooth) + min_entropy_val
+        
+        plt.plot(runs_smooth, fitted_curve, '--', linewidth=2, color='orange',
+                 label=f'1/√n Fit: {A_coefficient:.3f}/√n + {min_entropy_val:.4f}')
+        
+        # Calculate R-squared for goodness of fit
+        predicted_values = A_coefficient / np.sqrt(runs_fit) + min_entropy_val
+        ss_res = np.sum((cross_entropies[valid_indices] - predicted_values) ** 2)
+        ss_tot = np.sum((cross_entropies[valid_indices] - np.mean(cross_entropies[valid_indices])) ** 2)
+        r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
+        
+        print(f"1/√n fit coefficient A = {A_coefficient:.6f}")
+        print(f"R² goodness of fit = {r_squared:.4f}")
 
     # Find the minimum cross-entropy achieved and its run number
-    min_achieved_entropy = min(cross_entropy_lst)
-    min_achieved_idx = cross_entropy_lst.index(min_achieved_entropy)
-    min_achieved_run = run_number_lst[min_achieved_idx]
+    min_achieved_entropy = min(cross_entropies)
+    min_achieved_idx = np.argmin(cross_entropies)
+    min_achieved_run = runs[min_achieved_idx]
 
     # Mark the minimum achieved entropy on the plot
-    plt.scatter([min_achieved_run], [min_achieved_entropy], color='g', zorder=5, label=f'Min Achieved: {min_achieved_entropy:.4f} (Run {min_achieved_run})')
+    plt.scatter([min_achieved_run], [min_achieved_entropy], color='g', s=100, zorder=5, 
+                label=f'Min Achieved: {min_achieved_entropy:.4f} (Run {min_achieved_run})')
     plt.annotate(f"{min_achieved_entropy:.4f}\n(Run {min_achieved_run})",
                  (min_achieved_run, min_achieved_entropy),
-                 textcoords="offset points", xytext=(0,10), ha='center', color='g')
+                 textcoords="offset points", xytext=(0,15), ha='center', color='g',
+                 fontsize=10, bbox=dict(boxstyle="round,pad=0.3", facecolor='lightgreen', alpha=0.7))
 
-    plt.xlabel('Number of Runs for Dynamic Circuit')
-    plt.ylabel('Cross-Entropy')
-    plt.title(f'Cross-Entropy vs. Number of Runs ({qubits_num} Qubits)')
-    plt.grid(True)
-    plt.legend()
+    plt.xlabel('Number of Runs for Dynamic Circuit', fontsize=12)
+    plt.ylabel('Cross-Entropy', fontsize=12)
+    plt.title(f'Cross-Entropy vs. Number of Runs ({qubits_num} Qubits)\nwith 1/√n Theoretical Fit', fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.legend(fontsize=10)
     plt.tight_layout()
-    plt.savefig(f"cross_entropy_{qubits_num}_qubits.png")
+    plt.savefig(f"cross_entropy_{qubits_num}_qubits.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
@@ -441,8 +484,10 @@ def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
     print("QFT comparison completed!")
 
 if __name__ == "__main__":
+    # Test the cross-entropy plot with 1/sqrt(n) fit
+    cmp_dynamic_qft(qubits_num=7, number_of_runs=1000, step=20)
+    
     # cmp_states(qubits_num=7,number_of_runs=3000)
-    # cmp_dynamic_qft(qubits_num=7,number_of_runs=2000,step=50)
-    cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=20000)
+    # cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=20000)
 
     print("=============== All tests passed! ===============")
