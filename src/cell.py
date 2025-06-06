@@ -52,6 +52,7 @@ class QuantumCircuitCell:
         """
         self.__gate_matrix = None
         self.__gate_type = "I"
+        self.__phi = 0.0  # Store phase parameter for conditional gates
         self.__target_qubit = None
         self.__control_qubit = None
         self.__is_control_gate = False
@@ -312,6 +313,7 @@ class QuantumCircuitCell:
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
         self.__gate_type = gate_type
+        self.__phi = phi  # Store the phase parameter
         self.__is_conditional_gate = True
 
     def conditional_gate_input(self,classical_bit:int,gate_type:str,phi:float=0.0) -> None:
@@ -391,4 +393,7 @@ class QuantumCircuitCell:
 
         # If the bit is zero we revert the gate to be an identity gate otherwise the bit is one and we apply the desired unitary.
         if not bit:
-            self.__gate_matrix = self.__get_gate_matrix('I')
+            self.__gate_matrix = self.__get_gate_matrix('I', 0.0)
+        else:
+            # When bit is 1, restore the original gate matrix with the correct phase
+            self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi)
