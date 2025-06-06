@@ -13,6 +13,7 @@ QUBITS_TO_TEST = 6
 NUM_MEASUREMENTS_DELTA = 100
 MAX_MEASURE_NUM = 5000
 NUM_OF_RUNS = 5000
+EPSILON = 1e-10
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -357,8 +358,91 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
     plt.savefig(f"cross_entropy_{qubits_num}_qubits.png")
     plt.show()
 
+def compare_qft_results(qubits_num: int, number_of_runs: int) -> None:
+    """
+    Compare regular QFT and dynamic QFT results by overlaying their probability distributions in a single plot.
+    
+    This function creates a random quantum state, applies both regular and dynamic QFT circuits,
+    and plots the resulting probability distributions overlaid on the same graph for easy comparison.
+    
+    Parameters
+    ----------
+    qubits_num : int
+        The number of qubits for the quantum state and circuits.
+    number_of_runs : int
+        The number of runs for the dynamic QFT circuit to estimate probabilities.
+        
+    Returns
+    -------
+    None
+    """
+    print(f"Comparing Regular QFT vs Dynamic QFT with {qubits_num} qubits and {number_of_runs} runs...")
+    
+    # Create a random quantum state
+    rand_state = MultiQubit(qubits_num=qubits_num)
+    
+    # Create classical register for dynamic circuit
+    classical_reg = ClassicalRegister(num_bits=qubits_num)
+    
+    # Set up regular QFT circuit
+    regular_circuit = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
+    regular_circuit.load_qft_preset()
+    
+    # Set up dynamic QFT circuit  
+    dynamic_circuit = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
+    dynamic_circuit.load_dynamic_qft_preset()
+    
+    # Run both circuits
+    print("Running regular QFT circuit...")
+    reg_output_state = regular_circuit.run_circuit()
+    
+    print("Running dynamic QFT circuit...")
+    dyn_output_state = dynamic_circuit.run_many(number_of_runs)
+    
+    # Get probability data for plotting
+    states_list = [format(state, f"0{qubits_num}b") for state in range(2 ** qubits_num)]
+    reg_probs = [abs(amplitude)**2 for amplitude in reg_output_state.get_tensor_vector()]
+    dyn_probs = [abs(amplitude)**2 for amplitude in dyn_output_state.get_tensor_vector()]
+    
+    # Create single overlay plot
+    fig, ax = plt.subplots(figsize=(14, 8))
+    
+    # Set up bar positions for side-by-side comparison
+    bar_width = 0.35
+    x_pos = np.arange(len(states_list))
+    
+    # Plot both results with slight offset for better visibility
+    bars1 = ax.bar(x_pos - bar_width/2, reg_probs, bar_width, 
+                   color='blue', alpha=0.7, label='Regular QFT')
+    bars2 = ax.bar(x_pos + bar_width/2, dyn_probs, bar_width, 
+                   color='red', alpha=0.7, label=f'Dynamic QFT ({number_of_runs} runs)')
+    
+    # Customize the plot
+    ax.set_xlabel('Quantum States', fontsize=12)
+    ax.set_ylabel('Probability', fontsize=12)
+    ax.set_title(f'QFT Comparison: Regular vs Dynamic ({qubits_num} Qubits)', fontsize=16)
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(states_list, rotation=90)
+    ax.grid(axis='y', linestyle='--', alpha=0.6)
+    ax.legend(fontsize=12)
+    
+    plt.tight_layout()
+    plt.savefig(f"qft_comparison_{qubits_num}_qubits_{number_of_runs}_runs.png", dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    # Calculate and print similarity metrics
+    cross_entropy_val = cross_entropy(reg_output_state, dyn_output_state)
+    print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.6f}")
+    
+    # Calculate fidelity (overlap between probability distributions)
+    fidelity = np.sum(np.sqrt(np.array(reg_probs) * np.array(dyn_probs)))
+    print(f"Fidelity between regular and dynamic QFT: {fidelity:.6f}")
+    
+    print("QFT comparison completed!")
+
 if __name__ == "__main__":
     # cmp_states(qubits_num=7,number_of_runs=3000)
-    cmp_dynamic_qft(qubits_num=7,number_of_runs=2000,step=50)
+    # cmp_dynamic_qft(qubits_num=7,number_of_runs=2000,step=50)
+    compare_qft_results(qubits_num=5, number_of_runs=20000)
 
     print("=============== All tests passed! ===============")
