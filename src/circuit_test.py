@@ -300,16 +300,13 @@ def cmp_states(qubits_num:int,number_of_runs: int):
         cross_entropy_lst.append(cross_entropy_val)
 
     print(f"Number of runs: {len(run_number_lst)}")
-    print(f"Number of cross entropy values: {len(cross_entropy_lst)}")
-    inf_count = sum(1 for val in cross_entropy_lst if val == float('inf'))
-    print(f"Number of 'inf' values in cross_entropy_lst for cmp_states: {inf_count}") 
 
     # Calculate true entropy (cross-entropy of expected state with itself)
     min_entropy_val = cross_entropy(rand_state, rand_state)
     
     plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val)
 
-def cmp_dynamic_qft(qubits_num:int,number_of_runs: int) -> None:
+def cmp_dynamic_qft(qubits_num:int,number_of_runs: int,step: int) -> None:
     rand_state = MultiQubit(qubits_num=qubits_num)
     classical_reg = ClassicalRegister(num_bits=qubits_num)
     regular_circuit = QuantumCircuit(input_state=rand_state,classical_register=classical_reg)
@@ -335,19 +332,32 @@ def cmp_dynamic_qft(qubits_num:int,number_of_runs: int) -> None:
 def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val):
     plt.figure(figsize=(10, 6))
     plt.plot(run_number_lst, cross_entropy_lst, marker='o', label='Measured Cross-Entropy')
-    
+
     # Add a horizontal line for the true entropy
     plt.axhline(y=min_entropy_val, color='r', linestyle='--', label=f'Minimum Entropy: {min_entropy_val:.4f}')
-    
+
+    # Find the minimum cross-entropy achieved and its run number
+    min_achieved_entropy = min(cross_entropy_lst)
+    min_achieved_idx = cross_entropy_lst.index(min_achieved_entropy)
+    min_achieved_run = run_number_lst[min_achieved_idx]
+
+    # Mark the minimum achieved entropy on the plot
+    plt.scatter([min_achieved_run], [min_achieved_entropy], color='g', zorder=5, label=f'Min Achieved: {min_achieved_entropy:.4f} (Run {min_achieved_run})')
+    plt.annotate(f"{min_achieved_entropy:.4f}\n(Run {min_achieved_run})",
+                 (min_achieved_run, min_achieved_entropy),
+                 textcoords="offset points", xytext=(0,10), ha='center', color='g')
+
     plt.xlabel('Number of Runs for Dynamic Circuit')
     plt.ylabel('Cross-Entropy')
     plt.title(f'Cross-Entropy vs. Number of Runs ({qubits_num} Qubits)')
     plt.grid(True)
-    plt.legend() 
+    plt.legend()
     plt.tight_layout()
+    plt.savefig(f"cross_entropy_{qubits_num}_qubits.png")
     plt.show()
 
 if __name__ == "__main__":
-    # cmp_states(10)
-    cmp_dynamic_qft(qubits_num=3,number_of_runs=2000)
+    # cmp_states(qubits_num=7,number_of_runs=3000)
+    cmp_dynamic_qft(qubits_num=5,number_of_runs=500,step=10)
+
     print("=============== All tests passed! ===============")
