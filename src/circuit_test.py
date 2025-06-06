@@ -358,7 +358,7 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
     plt.savefig(f"cross_entropy_{qubits_num}_qubits.png")
     plt.show()
 
-def compare_qft_results(qubits_num: int, number_of_runs: int) -> None:
+def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
     """
     Compare regular QFT and dynamic QFT results by overlaying their probability distributions in a single plot.
     
@@ -443,6 +443,6 @@ def compare_qft_results(qubits_num: int, number_of_runs: int) -> None:
 if __name__ == "__main__":
     # cmp_states(qubits_num=7,number_of_runs=3000)
     # cmp_dynamic_qft(qubits_num=7,number_of_runs=2000,step=50)
-    compare_qft_results(qubits_num=5, number_of_runs=20000)
+    cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=20000)
 
     print("=============== All tests passed! ===============")
