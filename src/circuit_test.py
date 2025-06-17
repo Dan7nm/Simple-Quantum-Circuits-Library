@@ -8,6 +8,7 @@ import random
 import matplotlib.pyplot as plt
 from typing import Dict
 from scipy.optimize import curve_fit
+from matplotlib.ticker import FormatStrFormatter
 
 ### Constants ###
 QUBITS_TO_TEST = 6
@@ -331,29 +332,25 @@ def cmp_dynamic_qft(qubits_num:int,number_of_runs: int,step: int) -> None:
 
     plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val)
 
+    plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val,log_scale=True)
 
-def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val):
+def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entropy_val, log_scale: bool = False):
     plt.figure(figsize=(12, 8))
     
     runs = np.array(run_number_lst)
-    cross_entropies = np.array(cross_entropy_lst)
+    cross_entropies = np.array(cross_entropy_lst) - min_entropy_val
     
     # Plot measured cross-entropy
     plt.plot(runs, cross_entropies, 'o-', markersize=8, linewidth=2, 
              label='Measured Cross-Entropy', color='blue', alpha=0.8)
     
-    # Add horizontal line for minimum entropy
-    plt.axhline(y=min_entropy_val, color='red', linestyle='--', linewidth=2,
-                label=f'Minimum Entropy: {min_entropy_val:.4f}')
-    
     # Fit 1/N function: cross_entropy = A/N + min_entropy_val
     def inverse_n_func(n, A):
-        return A / n + min_entropy_val
+        return A / n
     
     # Use scipy curve_fit
     popt, _ = curve_fit(inverse_n_func, runs, cross_entropies, p0=[100.0])
     A_coefficient = popt[0]
-    
     
     # Calculate R-squared
     predicted = inverse_n_func(runs, A_coefficient)
@@ -365,7 +362,7 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
     runs_smooth = np.linspace(runs[0], runs[-1], 200)
     fitted_curve = inverse_n_func(runs_smooth, A_coefficient)
     plt.plot(runs_smooth, fitted_curve, '--', linewidth=3, color='orange',
-             label=f'1/N Fit: {A_coefficient:.1f}/N + Minimum_Entropy (R^2 = {r_squared:.2f})')
+             label=f'fit: {A_coefficient:.1f}/N (R^2 = {r_squared:.2f})')
     
     print(f"1/N fit: A = {A_coefficient:.3f}, R² = {r_squared:.4f}")
     
@@ -376,11 +373,21 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
     
     plt.xlabel('Number of Runs', fontsize=12)
     plt.ylabel('Cross-Entropy', fontsize=12)
-    plt.title(f'Cross-Entropy vs. Number of Runs ({qubits_num} Qubits)', fontsize=14)
+    plt.title(f'Cross-Entropy Difference vs. Number of Runs ({qubits_num} Qubits)', fontsize=14)
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     plt.tight_layout()
-    plt.savefig(f"cross_entropy_{qubits_num}_qubits.png", dpi=200, bbox_inches='tight')
+    if log_scale:
+        plt.xscale('log',base=np.e)
+        plt.yscale('log',base=np.e)
+
+        # Round the axes to 2 decimal places
+        plt.gca().xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+        plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+
+        plt.savefig(f"cross_entropy_{qubits_num}_qubits_log.png", dpi=200, bbox_inches='tight')
+    else:
+        plt.savefig(f"cross_entropy_{qubits_num}_qubits.png", dpi=200, bbox_inches='tight')
     plt.show()
 
 def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
@@ -466,7 +473,7 @@ def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
     print("QFT comparison completed!")
 
 if __name__ == "__main__":
-    cmp_dynamic_qft(qubits_num=5, number_of_runs=500, step=20)
+    cmp_dynamic_qft(qubits_num=5, number_of_runs=1000, step=10)
     
     # cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=20000)
 
