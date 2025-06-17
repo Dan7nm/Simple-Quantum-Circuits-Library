@@ -472,9 +472,146 @@ def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
     
     print("QFT comparison completed!")
 
-if __name__ == "__main__":
-    cmp_dynamic_qft(qubits_num=5, number_of_runs=1000, step=10)
+def test_qft_phase_error_cross_entropy(number_of_qubits: int = 5, num_runs: int = 10, 
+                                        phi_max: float = 0.5, num_phi_points: int = 20,measurement_num: int = 1000) -> None:
+    """
+    Test that compares cross entropy between regular QFT (no errors) and QFT with phase errors.
+    Plots cross_entropy vs error magnitude phi.
+
+    Parameters
+    ----------
+    number_of_qubits : int, optional
+        Number of qubits for the QFT circuit (default is 5).
+    num_runs : int, optional
+        Number of runs to average over for each phi value (default is 10).
+    phi_max : float, optional
+        Maximum phase error magnitude to test (default is 0.5 radians).
+    num_phi_points : int, optional
+        Number of phi values to test (default is 20).
+    meaasurement_num : int, optional
+        Number of measurements to perform for each run (default is 1000).
+
+    Returns
+    -------
+    None
+    """
+    from cell import QuantumCircuitCell
     
-    # cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=20000)
+    print(f"Testing QFT Phase Error Cross Entropy ({number_of_qubits} qubits)")
+    print("=" * 60)
+    
+    # Create test phi values from 0 to phi_max
+    phi_values = np.linspace(0, phi_max, num_phi_points)
+    cross_entropy_values = []
+    cross_entropy_std = []
+    cross_entropies_values_dyn = []
+    cross_entropy_std_dyn = []
+
+    # Get reference QFT result (no errors)
+    print("Computing reference QFT result (no phase errors)...")
+    QuantumCircuitCell.disable_phase_error()
+    input_state = MultiQubit(qubits_num=number_of_qubits)
+    reference_circuit = QuantumCircuit(input_state)
+    reference_circuit.load_qft_preset()
+    reference_result = reference_circuit.run_circuit()
+    
+    print(f"Testing {num_phi_points} phase error values from 0 to {phi_max:.3f} radians...")
+    
+    for i, phi in enumerate(phi_values):
+        print(f"Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r")
+        
+        # Set phase error magnitude
+        if phi == 0:
+            QuantumCircuitCell.disable_phase_error()
+        else:
+            QuantumCircuitCell.set_phase_error(phi)
+        
+        # Run multiple trials for this phi value
+        cross_entropies_for_phi = []
+        cross_entropies_for_phi_dyn = []
+        
+        for run in range(num_runs):
+            # Create regular qft circuit
+            test_circuit = QuantumCircuit(input_state)
+            test_circuit.load_qft_preset()
+            test_result = test_circuit.run_circuit()
+            sampled_result = test_result.measure_multiple(num_of_measurements=measurement_num)
+
+            # create a dynamic qft circuit
+            classical_reg = ClassicalRegister(num_bits=number_of_qubits)
+            dynamic_circuit = QuantumCircuit(input_state, classical_register=classical_reg)
+            dynamic_circuit.load_dynamic_qft_preset()
+            dynamic_result = dynamic_circuit.run_many(num_of_runs=measurement_num)
+            
+            # Calculate cross entropy between reference and error-affected result
+            ce_dyn = cross_entropy(reference_result, dynamic_result)
+            ce = cross_entropy(reference_result, sampled_result)
+            cross_entropies_for_phi.append(ce)
+            cross_entropies_for_phi_dyn.append(ce_dyn)
+        
+        # Store mean and standard deviation
+        cross_entropy_values.append(np.mean(cross_entropies_for_phi))
+        cross_entropy_std.append(np.std(cross_entropies_for_phi))
+
+        cross_entropies_values_dyn.append(np.mean(cross_entropies_for_phi_dyn))
+        cross_entropy_std_dyn.append(np.std(cross_entropies_for_phi_dyn))
+    
+    print("\nCompleted all phase error tests.")
+    
+    # Disable phase errors after testing
+    QuantumCircuitCell.disable_phase_error()
+    
+    # Convert to numpy arrays for plotting
+    phi_values = np.array(phi_values)
+    cross_entropy_values = np.array(cross_entropy_values)
+    cross_entropy_std = np.array(cross_entropy_std)
+    cross_entropies_values_dyn = np.array(cross_entropies_values_dyn)
+    cross_entropy_std_dyn = np.array(cross_entropy_std_dyn)
+
+    # Plot results
+    plt.figure(figsize=(12, 8))
+    
+    # Plot regular QFT cross entropy with error bars
+    plt.errorbar(phi_values, cross_entropy_values, yerr=cross_entropy_std, 
+                fmt='o-', markersize=6, linewidth=2, capsize=5, 
+                label=f'Regular QFT Cross-Entropy (avg over {num_runs} runs)', 
+                color='blue', alpha=0.8)
+    # Plot dynamic QFT cross entropy with error bars
+    plt.errorbar(phi_values, cross_entropies_values_dyn, yerr=cross_entropy_std_dyn,
+                fmt='s--', markersize=6, linewidth=2, capsize=5,
+                label=f'Dynamic QFT Cross-Entropy (avg over {num_runs} runs)',
+                color='orange', alpha=0.8)
+
+    plt.xlabel('Phase Error Magnitude φ (radians)', fontsize=12)
+    plt.ylabel('Cross Entropy', fontsize=12)
+    plt.title(f'Cross Entropy vs Phase Error Magnitude\n'
+              f'QFT with {number_of_qubits} qubits, averaged over {num_runs} runs\n'
+              f'Measurements of circuit: {measurement_num}', fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.legend(fontsize=10)
+    
+    plt.tight_layout()
+    
+    # Save the plot
+    filename = f'cross_entropy_vs_phase_error_{number_of_qubits}_qubits_mes_{measurement_num}.png'
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    print(f"Plot saved as: {filename}")
+    
+    plt.show()
+    
+    # Print summary statistics
+    print("\nSummary:")
+    print(f"Number of qubits: {number_of_qubits}")
+    print(f"Runs per phi value: {num_runs}")
+    print(f"Phase error range: 0 to {phi_max:.3f} radians")
+    print(f"Cross entropy at phi=0: {cross_entropy_values[0]:.6f} ± {cross_entropy_std[0]:.6f}")
+    print(f"Cross entropy at phi={phi_max:.3f}: {cross_entropy_values[-1]:.6f} ± {cross_entropy_std[-1]:.6f}")
+    print(f"Maximum cross entropy: {np.max(cross_entropy_values):.6f}")
+    print("Test completed successfully!")
+
+if __name__ == "__main__":
+    
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(number_of_qubits=5, num_runs=10, phi_max=0.3, num_phi_points=15,measurement_num=500)
 
     print("=============== All tests passed! ===============")
