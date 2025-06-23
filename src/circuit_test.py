@@ -8,7 +8,7 @@ import random
 import matplotlib.pyplot as plt
 from typing import Dict
 from scipy.optimize import curve_fit
-from matplotlib.ticker import FormatStrFormatter
+import os
 
 ### Constants ###
 QUBITS_TO_TEST = 6
@@ -378,24 +378,18 @@ def plot_cross_entropy(run_number_lst, cross_entropy_lst, qubits_num, min_entrop
     plt.legend(fontsize=10)
     plt.tight_layout()
     if log_scale:
-        plt.xscale('log',base=np.e)
-        plt.yscale('log',base=np.e)
-
-        # Round the axes to 2 decimal places
-        plt.gca().xaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-        plt.gca().yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-
+        plt.xscale('log')
+        plt.yscale('log')
         plt.savefig(f"cross_entropy_{qubits_num}_qubits_log.png", dpi=200, bbox_inches='tight')
     else:
         plt.savefig(f"cross_entropy_{qubits_num}_qubits.png", dpi=200, bbox_inches='tight')
     plt.show()
 
-def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
+def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int, phi_max: float = np.pi/2, num_phi_points: int = 5) -> None:
     """
-    Compare regular QFT and dynamic QFT results by overlaying their probability distributions in a single plot.
-    
-    This function creates a random quantum state, applies both regular and dynamic QFT circuits,
-    and plots the resulting probability distributions overlaid on the same graph for easy comparison.
+    Compare regular QFT, dynamic QFT, and regular QFT with phase error by overlaying their probability distributions in a single plot,
+    for a range of phase errors from 0 to phi_max.
+    For regular QFT with error, sample the output using measure_multiple(number_of_runs).
     
     Parameters
     ----------
@@ -403,72 +397,115 @@ def cmp_qft_results_prob_distr(qubits_num: int, number_of_runs: int) -> None:
         The number of qubits for the quantum state and circuits.
     number_of_runs : int
         The number of runs for the dynamic QFT circuit to estimate probabilities.
-        
+    phi_max : float, optional
+        The maximum phase error magnitude to test (default is pi/2).
+    num_phi_points : int, optional
+        The number of phi values to test (default is 5).
+    
     Returns
     -------
     None
     """
-    print(f"Comparing Regular QFT vs Dynamic QFT with {qubits_num} qubits and {number_of_runs} runs...")
+    from cell import QuantumCircuitCell
+    print(f"Comparing Regular QFT, Dynamic QFT, and Regular QFT with error for {qubits_num} qubits and {number_of_runs} runs...")
+    # Always disable phase error before running regular QFT (no error)
+    QuantumCircuitCell.disable_phase_error()
     
     # Create a random quantum state
     rand_state = MultiQubit(qubits_num=qubits_num)
-    
-    # Create classical register for dynamic circuit
-    classical_reg = ClassicalRegister(num_bits=qubits_num)
-    
-    # Set up regular QFT circuit
-    regular_circuit = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
+
+    # Set up regular QFT circuit (no error)
+    regular_circuit = QuantumCircuit(input_state=rand_state)
     regular_circuit.load_qft_preset()
-    
-    # Set up dynamic QFT circuit  
-    dynamic_circuit = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
-    dynamic_circuit.load_dynamic_qft_preset()
-    
-    # Run both circuits
-    print("Running regular QFT circuit...")
+
+    # Run regular QFT circuit (no phase error)
+    print("Running regular QFT circuit (no error)...")
     reg_output_state = regular_circuit.run_circuit()
-    
-    print("Running dynamic QFT circuit...")
-    dyn_output_state = dynamic_circuit.run_many(number_of_runs)
-    
-    # Get probability data for plotting
-    states_list = [format(state, f"0{qubits_num}b") for state in range(2 ** qubits_num)]
-    reg_probs = [abs(amplitude)**2 for amplitude in reg_output_state.get_tensor_vector()]
-    dyn_probs = [abs(amplitude)**2 for amplitude in dyn_output_state.get_tensor_vector()]
-    
-    # Create single overlay plot
-    fig, ax = plt.subplots(figsize=(14, 8))
-    
-    # Set up bar positions for side-by-side comparison
-    bar_width = 0.35
-    x_pos = np.arange(len(states_list))
-    
-    # Plot both results with slight offset for better visibility
-    bars1 = ax.bar(x_pos - bar_width/2, reg_probs, bar_width, 
-                   color='blue', alpha=0.7, label='Regular QFT')
-    bars2 = ax.bar(x_pos + bar_width/2, dyn_probs, bar_width, 
-                   color='red', alpha=0.7, label=f'Dynamic QFT ({number_of_runs} runs)')
-    
-    # Customize the plot
-    ax.set_xlabel('Quantum States', fontsize=12)
-    ax.set_ylabel('Probability', fontsize=12)
-    ax.set_title(f'QFT Comparison: Regular vs Dynamic ({qubits_num} Qubits)', fontsize=16)
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels(states_list, rotation=90)
-    ax.grid(axis='y', linestyle='--', alpha=0.6)
-    ax.legend(fontsize=12)
-    
-    plt.tight_layout()
-    plt.savefig(f"qft_comparison_{qubits_num}_qubits_{number_of_runs}_runs.png", dpi=300, bbox_inches='tight')
-    plt.show()
-    
-    # Calculate and print similarity metrics
-    cross_entropy_val = cross_entropy(reg_output_state, dyn_output_state)
-    print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.6f}")
-    
-    # Calculate fidelity (overlap between probability distributions)
-    fidelity = np.sum(np.sqrt(np.array(reg_probs) * np.array(dyn_probs)))
-    print(f"Fidelity between regular and dynamic QFT: {fidelity:.6f}")
+
+    # Create test phi values from 0 to phi_max
+    phi_values = np.linspace(0, phi_max, num_phi_points)
+
+    for phi in phi_values:
+
+        # Set phase error for dynamic QFT and regular QFT with error
+        if phi > 0:
+            print(f"Applying phase error: {phi} to dynamic QFT and regular QFT with error")
+            QuantumCircuitCell.set_phase_error(phi)
+        else:
+            QuantumCircuitCell.disable_phase_error()
+
+        # Create classical register for dynamic circuit
+        classical_reg = ClassicalRegister(num_bits=qubits_num)
+        
+        # Set up dynamic QFT circuit
+        dynamic_circuit = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
+        dynamic_circuit.load_dynamic_qft_preset()
+        
+        # Set up regular QFT circuit (with error)
+        regular_circuit_err = QuantumCircuit(input_state=rand_state, classical_register=classical_reg)
+        regular_circuit_err.load_qft_preset()
+        
+        # Run dynamic QFT circuit
+        print("Running dynamic QFT circuit (with error)...")
+        dyn_output_state = dynamic_circuit.run_many(number_of_runs)
+        
+        # Run regular QFT circuit (with error)
+        print("Running regular QFT circuit (with error)...")
+        reg_output_state_err = regular_circuit_err.run_circuit()
+        # Sample the output using measure_multiple(number_of_runs)
+        reg_output_state_err_sampled = reg_output_state_err.measure_multiple(number_of_runs)
+        
+        # Always disable phase error after
+        QuantumCircuitCell.disable_phase_error()
+        
+        # Get probability data for plotting
+        states_list = [format(state, f"0{qubits_num}b") for state in range(2 ** qubits_num)]
+        reg_probs = [abs(amplitude)**2 for amplitude in reg_output_state.get_tensor_vector()]
+        dyn_probs = [abs(amplitude)**2 for amplitude in dyn_output_state.get_tensor_vector()]
+        reg_probs_err = [abs(amplitude)**2 for amplitude in reg_output_state_err_sampled.get_tensor_vector()]
+        
+        # Create single overlay plot
+        fig, ax = plt.subplots(figsize=(14, 8))
+        
+        # Set up bar positions for side-by-side comparison
+        bar_width = 0.25
+        x_pos = np.arange(len(states_list))
+        
+        # Plot all three results with slight offset for better visibility
+        bars1 = ax.bar(x_pos - bar_width, reg_probs, bar_width, 
+                    color='blue', alpha=0.7, label='Regular QFT (no error)')
+        bars2 = ax.bar(x_pos, dyn_probs, bar_width, 
+                    color='red', alpha=0.7, label=f'Dynamic QFT ({number_of_runs} runs, phase error={phi:.2f})')
+        bars3 = ax.bar(x_pos + bar_width, reg_probs_err, bar_width, 
+                    color='green', alpha=0.7, label=f'Regular QFT ({number_of_runs} runs, phase error={phi:.2f})')
+        
+        # Customize the plot
+        ax.set_xlabel('Quantum States', fontsize=12)
+        ax.set_ylabel('Probability', fontsize=12)
+        ax.set_title(f'QFT Comparison: Regular, Dynamic with error, and Regular with Error (sampled) ({qubits_num} Qubits, phase error={phi:.2f})', fontsize=16)
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(states_list, rotation=90)
+        ax.grid(axis='y', linestyle='--', alpha=0.6)
+        ax.legend(fontsize=12)
+        
+        plt.tight_layout()
+        outdir = f'qft_comparison_{qubits_num}_qubits_{number_of_runs}_runs'
+        os.makedirs(outdir, exist_ok=True)
+        plt.savefig(os.path.join(outdir, f'qft_comparison_{qubits_num}_qubits_{number_of_runs}_runs_phase_error_{phi}.png'), dpi=300, bbox_inches='tight')
+        
+        # Calculate and print similarity metrics
+        cross_entropy_val = cross_entropy(reg_output_state, dyn_output_state)
+        cross_entropy_val_err = cross_entropy(reg_output_state, reg_output_state_err_sampled)
+        min_cross_entropy = cross_entropy(reg_output_state, reg_output_state)
+        print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.6f}")
+        print(f"Cross-entropy between regular and regular QFT with error (sampled): {cross_entropy_val_err:.6f}")
+        print(f"Minimum cross-entropy (self-comparison): {min_cross_entropy:.6f}")
+        
+        # Calculate fidelity (overlap between probability distributions)
+        fidelity = np.sum(np.sqrt(np.array(reg_probs) * np.array(dyn_probs)))
+        fidelity_err = np.sum(np.sqrt(np.array(reg_probs) * np.array(reg_probs_err)))
+        print(f"Fidelity between regular and dynamic QFT: {fidelity:.6f}")
+        print(f"Fidelity between regular and regular QFT with error (sampled): {fidelity_err:.6f}")
     
     print("QFT comparison completed!")
 
@@ -514,6 +551,8 @@ def test_qft_phase_error_cross_entropy(number_of_qubits: int = 5, num_runs: int 
     reference_circuit = QuantumCircuit(input_state)
     reference_circuit.load_qft_preset()
     reference_result = reference_circuit.run_circuit()
+
+    min_cross_entropy = cross_entropy(reference_result, reference_result)
     
     print(f"Testing {num_phi_points} phase error values from 0 to {phi_max:.3f} radians...")
     
@@ -530,22 +569,22 @@ def test_qft_phase_error_cross_entropy(number_of_qubits: int = 5, num_runs: int 
         cross_entropies_for_phi = []
         cross_entropies_for_phi_dyn = []
         
-        for run in range(num_runs):
+        for run in range(num_runs): 
             # Create regular qft circuit
-            test_circuit = QuantumCircuit(input_state)
+            test_circuit = QuantumCircuit(input_state=input_state)
             test_circuit.load_qft_preset()
             test_result = test_circuit.run_circuit()
             sampled_result = test_result.measure_multiple(num_of_measurements=measurement_num)
 
             # create a dynamic qft circuit
             classical_reg = ClassicalRegister(num_bits=number_of_qubits)
-            dynamic_circuit = QuantumCircuit(input_state, classical_register=classical_reg)
+            dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg)
             dynamic_circuit.load_dynamic_qft_preset()
             dynamic_result = dynamic_circuit.run_many(num_of_runs=measurement_num)
             
             # Calculate cross entropy between reference and error-affected result
-            ce_dyn = cross_entropy(reference_result, dynamic_result)
-            ce = cross_entropy(reference_result, sampled_result)
+            ce = cross_entropy(reference_result, sampled_result) - min_cross_entropy
+            ce_dyn = cross_entropy(reference_result, dynamic_result) - min_cross_entropy
             cross_entropies_for_phi.append(ce)
             cross_entropies_for_phi_dyn.append(ce_dyn)
         
@@ -568,23 +607,30 @@ def test_qft_phase_error_cross_entropy(number_of_qubits: int = 5, num_runs: int 
     cross_entropies_values_dyn = np.array(cross_entropies_values_dyn)
     cross_entropy_std_dyn = np.array(cross_entropy_std_dyn)
 
+    # Calculate asymmetric error bars so lower bound does not go below zero
+    ce_lower = np.minimum(cross_entropy_values, cross_entropy_std)
+    ce_yerr = np.array([ce_lower, cross_entropy_std])
+
+    ce_dyn_lower = np.minimum(cross_entropies_values_dyn, cross_entropy_std_dyn)
+    ce_dyn_yerr = np.array([ce_dyn_lower, cross_entropy_std_dyn])
+
     # Plot results
     plt.figure(figsize=(12, 8))
     
-    # Plot regular QFT cross entropy with error bars
-    plt.errorbar(phi_values, cross_entropy_values, yerr=cross_entropy_std, 
+    # Plot regular QFT cross entropy with asymmetric error bars
+    plt.errorbar(phi_values, cross_entropy_values, yerr=ce_yerr, 
                 fmt='o-', markersize=6, linewidth=2, capsize=5, 
                 label=f'Regular QFT Cross-Entropy (avg over {num_runs} runs)', 
                 color='blue', alpha=0.8)
-    # Plot dynamic QFT cross entropy with error bars
-    plt.errorbar(phi_values, cross_entropies_values_dyn, yerr=cross_entropy_std_dyn,
+    # Plot dynamic QFT cross entropy with asymmetric error bars
+    plt.errorbar(phi_values, cross_entropies_values_dyn, yerr=ce_dyn_yerr,
                 fmt='s--', markersize=6, linewidth=2, capsize=5,
                 label=f'Dynamic QFT Cross-Entropy (avg over {num_runs} runs)',
                 color='orange', alpha=0.8)
 
     plt.xlabel('Phase Error Magnitude φ (radians)', fontsize=12)
     plt.ylabel('Cross Entropy', fontsize=12)
-    plt.title(f'Cross Entropy vs Phase Error Magnitude\n'
+    plt.title(f'Cross Entropy Difference vs Phase Error Magnitude\n'
               f'QFT with {number_of_qubits} qubits, averaged over {num_runs} runs\n'
               f'Measurements of circuit: {measurement_num}', fontsize=14)
     plt.grid(True, alpha=0.3)
@@ -612,6 +658,8 @@ def test_qft_phase_error_cross_entropy(number_of_qubits: int = 5, num_runs: int 
 if __name__ == "__main__":
     
     # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(number_of_qubits=5, num_runs=10, phi_max=0.3, num_phi_points=15,measurement_num=500)
+    test_qft_phase_error_cross_entropy(number_of_qubits=3, num_runs=10, phi_max=np.pi/2, num_phi_points=10,measurement_num=100)
+
+    # cmp_qft_results_prob_distr(qubits_num=5, number_of_runs=10000, phi_max=np.pi/8, num_phi_points=10)
 
     print("=============== All tests passed! ===============")

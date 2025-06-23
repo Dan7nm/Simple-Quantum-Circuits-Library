@@ -461,8 +461,7 @@ class QuantumCircuitCell:
 
         # If the bit is zero we revert the gate to be an identity gate otherwise the bit is one and we apply the desired unitary.
         if not bit:
-            base_matrix = self.__get_gate_matrix('I', 0.0)
-            self.__gate_matrix = self._apply_phase_error(base_matrix)
+            self.__gate_matrix = self.__get_gate_matrix('I', 0.0)
         else:
             # When bit is 1, restore the original gate matrix with the correct phase
             base_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi)
