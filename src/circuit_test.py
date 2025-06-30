@@ -409,7 +409,6 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
     from cell import QuantumCircuitCell
     qubits_num = input_state.get_number_of_qubits()
 
-    print(f"Comparing Regular QFT, Dynamic QFT, and Regular QFT with error for {qubits_num} qubits and {measurement_num} runs...")
     # Always disable phase error before running regular QFT (no error)
     QuantumCircuitCell.disable_phase_error()
 
@@ -418,7 +417,6 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
     regular_circuit.load_qft_preset()
 
     # Run regular QFT circuit (no phase error)
-    print("Running regular QFT circuit (no error)...")
     reg_output_state = regular_circuit.run_circuit()
 
     # Create test phi values from 0 to phi_max
@@ -428,7 +426,7 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
 
         # Set phase error for dynamic QFT and regular QFT with error
         if phi > 0:
-            print(f"Applying phase error: {phi} to dynamic QFT and regular QFT with error")
+            print(f"Applying phase error: {phi} to dynamic QFT and regular QFT with error",end='\r')
             QuantumCircuitCell.set_phase_error(phi)
         else:
             QuantumCircuitCell.disable_phase_error()
@@ -445,14 +443,10 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         regular_circuit_err.load_qft_preset()
         
         # Run dynamic QFT circuit
-        print("Running dynamic QFT circuit (with error)...")
         dyn_output_state = dynamic_circuit.run_many(measurement_num)
         
         # Run regular QFT circuit (with error)
-        print("Running regular QFT circuit (with error)...")
-        reg_output_state_err = regular_circuit_err.run_circuit()
-        # Sample the output using measure_multiple(measurement_num)
-        reg_output_state_err_sampled = reg_output_state_err.measure_multiple(measurement_num)
+        reg_output_state_err_sampled = regular_circuit_err.run_many(num_of_runs=measurement_num)
         
         # Always disable phase error after
         QuantumCircuitCell.disable_phase_error()
@@ -491,19 +485,10 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         outdir = f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs'
         os.makedirs(outdir, exist_ok=True)
         plt.savefig(os.path.join(outdir, f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs_phase_error_{phi:.2f}.png'), dpi=300, bbox_inches='tight')
-        
-        # Calculate and print similarity metrics
-        cross_entropy_val = cross_entropy(reg_output_state, dyn_output_state)
-        cross_entropy_val_err = cross_entropy(reg_output_state, reg_output_state_err_sampled)
-        min_cross_entropy = cross_entropy(reg_output_state, reg_output_state)
-        print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.2f}")
-        print(f"Cross-entropy between regular and regular QFT with error (sampled): {cross_entropy_val_err:.2f}")
-        print(f"Minimum cross-entropy (self-comparison): {min_cross_entropy:.2f}")
-    
-    print("QFT comparison completed!")
 
-def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubits_num=3), num_runs: int = 10, 
-                                        phi_max: float = np.pi/8, num_phi_points: int = 20,measurement_num: int = 1000) -> None:
+    print('\n')
+
+def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubits_num=3),phi_max: float = np.pi/8, num_phi_points: int = 10,measurement_num: int = 1000) -> None:
     """
     Test that compares cross entropy between regular QFT (no errors) and QFT with phase errors.
     Plots cross_entropy vs error magnitude phi.
@@ -512,8 +497,6 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
     ----------
     input_state : MultiQubit, optional
         The input quantum state to use for all QFT circuits (default is a 3-qubit random state).
-    num_runs : int, optional
-        Number of runs to average over for each phi value (default is 10).
     phi_max : float, optional
         Maximum phase error magnitude to test (default is 0.5 radians).
     num_phi_points : int, optional
@@ -530,28 +513,32 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
     number_of_qubits = input_state.get_number_of_qubits()
     
     print(f"Testing QFT Phase Error Cross Entropy ({number_of_qubits} qubits)")
-    print("=" * 60)
+    print("=" * 80)
     
     # Create test phi values from 0 to phi_max
     phi_values = np.linspace(0, phi_max, num_phi_points)
     cross_entropy_values = []
-    cross_entropy_std = []
     cross_entropies_values_dyn = []
-    cross_entropy_std_dyn = []
 
     # Get reference QFT result (no errors)
-    print("Computing reference QFT result (no phase errors)...")
     QuantumCircuitCell.disable_phase_error()
     reference_circuit = QuantumCircuit(input_state)
     reference_circuit.load_qft_preset()
     reference_result = reference_circuit.run_circuit()
 
+    # Create regular qft circuit
+    test_circuit = QuantumCircuit(input_state=input_state)
+    test_circuit.load_qft_preset()
+
+    # create a dynamic qft circuit
+    classical_reg = ClassicalRegister(num_bits=number_of_qubits)
+    dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg)
+    dynamic_circuit.load_dynamic_qft_preset()
+
     min_cross_entropy = cross_entropy(reference_result, reference_result)
     
-    print(f"Testing {num_phi_points} phase error values from 0 to {phi_max:.3f} radians...")
-    
     for i, phi in enumerate(phi_values):
-        print(f"Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r")
+        print(f"Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r", flush=True)
         
         # Set phase error magnitude
         if phi == 0:
@@ -559,35 +546,15 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
         else:
             QuantumCircuitCell.set_phase_error(phi)
         
-        # Run multiple trials for this phi value
-        cross_entropies_for_phi = []
-        cross_entropies_for_phi_dyn = []
+        sampled_result = test_circuit.run_many(num_of_runs=measurement_num)
+        dynamic_result = dynamic_circuit.run_many(num_of_runs=measurement_num)
         
-        for run in range(num_runs): 
-            # Create regular qft circuit
-            test_circuit = QuantumCircuit(input_state=input_state)
-            test_circuit.load_qft_preset()
-            test_result = test_circuit.run_circuit()
-            sampled_result = test_result.measure_multiple(num_of_measurements=measurement_num)
+        # Calculate cross entropy between reference and error-affected result
+        ce = cross_entropy(reference_result, sampled_result) - min_cross_entropy
+        ce_dyn = cross_entropy(reference_result, dynamic_result) - min_cross_entropy
 
-            # create a dynamic qft circuit
-            classical_reg = ClassicalRegister(num_bits=number_of_qubits)
-            dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg)
-            dynamic_circuit.load_dynamic_qft_preset()
-            dynamic_result = dynamic_circuit.run_many(num_of_runs=measurement_num)
-            
-            # Calculate cross entropy between reference and error-affected result
-            ce = cross_entropy(reference_result, sampled_result) - min_cross_entropy
-            ce_dyn = cross_entropy(reference_result, dynamic_result) - min_cross_entropy
-            cross_entropies_for_phi.append(ce)
-            cross_entropies_for_phi_dyn.append(ce_dyn)
-        
-        # Store mean and standard deviation
-        cross_entropy_values.append(np.mean(cross_entropies_for_phi))
-        cross_entropy_std.append(np.std(cross_entropies_for_phi))
-
-        cross_entropies_values_dyn.append(np.mean(cross_entropies_for_phi_dyn))
-        cross_entropy_std_dyn.append(np.std(cross_entropies_for_phi_dyn))
+        cross_entropy_values.append(ce)
+        cross_entropies_values_dyn.append(ce_dyn)
     
     print("\nCompleted all phase error tests.")
     
@@ -597,35 +564,22 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
     # Convert to numpy arrays for plotting
     phi_values = np.array(phi_values)
     cross_entropy_values = np.array(cross_entropy_values)
-    cross_entropy_std = np.array(cross_entropy_std)
     cross_entropies_values_dyn = np.array(cross_entropies_values_dyn)
-    cross_entropy_std_dyn = np.array(cross_entropy_std_dyn)
-
-    # Calculate asymmetric error bars so lower bound does not go below zero
-    ce_lower = np.minimum(cross_entropy_values, cross_entropy_std)
-    ce_yerr = np.array([ce_lower, cross_entropy_std])
-
-    ce_dyn_lower = np.minimum(cross_entropies_values_dyn, cross_entropy_std_dyn)
-    ce_dyn_yerr = np.array([ce_dyn_lower, cross_entropy_std_dyn])
 
     # Plot results
     plt.figure(figsize=(12, 8))
     
-    # Plot regular QFT cross entropy with asymmetric error bars
-    plt.errorbar(phi_values, cross_entropy_values, yerr=ce_yerr, 
-                fmt='o-', markersize=6, linewidth=2, capsize=5, 
-                label=f'Regular QFT Cross-Entropy (avg over {num_runs} runs)', 
-                color='blue', alpha=0.8)
-    # Plot dynamic QFT cross entropy with asymmetric error bars
-    plt.errorbar(phi_values, cross_entropies_values_dyn, yerr=ce_dyn_yerr,
-                fmt='s--', markersize=6, linewidth=2, capsize=5,
-                label=f'Dynamic QFT Cross-Entropy (avg over {num_runs} runs)',
-                color='orange', alpha=0.8)
+    # Plot regular QFT cross entropy
+    plt.plot(phi_values, cross_entropy_values, 'o-', markersize=6, linewidth=2,
+             label='Regular QFT Cross-Entropy', color='blue', alpha=0.8)
+    # Plot dynamic QFT cross entropy
+    plt.plot(phi_values, cross_entropies_values_dyn, 's--', markersize=6, linewidth=2,
+             label='Dynamic QFT Cross-Entropy', color='orange', alpha=0.8)
 
     plt.xlabel('Phase Error Magnitude φ (radians)', fontsize=12)
     plt.ylabel('Cross Entropy', fontsize=12)
     plt.title(f'Cross Entropy Difference vs Phase Error Magnitude\n'
-              f'QFT with {number_of_qubits} qubits, averaged over {num_runs} runs\n'
+              f'QFT with {number_of_qubits} qubits\n'
               f'Measurements of circuit: {measurement_num}', fontsize=14)
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
@@ -635,45 +589,26 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
     # Save the plot
     filename = f'cross_entropy_vs_phase_error_{number_of_qubits}_qubits_mes_{measurement_num}.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
-    print(f"Plot saved as: {filename}")
-    
-    # plt.show()
+
+    # Plot with logarithmic scale
+    plt.yscale('log')
+    plt.savefig(f"{filename[:-4]}_log.png", dpi=300, bbox_inches='tight')    
 
 if __name__ == "__main__":
     import time
     start_time = time.perf_counter()
     # Random State:
-    random_state = MultiQubit(qubits_num=4)
+    random_state = MultiQubit(qubits_num=3)
 
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=100)
+    # measurement_nums = np.linspace(100,5000,10,dtype=int)
+    measurement_nums = [100, 300, 500, 1000, 3000, 5000,10000]
 
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=100)
-    
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=300)
+    for measurement_num in measurement_nums:
+        print(f"Testing QFT on random state with {measurement_num} measurements...")
 
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=300)
+        test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=measurement_num)
 
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=500)
-
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=500)
-    
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=1000)
-
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=1000)
-
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=3000)
-
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=3000)
-
-    # Test QFT with phase errors 
-    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=5000)
-
-    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=5000)
+        cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=30, measurement_num=measurement_num)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60

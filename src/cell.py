@@ -127,7 +127,7 @@ class QuantumCircuitCell:
                                      [0, np.exp(1j * random_phase)]], dtype=complex)
         
         # Apply the phase error by matrix multiplication
-        return np.dot(phase_error_matrix, matrix)
+        return np.dot(matrix,phase_error_matrix)
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
         """
@@ -187,7 +187,7 @@ class QuantumCircuitCell:
             The matrix of the current get.
         """
         # Apply phase error to base matrix on each retrieval for randomness
-        if self.__gate_type != 'I':
+        if self.__gate_type != 'I' and self._phase_error_enabled:
             # If the gate is not an identity gate, apply phase error
             return self._apply_phase_error(self.__gate_matrix.copy())
         else:
