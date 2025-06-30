@@ -139,8 +139,7 @@ class QuantumCircuitCell:
         :type phi: float
         :raises ValueError: If the gate type is invalid.
         """
-        base_matrix = self.__get_gate_matrix(gate_type, phi)
-        self.__gate_matrix = self._apply_phase_error(base_matrix)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
         self.__gate_type = gate_type
 
     def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str = 'I', phi: float = 0.0) -> None:
@@ -160,8 +159,7 @@ class QuantumCircuitCell:
         self.__validate_indices(control_qubit, target_qubit)
         self.__control_qubit, self.__target_qubit = control_qubit, target_qubit
         self.__is_control_gate = True
-        base_matrix = self.__get_gate_matrix(gate_type, phi)
-        self.__gate_matrix = self._apply_phase_error(base_matrix)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
         self.__gate_type = gate_type
 
     def set_swap_gate(self, first_qubit: int, second_qubit: int) -> None:
@@ -188,7 +186,12 @@ class QuantumCircuitCell:
         matrix : NDArray[np.complex128]
             The matrix of the current get.
         """
-        return self.__gate_matrix
+        # Apply phase error to base matrix on each retrieval for randomness
+        if self.__gate_type != 'I':
+            # If the gate is not an identity gate, apply phase error
+            return self._apply_phase_error(self.__gate_matrix.copy())
+        else:
+            return self.__gate_matrix.copy()
     
     def get_control_index(self) -> int:
         """
@@ -376,8 +379,7 @@ class QuantumCircuitCell:
             The index corresponding to the exact classical bit index in the classical register.
 
         """
-        base_matrix = self.__get_gate_matrix(gate_type, phi)
-        self.__gate_matrix = self._apply_phase_error(base_matrix)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
         self.__gate_type = gate_type
@@ -464,5 +466,4 @@ class QuantumCircuitCell:
             self.__gate_matrix = self.__get_gate_matrix('I', 0.0)
         else:
             # When bit is 1, restore the original gate matrix with the correct phase
-            base_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi)
-            self.__gate_matrix = self._apply_phase_error(base_matrix)
+            self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi)
