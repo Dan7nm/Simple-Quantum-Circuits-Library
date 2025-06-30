@@ -422,11 +422,11 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
     # Create test phi values from 0 to phi_max
     phi_values = np.linspace(0, phi_max, num_phi_points)
 
-    for phi in phi_values:
+    for i,phi in enumerate(phi_values):
 
         # Set phase error for dynamic QFT and regular QFT with error
         if phi > 0:
-            print(f"Applying phase error: {phi} to dynamic QFT and regular QFT with error",end='\r')
+            print(f"Probabilty Plot Progress: {i+1}/{num_phi_points} (phi={phi:.4f})",end='\r',flush=True)
             QuantumCircuitCell.set_phase_error(phi)
         else:
             QuantumCircuitCell.disable_phase_error()
@@ -485,8 +485,9 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         outdir = f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs'
         os.makedirs(outdir, exist_ok=True)
         plt.savefig(os.path.join(outdir, f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs_phase_error_{phi:.2f}.png'), dpi=300, bbox_inches='tight')
+        plt.close(fig)
 
-    print('\n')
+    print()
 
 def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubits_num=3),phi_max: float = np.pi/8, num_phi_points: int = 10,measurement_num: int = 1000) -> None:
     """
@@ -512,9 +513,6 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
 
     number_of_qubits = input_state.get_number_of_qubits()
     
-    print(f"Testing QFT Phase Error Cross Entropy ({number_of_qubits} qubits)")
-    print("=" * 80)
-    
     # Create test phi values from 0 to phi_max
     phi_values = np.linspace(0, phi_max, num_phi_points)
     cross_entropy_values = []
@@ -538,7 +536,7 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
     min_cross_entropy = cross_entropy(reference_result, reference_result)
     
     for i, phi in enumerate(phi_values):
-        print(f"Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r", flush=True)
+        print(f"Cross Entropy Plot Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r", flush=True)
         
         # Set phase error magnitude
         if phi == 0:
@@ -556,7 +554,7 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
         cross_entropy_values.append(ce)
         cross_entropies_values_dyn.append(ce_dyn)
     
-    print("\nCompleted all phase error tests.")
+    print()
     
     # Disable phase errors after testing
     QuantumCircuitCell.disable_phase_error()
@@ -602,13 +600,22 @@ if __name__ == "__main__":
 
     # measurement_nums = np.linspace(100,5000,10,dtype=int)
     measurement_nums = [100, 300, 500, 1000, 3000, 5000,10000]
+        
+    print("=" * 80)
+    print(f"Testing QFT Phase Error Cross Entropy ({3} qubits)")
+    print("=" * 80)
 
     for measurement_num in measurement_nums:
         print(f"Testing QFT on random state with {measurement_num} measurements...")
+        print("=" * 80)
 
         test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=measurement_num)
 
+        print("=" * 80)
+
         cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=30, measurement_num=measurement_num)
+
+        print("=" * 80)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60
