@@ -993,15 +993,17 @@ class QuantumCircuit:
         ValueError
             If the layer index is not valid.
         """
-        # If the circuit is computed and is not dynamic we apply the input state in the computed operator.
-        if self.__circuit_is_computed and not self.__is_dynamic:
-            qubit_tensor_vector = self.__quantum_state.get_tensor_vector()
-            result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
-            result_qubit_tensor = MultiQubit(result_vector)
-            return result_qubit_tensor
-         # If the circuit is not computed we compute the circuit and return the resulting state.
-        else:
-            return self.__compute_circuit()
+        # # If the circuit is computed and is not dynamic we apply the input state in the computed operator.
+        # if self.__circuit_is_computed and not self.__is_dynamic:
+        #     qubit_tensor_vector = self.__quantum_state.get_tensor_vector()
+        #     result_vector = np.dot(self.__circuit_operator, qubit_tensor_vector)
+        #     result_qubit_tensor = MultiQubit(result_vector)
+        #     return result_qubit_tensor
+        #  # If the circuit is not computed we compute the circuit and return the resulting state.
+        # else:
+        #     return self.__compute_circuit()
+
+        return self.__compute_circuit()
 
     def add_conditional_gate(self,target_qubit:int,layer_index:int,c_reg_index:int,gate_type:str,phi:float=0) -> None:
         """
@@ -1172,20 +1174,19 @@ class QuantumCircuit:
         count_vector = np.zeros(2**self.__circuit_qubit_num)
 
         for run in range(num_of_runs):
-            collapsed_state = self.run_circuit()
+            if self.__is_dynamic:
+                collapsed_state = self.run_circuit()
+            else:
+                output_state = self.run_circuit()
+                collapsed_state = output_state.measure(return_as_str=False)
+                
             state_vector = collapsed_state.get_tensor_vector()
 
             # Return the index of corresponding to the collapsed state
             state_index = np.where(state_vector != 0)[0][0]
-
             count_vector[state_index] += 1
 
         count_vector /= num_of_runs
         count_vector = np.sqrt(count_vector)
 
         return MultiQubit(count_vector)
-        
-        
-
-        
-            

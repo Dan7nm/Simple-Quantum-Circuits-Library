@@ -274,7 +274,7 @@ class MultiQubit:
         for state_index,amplitude in enumerate(self.__tensor_vector):
             prob = abs(amplitude) ** 2
             # We could have prob that are not zero but close to zero to floating inaccuracies. This should solve this problem.
-            if prob > EPSILON:
+            if prob > 0:
                 upper_bound+=prob
                 state = format(state_index,f'0{self.__number_of_qubits}b')
                 interval_dict.update({(lower_bound,upper_bound):state})
