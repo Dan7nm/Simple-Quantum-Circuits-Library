@@ -490,21 +490,15 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         plt.tight_layout()
         outdir = f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs'
         os.makedirs(outdir, exist_ok=True)
-        plt.savefig(os.path.join(outdir, f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs_phase_error_{phi}.png'), dpi=300, bbox_inches='tight')
+        plt.savefig(os.path.join(outdir, f'qft_comparison_{qubits_num}_qubits_{measurement_num}_runs_phase_error_{phi:.2f}.png'), dpi=300, bbox_inches='tight')
         
         # Calculate and print similarity metrics
         cross_entropy_val = cross_entropy(reg_output_state, dyn_output_state)
         cross_entropy_val_err = cross_entropy(reg_output_state, reg_output_state_err_sampled)
         min_cross_entropy = cross_entropy(reg_output_state, reg_output_state)
-        print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.6f}")
-        print(f"Cross-entropy between regular and regular QFT with error (sampled): {cross_entropy_val_err:.6f}")
-        print(f"Minimum cross-entropy (self-comparison): {min_cross_entropy:.6f}")
-        
-        # Calculate fidelity (overlap between probability distributions)
-        fidelity = np.sum(np.sqrt(np.array(reg_probs) * np.array(dyn_probs)))
-        fidelity_err = np.sum(np.sqrt(np.array(reg_probs) * np.array(reg_probs_err)))
-        print(f"Fidelity between regular and dynamic QFT: {fidelity:.6f}")
-        print(f"Fidelity between regular and regular QFT with error (sampled): {fidelity_err:.6f}")
+        print(f"Cross-entropy between regular and dynamic QFT: {cross_entropy_val:.2f}")
+        print(f"Cross-entropy between regular and regular QFT with error (sampled): {cross_entropy_val_err:.2f}")
+        print(f"Minimum cross-entropy (self-comparison): {min_cross_entropy:.2f}")
     
     print("QFT comparison completed!")
 
@@ -644,24 +638,44 @@ def test_qft_phase_error_cross_entropy(input_state:MultiQubit = MultiQubit(qubit
     print(f"Plot saved as: {filename}")
     
     # plt.show()
-    
-    # Print summary statistics
-    print("\nSummary:")
-    print(f"Number of qubits: {number_of_qubits}")
-    print(f"Runs per phi value: {num_runs}")
-    print(f"Phase error range: 0 to {phi_max:.3f} radians")
-    print(f"Cross entropy at phi=0: {cross_entropy_values[0]:.6f} ± {cross_entropy_std[0]:.6f}")
-    print(f"Cross entropy at phi={phi_max:.3f}: {cross_entropy_values[-1]:.6f} ± {cross_entropy_std[-1]:.6f}")
-    print(f"Maximum cross entropy: {np.max(cross_entropy_values):.6f}")
-    print("Test completed successfully!")
 
 if __name__ == "__main__":
+    import time
+    start_time = time.perf_counter()
     # Random State:
-    random_state = MultiQubit(qubits_num=3)
+    random_state = MultiQubit(qubits_num=4)
+
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=100)
+
+    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=100)
     
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=300)
+
+    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=300)
+
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=500)
+
+    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=500)
+    
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=1000)
+
+    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=1000)
+
+    # Test QFT with phase errors 
+    test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=3000)
+
+    cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=3000)
+
     # Test QFT with phase errors 
     test_qft_phase_error_cross_entropy(input_state=random_state, num_runs=10, phi_max=np.pi/8, num_phi_points=10,measurement_num=5000)
 
     cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=10, measurement_num=5000)
 
-    print("=============== All tests passed! ===============")
+    end_time = time.perf_counter()
+    elapsed_minutes = (end_time - start_time) / 60
+    print(f"=============== All tests passed! ===============")
+    print(f"Total run time: {elapsed_minutes:.2f} minutes")
