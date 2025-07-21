@@ -16,32 +16,32 @@ EPSILON = 1e-10
 
 class QuantumCircuitCell:
     """
-    A class to represent a quantum circuit cell, with options for single-qubit gates, controlled gates, and swap gates, measurments.
-    
-    The gate can be specified as a single qubit gate (e.g., I, X, Y, Z, H, SWAP,M), a controlled qubit gate, 
-    or a swap gate, allowing for versatile operations on qubits in a quantum system.
+    QuantumCircuitCell represents a cell in a quantum circuit, supporting single-qubit,
+    controlled-qubit, swap, measurement, and conditional gates, with optional phase noise.
 
-    Example
-    --------
-    >>> gate = QuantumCircuitCell()
-    >>> gate.set_controlled_qubit_gate(1, 2, "P", np.pi/2)
-    >>> gate.print_matrix()
-    >>> print(gate.get_control_index())
-    >>> print(gate.get_target_index())
-    >>> print(gate.is_control_gate())
-    Output:
-    [ 1.00 0.00 ]
-    [ 0.00 0.00+1.00j ]
-    1
-    2
-    True
+    Attributes
+    ----------
+    __gate_matrix : ndarray of complex
+        Matrix representation of the gate.
+    __gate_type : str
+        Type of the gate ('I', 'X', 'Y', 'Z', 'H', 'P', 'SWAP', 'M').
+    __phi : float
+        Phase angle for phase or conditional gates.
+    __error_magnitude : float
+        Magnitude of phase error noise applied to the gate.
     """
 
     def __init__(self) -> None:
         """
-        Initialize the Gate object with an identity gate.
-        
-        The initial configuration represents the identity gate, with no control or target qubits set.
+        Initialize a QuantumCircuitCell as an identity gate with no targets or controls.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
         """
         self.__gate_matrix = None
         self.__gate_type = "I"
@@ -61,15 +61,21 @@ class QuantumCircuitCell:
     
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0, error_magnitude: float = 0.0) -> None:
         """
-        Set the gate matrix for a specified single qubit gate type or phase gate.
+        Configure a single-qubit or phase gate with optional phase noise.
 
-        :param gate_type: Type of the gate, should be one of ('I', 'X', 'Y', 'Z', 'H', 'P').
-        :type gate_type: str
-        :param phi: Rotation angle in radians, used only if gate_type is 'P' (phase gate).
-        :type phi: float
-        :param error_magnitude: Magnitude of phase error noise applied to the gate.
-        :type error_magnitude: float
-        :raises ValueError: If the gate type is invalid.
+        Parameters
+        ----------
+        gate_type : {'I','X','Y','Z','H','P'}
+            Gate identifier. 'P' uses phi for phase shift.
+        phi : float, optional
+            Phase angle in radians for 'P' gate (default 0.0).
+        error_magnitude : float, optional
+            Magnitude of random phase noise to apply (default 0.0).
+
+        Raises
+        ------
+        ValueError
+            If gate_type is not recognized.
         """
         self.__gate_matrix = self.__get_gate_matrix(gate_type, phi, error_magnitude)
         self.__gate_type = gate_type
@@ -77,19 +83,25 @@ class QuantumCircuitCell:
 
     def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str = 'I', phi: float = 0.0, error_magnitude: float = 0.0) -> None:
         """
-        Set up a controlled gate with the specified control and target qubits and gate type.
+        Configure a controlled-qubit gate with optional phase and noise.
 
-        :param control_qubit: Index of the control qubit.
-        :type control_qubit: int
-        :param target_qubit: Index of the target qubit.
-        :type target_qubit: int
-        :param gate_type: Type of the gate, should be one of ('I', 'X', 'Y', 'Z', 'H', 'P').
-        :type gate_type: str
-        :param phi: Rotation angle in radians, used only if gate_type is 'P' (phase gate).
-        :type phi: float
-        :param error_magnitude: Magnitude of phase error noise applied to the gate.
-        :type error_magnitude: float
-        :raises ValueError: If indices are negative or if the gate type is invalid.
+        Parameters
+        ----------
+        control_qubit : int
+            Index of the control qubit (>= 0).
+        target_qubit : int
+            Index of the target qubit (>= 0).
+        gate_type : {'I','X','Y','Z','H','P'}, optional
+            Type of gate (default 'I'). 'P' uses phi.
+        phi : float, optional
+            Phase angle for 'P' gate (default 0.0).
+        error_magnitude : float, optional
+            Phase error noise magnitude (default 0.0).
+
+        Raises
+        ------
+        ValueError
+            If control_qubit or target_qubit is negative.
         """
         self.__validate_indices(control_qubit, target_qubit)
         self.__control_qubit, self.__target_qubit = control_qubit, target_qubit
@@ -412,7 +424,20 @@ class QuantumCircuitCell:
             # When bit is 1, restore the original gate matrix with the correct phase and error
             self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi, self.__error_magnitude)
  
-    def __get_error_matrix(self,error_magnitude: float) -> NDArray[np.complex128]:
+    def __get_error_matrix(self, error_magnitude: float) -> NDArray[np.complex128]:
+        """
+        Generate a random 2×2 error matrix for phase noise.
+
+        Parameters
+        ----------
+        error_magnitude : float
+            Maximum deviation for random phase error.
+
+        Returns
+        -------
+        NDArray[np.complex128]
+            2×2 complex matrix representing phase error perturbation.
+        """
         sigma_x = np.array([[0, 1], [1, 0]], dtype=complex)
         sigma_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
         sigma_z = np.array([[1, 0], [0, -1]], dtype=complex)
