@@ -101,7 +101,7 @@ class QuantumCircuit:
     q4: ──⨉─────────
     Tensor product in basis state form: |11011⟩
     """
-    def __init__(self,input_state: MultiQubit, classical_register: ClassicalRegister= None, num_of_layers: int = 1, device= None) -> None:
+    def __init__(self, input_state: MultiQubit, classical_register: ClassicalRegister= None, num_of_layers: int = 1, device= None, error_magnitude: float = 0.0) -> None:
         # Select a device to compute the matrices:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
@@ -130,6 +130,8 @@ class QuantumCircuit:
         # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
 
+        # Error magnitude for phase noise in gates
+        self.__error_magnitude = error_magnitude
         # Set value for if the gate is regular or dynamic circuit:
         self.__is_dynamic = False
     
@@ -159,7 +161,7 @@ class QuantumCircuit:
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(target_qubit,layer_index)
         gate = QuantumCircuitCell()
-        gate.set_single_qubit_gate(gate_type,phi)
+        gate.set_single_qubit_gate(gate_type, phi, self.__error_magnitude)
         self.__circuit[layer_index][target_qubit] = gate
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
@@ -191,7 +193,7 @@ class QuantumCircuit:
         self.__valid_qubit_index(target_qubit, layer_index)
         self.__valid_qubit_index(control_qubit, layer_index)
         gate = QuantumCircuitCell()
-        gate.set_controlled_qubit_gate(control_qubit,target_qubit,gate_type,phi)
+        gate.set_controlled_qubit_gate(control_qubit, target_qubit, gate_type, phi, self.__error_magnitude)
         self.__circuit[layer_index][target_qubit] = gate
         self.__circuit[layer_index][control_qubit] = gate
 
@@ -1032,7 +1034,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_conditional_gate(gate_type,phi,self.__classical_register,c_reg_index)
+        gate.set_conditional_gate(gate_type, phi, self.__classical_register, c_reg_index, self.__error_magnitude)
         self.__circuit[layer_index][target_qubit]=gate
         
         self.__circuit_is_computed = False

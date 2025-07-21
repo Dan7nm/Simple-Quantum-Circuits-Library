@@ -5,6 +5,7 @@ from numpy.typing import NDArray
 from c_register import ClassicalRegister
 from multi_qubit import MultiQubit
 from typing import NewType
+from scipy.linalg import expm  # for exponentiation of Pauli generators
 
 # Constants
 INV_SINGLE_GATE_TYP = "Invalid single qubit gate type. Must be one of: "
@@ -36,19 +37,6 @@ class QuantumCircuitCell:
     True
     """
 
-    # Define gate matrices as class constants
-    __gate_matrices = {
-        'I': np.array([[1, 0], [0, 1]], dtype=complex),
-        'X': np.array([[0, 1], [1, 0]], dtype=complex),
-        'Y': np.array([[0, -1j], [1j, 0]], dtype=complex),
-        'Z': np.array([[1, 0], [0, -1]], dtype=complex),
-        'H': np.array([[1, 1], [1, -1]], dtype=complex) / np.sqrt(2),
-    }
-    
-    # Class variable for phase error parameter
-    _phase_error_enabled = False
-    _phase_error_magnitude = 0.0
-
     def __init__(self) -> None:
         """
         Initialize the Gate object with an identity gate.
@@ -68,74 +56,10 @@ class QuantumCircuitCell:
 
         self.__c_reg = None
         self.__c_reg_index = 0
-
-    @classmethod
-    def set_phase_error(cls, phi: float) -> None:
-        """
-        Set the maximum phase error magnitude for all quantum circuit cells.
-        
-        When enabled, each gate will have a random phase error applied uniformly 
-        distributed between -phi and +phi.
-        
-        :param phi: Maximum phase error magnitude in radians. If phi > 0, phase errors are enabled.
-        :type phi: float
-        """
-        cls._phase_error_magnitude = abs(phi)
-        cls._phase_error_enabled = phi > 0
+        # store phase error magnitude for gate
+        self.__error_magnitude = 0.0
     
-    @classmethod 
-    def disable_phase_error(cls) -> None:
-        """
-        Disable phase error for all quantum circuit cells.
-        """
-        cls._phase_error_enabled = False
-        cls._phase_error_magnitude = 0.0
-    
-    @classmethod
-    def get_phase_error_status(cls) -> tuple[bool, float]:
-        """
-        Get the current phase error status.
-        
-        :return: Tuple of (enabled, magnitude) where enabled is bool and magnitude is float
-        :rtype: tuple[bool, float]
-        """
-        return cls._phase_error_enabled, cls._phase_error_magnitude
-    
-    def _apply_phase_error(self, matrix: NDArray[np.complex128]) -> NDArray[np.complex128]:
-        """
-        Apply a random relative phase error to a gate matrix.
-        
-        The relative phase error is implemented as a 2x2 diagonal matrix with entries
-        [1, exp(i*random_phase)] where random_phase is uniformly distributed between 
-        -phase_error_magnitude and +phase_error_magnitude. This introduces a relative
-        phase between the |0⟩ and |1⟩ basis states.
-        
-        :param matrix: The original gate matrix
-        :type matrix: NDArray[np.complex128]
-        :return: Gate matrix with relative phase error applied
-        :rtype: NDArray[np.complex128]
-        """
-        if not self._phase_error_enabled:
-            return matrix
-            
-        # Generate random phase error between -phi and +phi
-        random_phase = random.uniform(-self._phase_error_magnitude, self._phase_error_magnitude)
-        
-        # Create custom phase error matrix E as per specified formula
-        sqrt3 = np.sqrt(3)
-        theta = random_phase * sqrt3
-        cos_t = np.cos(theta)
-        sin_t = np.sin(theta)
-        alpha = 1j / sqrt3
-        phase_error_matrix = np.array([
-            [cos_t - alpha * sin_t, -alpha * (1 - 1j) * sin_t],
-            [-alpha * (1 + 1j) * sin_t, cos_t + alpha * sin_t]
-        ], dtype=complex)
-        
-        # Apply the phase error matrix after the original matrix
-        return np.dot(matrix,phase_error_matrix)
-
-    def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
+    def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0, error_magnitude: float = 0.0) -> None:
         """
         Set the gate matrix for a specified single qubit gate type or phase gate.
 
@@ -143,12 +67,15 @@ class QuantumCircuitCell:
         :type gate_type: str
         :param phi: Rotation angle in radians, used only if gate_type is 'P' (phase gate).
         :type phi: float
+        :param error_magnitude: Magnitude of phase error noise applied to the gate.
+        :type error_magnitude: float
         :raises ValueError: If the gate type is invalid.
         """
-        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi, error_magnitude)
         self.__gate_type = gate_type
+        self.__error_magnitude = error_magnitude
 
-    def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str = 'I', phi: float = 0.0) -> None:
+    def set_controlled_qubit_gate(self, control_qubit: int, target_qubit: int, gate_type: str = 'I', phi: float = 0.0, error_magnitude: float = 0.0) -> None:
         """
         Set up a controlled gate with the specified control and target qubits and gate type.
 
@@ -160,13 +87,16 @@ class QuantumCircuitCell:
         :type gate_type: str
         :param phi: Rotation angle in radians, used only if gate_type is 'P' (phase gate).
         :type phi: float
+        :param error_magnitude: Magnitude of phase error noise applied to the gate.
+        :type error_magnitude: float
         :raises ValueError: If indices are negative or if the gate type is invalid.
         """
         self.__validate_indices(control_qubit, target_qubit)
         self.__control_qubit, self.__target_qubit = control_qubit, target_qubit
         self.__is_control_gate = True
-        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi, error_magnitude)
         self.__gate_type = gate_type
+        self.__error_magnitude = error_magnitude
 
     def set_swap_gate(self, first_qubit: int, second_qubit: int) -> None:
         """
@@ -192,14 +122,6 @@ class QuantumCircuitCell:
         matrix : NDArray[np.complex128]
             The matrix of the current get.
         """
-        # Measurement or classical bit cells should not get phase error
-        if self.__is_measure_gate or self.__is_classical_bit:
-            return self.__gate_matrix.copy()
-        # Apply phase error to base matrix on each retrieval for randomness
-        if self.__gate_type != 'I' and self._phase_error_enabled:
-            # If the gate is not an identity gate, apply phase error
-            return self._apply_phase_error(self.__gate_matrix.copy())
-        # Identity or phase error disabled: return clean matrix
         return self.__gate_matrix.copy()
     
     def get_control_index(self) -> int:
@@ -255,23 +177,47 @@ class QuantumCircuitCell:
             formatted_row.append(']')
             print(" ".join(formatted_row))
 
-    def __get_gate_matrix(self, gate_type: str, phi: float=0.0) -> NDArray[np.complex128]:
+    def __get_gate_matrix(self, gate_type: str, phi: float=0.0,error_magnitude: float = 0.0) -> NDArray[np.complex128]:
         """
-        Retrieve the gate matrix based on the specified type, including phase gate support.
+        Generate a single-qubit gate matrix via Pauli exponentials.
 
-        :param gate_type: Type of the gate, such as 'I', 'X', 'Y', 'Z', 'H', or 'P' for phase gate.
-        :type gate_type: str
-        :param phi: Rotation angle in radians, used only if gate_type is 'P' (phase gate).
-        :type phi: float
-        :return: The matrix for the specified gate type.
-        :rtype: NDArray[np.complex128]
-        :raises ValueError: If the gate type is invalid.
+        Parameters
+        ----------
+        gate_type : {'I', 'X', 'Y', 'Z', 'H', 'P'}
+        phi : float, optional
+            Phase angle in radians for P gate. Default is 0.
+
+        Returns
+        -------
+        NDArray[np.complex128]
+            2×2 unitary matrix implementing the specified gate.
         """
-        if gate_type == 'P':
-            return np.array([[1, 0], [0, np.exp(1j * phi)]], dtype=complex)
-        if gate_type not in QuantumCircuitCell.__gate_matrices:
-            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(QuantumCircuitCell.__gate_matrices.keys()) + ['P']}")
-        return QuantumCircuitCell.__gate_matrices[gate_type].copy()
+        # Pauli matrices
+        sigma_x = np.array([[0, 1], [1, 0]], dtype=complex)
+        sigma_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
+        sigma_z = np.array([[1, 0], [0, -1]], dtype=complex)
+        identity = np.eye(2, dtype=complex)
+
+        # Apply phase error based on error magnitude
+        noisy_matrix = self.__get_error_matrix(error_magnitude) if error_magnitude > 0 else identity
+
+        # Gate mappings via exponentials
+        if gate_type == 'I':
+            return identity
+        elif gate_type == 'X':
+            return expm(-1j * np.pi/2 * sigma_x + noisy_matrix)
+        elif gate_type == 'Y':
+            return expm(-1j * np.pi/2 * sigma_y + noisy_matrix)
+        elif gate_type == 'Z':
+            return expm(-1j * np.pi/2 * sigma_z + noisy_matrix)
+        elif gate_type == 'H':
+            # Hadamard: rotation around (σ_x + σ_z)/√2 by π/2
+            return expm(-1j * np.pi/2 * (identity + (sigma_x + sigma_z)/ np.sqrt(2)) + noisy_matrix)
+        elif gate_type == 'P':
+            # Phase gate P(phi): diag([1, e^{i phi}]) via (I - σ_z)/2 projector
+            return expm((1j * phi * (identity - sigma_z) / 2) + noisy_matrix)
+        else:
+            raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(['I','X','Y','Z','H','P'])}")
 
     def __validate_indices(self, control_qubit: int, target_qubit: int) -> None:
         """
@@ -356,7 +302,8 @@ class QuantumCircuitCell:
         self.__is_measure_gate = True
         self.__gate_type = 'M'
         # We set the measure gate as an idetity cause we perform the measurement using another method and we do not change the resulting state.
-        self.__gate_matrix = QuantumCircuitCell.__gate_matrices["I"]
+        # Initialize measurement gate as identity with existing error magnitude
+        self.__gate_matrix = self.__get_gate_matrix('I', 0.0, 0.0)
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
         self.__target_qubit = target_qubit
@@ -374,7 +321,7 @@ class QuantumCircuitCell:
         """
         return self.__is_conditional_gate
     
-    def set_conditional_gate(self,gate_type: str,phi: float ,c_reg: ClassicalRegister,c_reg_index: int) -> None:
+    def set_conditional_gate(self, gate_type: str, phi: float, c_reg: ClassicalRegister, c_reg_index: int, error_magnitude: float = 0.0) -> None:
         """
         This method sets this gate to be a a conditional gate.
 
@@ -386,30 +333,17 @@ class QuantumCircuitCell:
             The classical register object to which the classical bit will be stored.
         c_reg_int : int
             The index corresponding to the exact classical bit index in the classical register.
+        error_magnitude: float
+            Magnitude of phase error noise applied to the gate.
 
         """
-        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi)
+        self.__gate_matrix = self.__get_gate_matrix(gate_type, phi, error_magnitude)
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
         self.__gate_type = gate_type
         self.__phi = phi  # Store the phase parameter
         self.__is_conditional_gate = True
-
-    def conditional_gate_input(self,classical_bit:int,gate_type:str,phi:float=0.0) -> None:
-        """
-        This method recieves an input classical bit. If the input bit is one we apply the desired unitary operation otherwise we don't won't to change the qubit state applying the identity matrix.
-
-        Parameters
-        ----------
-        classical_bit : int
-            The input classical bit.
-        gate_type : str
-            The desired unitary opertion gate type.
-        """
-        if classical_bit:
-            self.set_single_qubit_gate(gate_type,phi)
-        else:
-            self.set_single_qubit_gate("I")
+        self.__error_magnitude = error_magnitude
 
     def set_classical_bit(self) -> None:
         """
@@ -417,7 +351,8 @@ class QuantumCircuitCell:
         """
         self.__is_classical_bit = True
         # We set the classical bit cell to be an idenity matrix because we to not want to change the quantum state if the specified qubit.
-        self.__gate_matrix = QuantumCircuitCell.__gate_matrices["I"]
+        # Initialize classical bit as identity with existing error magnitude
+        self.__gate_matrix = self.__get_gate_matrix('I', 0.0, 0.0)
         self.__gate_type = "I"   
         self.__is_control_gate = False
         self.__is_swap_gate = False
@@ -474,5 +409,14 @@ class QuantumCircuitCell:
         if not bit:
             self.__gate_matrix = self.__get_gate_matrix('I', 0.0)
         else:
-            # When bit is 1, restore the original gate matrix with the correct phase
-            self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi)
+            # When bit is 1, restore the original gate matrix with the correct phase and error
+            self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi, self.__error_magnitude)
+ 
+    def __get_error_matrix(self,error_magnitude: float) -> NDArray[np.complex128]:
+        sigma_x = np.array([[0, 1], [1, 0]], dtype=complex)
+        sigma_y = np.array([[0, -1j], [1j, 0]], dtype=complex)
+        sigma_z = np.array([[1, 0], [0, -1]], dtype=complex)
+
+        random_error = random.uniform(-error_magnitude, error_magnitude)
+
+        return (-1j * random_error * (sigma_x + sigma_y + sigma_z)) / np.sqrt(3)
