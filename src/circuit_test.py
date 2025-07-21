@@ -599,23 +599,25 @@ if __name__ == "__main__":
     random_state = MultiQubit(qubits_num=3)
 
     # measurement_nums = np.linspace(100,5000,10,dtype=int)
-    measurement_nums = [100, 300, 500, 1000, 3000, 5000,10000]
+    measurement_nums = [100, 300, 500, 1000, 3000]
         
     print("=" * 80)
     print(f"Testing QFT Phase Error Cross Entropy ({3} qubits)")
     print("=" * 80)
 
-    for measurement_num in measurement_nums:
-        print(f"Testing QFT on random state with {measurement_num} measurements...")
-        print("=" * 80)
+    # for measurement_num in measurement_nums:
+    #     print(f"Testing QFT on random state with {measurement_num} measurements...")
+    #     print("=" * 80)
 
-        test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=measurement_num)
+    #     test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=measurement_num)
 
-        print("=" * 80)
+    #     print("=" * 80)
 
-        cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=30, measurement_num=measurement_num)
+    #     cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=30, measurement_num=measurement_num)
 
-        print("=" * 80)
+    #     print("=" * 80)
+
+    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=10000)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60

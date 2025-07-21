@@ -121,12 +121,18 @@ class QuantumCircuitCell:
         # Generate random phase error between -phi and +phi
         random_phase = random.uniform(-self._phase_error_magnitude, self._phase_error_magnitude)
         
-        # Create 2x2 relative phase error matrix: diag([1, exp(i*random_phase)])
-        # This applies no phase to |0⟩ and a random phase to |1⟩
-        phase_error_matrix = np.array([[1, 0], 
-                                     [0, np.exp(1j * random_phase)]], dtype=complex)
+        # Create custom phase error matrix E as per specified formula
+        sqrt3 = np.sqrt(3)
+        theta = random_phase * sqrt3
+        cos_t = np.cos(theta)
+        sin_t = np.sin(theta)
+        alpha = 1j / sqrt3
+        phase_error_matrix = np.array([
+            [cos_t - alpha * sin_t, -alpha * (1 - 1j) * sin_t],
+            [-alpha * (1 + 1j) * sin_t, cos_t + alpha * sin_t]
+        ], dtype=complex)
         
-        # Apply the phase error by matrix multiplication
+        # Apply the phase error matrix after the original matrix
         return np.dot(matrix,phase_error_matrix)
 
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0) -> None:
@@ -186,12 +192,15 @@ class QuantumCircuitCell:
         matrix : NDArray[np.complex128]
             The matrix of the current get.
         """
+        # Measurement or classical bit cells should not get phase error
+        if self.__is_measure_gate or self.__is_classical_bit:
+            return self.__gate_matrix.copy()
         # Apply phase error to base matrix on each retrieval for randomness
         if self.__gate_type != 'I' and self._phase_error_enabled:
             # If the gate is not an identity gate, apply phase error
             return self._apply_phase_error(self.__gate_matrix.copy())
-        else:
-            return self.__gate_matrix.copy()
+        # Identity or phase error disabled: return clean matrix
+        return self.__gate_matrix.copy()
     
     def get_control_index(self) -> int:
         """
