@@ -211,23 +211,23 @@ class QuantumCircuitCell:
         identity = np.eye(2, dtype=complex)
 
         # Apply phase error based on error magnitude
-        noisy_matrix = self.__get_error_matrix(error_magnitude) if error_magnitude > 0 else identity
+        noisy_matrix = self.__get_error_matrix(error_magnitude) if error_magnitude > 0 else np.zeros((2,2),dtype=complex)
 
         # Gate mappings via exponentials
         if gate_type == 'I':
             return identity
         elif gate_type == 'X':
-            return expm(-1j * np.pi/2 * sigma_x + noisy_matrix)
+            return expm(-1j * (np.pi/2 * sigma_x) + noisy_matrix)
         elif gate_type == 'Y':
-            return expm(-1j * np.pi/2 * sigma_y + noisy_matrix)
+            return expm(-1j * (np.pi/2 * sigma_y) + noisy_matrix)
         elif gate_type == 'Z':
-            return expm(-1j * np.pi/2 * sigma_z + noisy_matrix)
+            return expm(-1j * (np.pi/2 * sigma_z) + noisy_matrix)
         elif gate_type == 'H':
             # Hadamard: rotation around (σ_x + σ_z)/√2 by π/2
-            return expm(-1j * np.pi/2 * (identity + (sigma_x + sigma_z)/ np.sqrt(2)) + noisy_matrix)
+            return expm(-1j * np.pi/2 * ((sigma_x + sigma_z)/ np.sqrt(2)) + noisy_matrix)
         elif gate_type == 'P':
             # Phase gate P(phi): diag([1, e^{i phi}]) via (I - σ_z)/2 projector
-            return expm((1j * phi * (identity - sigma_z) / 2) + noisy_matrix)
+            return expm(-1j * (phi * (sigma_z - identity) / 2) + noisy_matrix)
         else:
             raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(['I','X','Y','Z','H','P'])}")
 
@@ -419,7 +419,8 @@ class QuantumCircuitCell:
 
         # If the bit is zero we revert the gate to be an identity gate otherwise the bit is one and we apply the desired unitary.
         if not bit:
-            self.__gate_matrix = self.__get_gate_matrix('I', 0.0)
+            # Apply identity with stored error magnitude for conditional gate
+            self.__gate_matrix = self.__get_gate_matrix('I', 0.0, self.__error_magnitude)
         else:
             # When bit is 1, restore the original gate matrix with the correct phase and error
             self.__gate_matrix = self.__get_gate_matrix(self.__gate_type, self.__phi, self.__error_magnitude)
