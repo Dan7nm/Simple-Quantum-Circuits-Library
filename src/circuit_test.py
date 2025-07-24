@@ -593,7 +593,7 @@ if __name__ == "__main__":
 
     #     print("=" * 80)
 
-    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=10000)
+    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=10,measurement_num=5000)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60
