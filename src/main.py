@@ -7,27 +7,11 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   mt = MultiQubit(vector=np.array([1,0,0,0,0,0,0,0], dtype=complex))
-   circuit = QuantumCircuit(mt,error_magnitude=0.0)
-   mt.print_tensor_form()
-   circuit.load_qft_preset()
-
-   # circuit.draw_circuit()
-
-   result = circuit.run_circuit()
-
-   result.plot_amplitudes()
-
-   # mt = MultiQubit(vector=np.array([1,0,0,0], dtype=complex))
-   # circuit = QuantumCircuit(mt,error_magnitude=0.0)
-   # mt.print_tensor_form()
-
-   # circuit.add_single_qubit_gate(0,0,'X',0.0)
-   # # circuit.draw_circuit()
-
-   # result = circuit.run_circuit()
-
-   # result.print_tensor_form()
+   mt = MultiQubit(qubits_num=3)
+   c_reg = ClassicalRegister(num_bits=3)
+   circuit = QuantumCircuit(input_state=mt,classical_register=c_reg)
+   circuit.load_dynamic_qft_preset()
+   circuit.draw_circuit()
 
 
    # Calculate the runtime:

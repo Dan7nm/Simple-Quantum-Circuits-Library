@@ -572,13 +572,13 @@ if __name__ == "__main__":
     import time
     start_time = time.perf_counter()
     # Random State:
-    random_state = MultiQubit(qubits_num=3)
+    random_state = MultiQubit(qubits_num=5)
 
     # measurement_nums = np.linspace(100,5000,10,dtype=int)
     measurement_nums = [100, 300, 500, 1000, 3000]
         
     print("=" * 80)
-    print(f"Testing QFT Phase Error Cross Entropy ({3} qubits)")
+    print(f"Testing QFT Phase Error Cross Entropy (5 qubits)")
     print("=" * 80)
 
     # for measurement_num in measurement_nums:
@@ -593,7 +593,7 @@ if __name__ == "__main__":
 
     #     print("=" * 80)
 
-    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=10,measurement_num=5000)
+    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/2,num_phi_points=10,measurement_num=5000)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60

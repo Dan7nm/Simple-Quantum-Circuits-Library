@@ -152,7 +152,27 @@ class QuantumCircuitCell:
         if self.__is_measure_gate or self.__is_classical_bit:
             return identity
 
-        random_error = 0.0 if self.__error_magnitude == 0 else np.random.uniform(0, self.__error_magnitude)
+        # noisy_matrix = self.__get_error_matrix(self.__error_magnitude) if self.__error_magnitude > 0 else np.zeros((2, 2), dtype=complex)
+        
+        # # Gate mappings via exponentials with fresh random error
+        # if gate_type == 'I':
+        #     return identity
+        # elif gate_type == 'X':
+        #     return expm(-1j * ((np.pi) / 2) * sigma_x + noisy_matrix)
+        # elif gate_type == 'Y':
+        #     return expm(-1j * ((np.pi) / 2) * sigma_y + noisy_matrix)
+        # elif gate_type == 'Z':
+        #     return expm(-1j * ((np.pi) / 2) * sigma_z + noisy_matrix)
+        # elif gate_type == 'H':
+        #     # Hadamard: rotation around (σ_x + σ_z)/√2 by π/2
+        #     return expm(-1j * ((np.pi) / 2) * ((sigma_x + sigma_z)/ np.sqrt(2)) + noisy_matrix)
+        # elif gate_type == 'P':
+        #     # Phase gate P(phi): diag([1, e^{i phi}]) via (I - σ_z)/2 projector
+        #     return expm(-1j * ((phi) * (sigma_z - identity) / 2) + noisy_matrix)
+        # else:
+        #     raise ValueError(f"{INV_SINGLE_GATE_TYP} {', '.join(['I','X','Y','Z','H','P'])}")
+
+        random_error = 0.0 if self.__error_magnitude == 0 else np.random.uniform(-self.__error_magnitude, self.__error_magnitude)
         
         # Gate mappings via exponentials with fresh random error
         if gate_type == 'I':
@@ -446,4 +466,4 @@ class QuantumCircuitCell:
 
         random_error = np.random.uniform(-error_magnitude, error_magnitude)
 
-        return (-1j * random_error * (sigma_x + sigma_y + sigma_z) / np.sqrt(3)) 
+        return (-1j * (random_error / 2) * (sigma_x + sigma_y + sigma_z) / np.sqrt(3)) 
