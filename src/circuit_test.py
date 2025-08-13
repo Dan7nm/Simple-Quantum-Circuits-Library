@@ -410,7 +410,7 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
     qubits_num = input_state.get_number_of_qubits()
 
     # Set up regular QFT circuit (no error)
-    regular_circuit = QuantumCircuit(input_state=input_state, error_magnitude=0.0)
+    regular_circuit = QuantumCircuit(input_state=input_state)
     regular_circuit.load_qft_preset()
 
     # Run regular QFT circuit (no phase error)
@@ -426,10 +426,10 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         # Create classical register for dynamic circuit
         classical_reg = ClassicalRegister(num_bits=qubits_num)
         # Set up dynamic QFT circuit with phase error
-        dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_magnitude=phi)
+        dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_single_gate=phi,error_control_gate=phi)
         dynamic_circuit.load_dynamic_qft_preset()
         # Set up regular QFT circuit with phase error
-        regular_circuit_err = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_magnitude=phi)
+        regular_circuit_err = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_single_gate=phi,error_control_gate=phi)
         regular_circuit_err.load_qft_preset()
         
         # Run dynamic QFT circuit
@@ -437,7 +437,6 @@ def cmp_qft_results_prob_distr(input_state: MultiQubit, phi_max: float = np.pi/8
         
         # Run regular QFT circuit (with error)
         reg_output_state_err_sampled = regular_circuit_err.run_many(num_of_runs=measurement_num)
-        
         
         # Get probability data for plotting
         states_list = [format(state, f"0{qubits_num}b") for state in range(2 ** qubits_num)]
@@ -507,7 +506,7 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
     cross_entropies_values_dyn = []
 
     # Get reference QFT result (no errors)
-    reference_circuit = QuantumCircuit(input_state=input_state, error_magnitude=0.0)
+    reference_circuit = QuantumCircuit(input_state=input_state)
     reference_circuit.load_qft_preset()
     reference_result = reference_circuit.run_circuit()
 
@@ -518,11 +517,11 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
     for i, phi in enumerate(phi_values):
         print(f"Cross Entropy Plot Progress: {i+1}/{num_phi_points} (phi = {phi:.3f})", end="\r", flush=True)
         # Regular QFT with error magnitude phi
-        test_circuit = QuantumCircuit(input_state=input_state, error_magnitude=phi)
+        test_circuit = QuantumCircuit(input_state=input_state, error_single_gate=phi,error_control_gate=phi)
         test_circuit.load_qft_preset()
         sampled_result = test_circuit.run_many(num_of_runs=measurement_num)
         # Dynamic QFT with error magnitude phi
-        dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_magnitude=phi)
+        dynamic_circuit = QuantumCircuit(input_state=input_state, classical_register=classical_reg, error_single_gate=phi,error_control_gate=phi)
         dynamic_circuit.load_dynamic_qft_preset()
         dynamic_result = dynamic_circuit.run_many(num_of_runs=measurement_num)
         
