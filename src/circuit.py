@@ -46,7 +46,10 @@ class QuantumCircuit:
         The number of layers in the quantum circuit. Defaults to 1.
     device : optional
         The computation device to run the circuit on (e.g., 'cpu', 'gpu'). Defaults to `None`.
-        
+    error_single_gate : float, optional
+        The error magnitude for single qubit gates. Defaults to 0.0.
+    error_control_gate : float, optional
+        The error magnitude for controlled gates. Defaults to 0.0.
 
     Attributes
     ----------
@@ -70,42 +73,15 @@ class QuantumCircuit:
         A flag indicating whether the circuit has been computed (False by default).
     is_dynamic : bool
         A flag indicating whether the circuit is dynamic (False by default).
+    error_single_gate : float
+        The error magnitude for single qubit gates, used to simulate noise in the circuit.
+    error_control_gate : float
+        The error magnitude for controlled gates, used to simulate noise in the circuit.
 
-        
-    Examples
-    --------
-    >>> q0 = Qubit(1,0)
-    >>> q1 = Qubit(0,1)
-    >>> mt = MultiQubit()
-    >>> mt.add_qubit(q1)
-    >>> mt.add_qubit(q1)
-    >>> mt.add_qubit(q1)
-    >>> mt.add_qubit(q0)
-    >>> mt.add_qubit(q0)
-    >>> mt.print_tensor_form()
-    >>> circuit = QuantumCircuit(mt)
-    >>> circuit.add_controlled_qubit_gate(0,0,1,"X")
-    >>> circuit.add_layer()
-    >>> circuit.add_single_qubit_gate(3,1,"X")
-    >>> circuit.add_single_qubit_gate(0,1,"X")
-    >>> circuit.add_swap_gate(2,4,0)
-    >>> circuit.draw_circuit("mpl")
-    >>> result = circuit.run_circuit()
-    >>> result.print_tensor_form()
-    Tensor product in basis state form: |11100⟩
-    Circuit Diagram:
-    q0: ─[CX]──[X]──
-    q1: ──●0────────
-    q2: ──⨉─────────
-    q3: ───────[X]──
-    q4: ──⨉─────────
-    Tensor product in basis state form: |11011⟩
     """
-    def __init__(self, input_state: MultiQubit, classical_register: ClassicalRegister= None, num_of_layers: int = 1, device= None, error_magnitude: float = 0.0) -> None:
-        # Select a device to compute the matrices:
+    def __init__(self, input_state: MultiQubit, classical_register: ClassicalRegister= None, num_of_layers: int = 1, device= None, error_single_gate: float = 0.0, error_control_gate:float = 0.0) -> None:
         self.__device = device or torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         
-        # Assign the classical register and the quantum state to the circuit
         self.__quantum_state = input_state
         if classical_register is not None and not isinstance(classical_register,ClassicalRegister):
             raise ValueError(INV_C_REG)
@@ -114,25 +90,21 @@ class QuantumCircuit:
         self.__circuit_qubit_num = input_state.get_number_of_qubits()
         self.__number_of_layers = 0
 
-        # Check if valid inputs:
         self.__valid_pos_val(num_of_layers)
 
-        # Initialize a circuit with the one layer with no gates (identity gate is counted as no gate)
         self.__circuit= np.empty((0, self.__circuit_qubit_num),dtype=QuantumCircuitCell)
 
-        # Add additional layers as specified in number of layers:
         for i in range(0,num_of_layers):
             self.add_layer()
 
-        # Initialize the circuit operator as an identity on all qubits.
         self.__circuit_operator = np.identity(2 ** self.__circuit_qubit_num,dtype=np.complex128)
 
-        # The circuit was updated show it should be computed to avoid getting a wrong state.
         self.__circuit_is_computed = False
 
-        # Error magnitude for phase noise in gates
-        self.__error_magnitude = error_magnitude
-        # Set value for if the gate is regular or dynamic circuit:
+        self.__error_single_gate = error_single_gate
+
+        self.__error_control_gate = error_control_gate
+
         self.__is_dynamic = False
     
     def add_single_qubit_gate(self, target_qubit: int, layer_index: int, gate_type: str, phi: float = 0.0) -> None:
@@ -161,7 +133,7 @@ class QuantumCircuit:
         self.__valid_layer_index(layer_index)
         self.__valid_qubit_index(target_qubit,layer_index)
         gate = QuantumCircuitCell()
-        gate.set_single_qubit_gate(gate_type, phi, self.__error_magnitude)
+        gate.set_single_qubit_gate(gate_type, phi, self.__error_single_gate)
         self.__circuit[layer_index][target_qubit] = gate
 
         # The circuit was updated show it should be computed to avoid getting a wrong state.
@@ -193,7 +165,7 @@ class QuantumCircuit:
         self.__valid_qubit_index(target_qubit, layer_index)
         self.__valid_qubit_index(control_qubit, layer_index)
         gate = QuantumCircuitCell()
-        gate.set_controlled_qubit_gate(control_qubit, target_qubit, gate_type, phi, self.__error_magnitude)
+        gate.set_controlled_qubit_gate(control_qubit, target_qubit, gate_type, phi, self.__error_control_gate)
         self.__circuit[layer_index][target_qubit] = gate
         self.__circuit[layer_index][control_qubit] = gate
 
@@ -1058,7 +1030,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_conditional_gate(gate_type, phi, self.__classical_register, c_reg_index, self.__error_magnitude)
+        gate.set_conditional_gate(gate_type, phi, self.__classical_register, c_reg_index, self.__error_single_gate)
         self.__circuit[layer_index][target_qubit]=gate
         
         self.__circuit_is_computed = False
