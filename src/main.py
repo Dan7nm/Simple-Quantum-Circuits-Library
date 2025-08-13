@@ -7,10 +7,10 @@ def main():
    start_time = time.perf_counter()
    
    # Write code here:
-   mt = MultiQubit(qubits_num=5)
-   c_reg = ClassicalRegister(num_bits=5)
+   mt = MultiQubit(qubits_num=6)
+   c_reg = ClassicalRegister(num_bits=6)
    circuit = QuantumCircuit(input_state=mt,classical_register=c_reg)
-   circuit.load_dynamic_qft_preset(m=2)
+   circuit.load_dynamic_qft_preset()
    circuit.draw_circuit()
 
 

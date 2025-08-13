@@ -844,9 +844,30 @@ class QuantumCircuit:
 
         fig, ax = plt.subplots(figsize=(self.__number_of_layers * 1.5,self.__circuit_qubit_num * 0.8))
 
+        # Determine measurement layer (if any) for each qubit
+        meas_layer_by_qubit = {q: None for q in range(self.__circuit_qubit_num)}
+        for layer in range(self.__number_of_layers):
+            for q in range(self.__circuit_qubit_num):
+                cell = self.__circuit[layer][q]
+                if cell is not None and cell.is_measure_gate() and meas_layer_by_qubit[q] is None:
+                    meas_layer_by_qubit[q] = layer
+
         # Add horizontal lines for qubits (ascending order from top to bottom)
+        # Draw single line up to the measurement, then double-line (classical) after the measurement.
+        dy = 0.04  # vertical separation for classical double line
         for qubit_index in range(self.__circuit_qubit_num):
-            ax.plot([0, self.__number_of_layers], [self.__circuit_qubit_num - 1 - qubit_index,self.__circuit_qubit_num - 1 - qubit_index], 'k-', lw=1)
+            y = self.__circuit_qubit_num - 1 - qubit_index
+            m_layer = meas_layer_by_qubit[qubit_index]
+            if m_layer is None:
+                # No measurement on this wire: quantum line across
+                ax.plot([0, self.__number_of_layers], [y, y], 'k-', lw=1)
+            else:
+                # Quantum segment before measurement
+                if m_layer > 0:
+                    ax.plot([0, m_layer], [y, y], 'k-', lw=1)
+                # Classical double line after (and including) the measurement column
+                ax.plot([m_layer, self.__number_of_layers], [y - dy, y - dy], color='green', lw=2)
+                ax.plot([m_layer, self.__number_of_layers], [y + dy, y + dy], color='green', lw=2)
 
         for layer in range(self.__number_of_layers):
             for qubit in range(self.__circuit_qubit_num):
@@ -857,30 +878,53 @@ class QuantumCircuit:
                     continue
                 elif gate.is_swap_gate():
                     # Handle SWAP gate
-                    idx1 =self.__circuit_qubit_num - 1 - gate.get_control_index()
-                    idx2 =self.__circuit_qubit_num - 1 - gate.get_target_index()
+                    idx1 = self.__circuit_qubit_num - 1 - gate.get_control_index()
+                    idx2 = self.__circuit_qubit_num - 1 - gate.get_target_index()
                     ax.plot([layer, layer], [idx1, idx2], 'k--')
                     ax.text(layer, idx1, '\u2716', ha='center', va='center', fontsize=12)
                     ax.text(layer, idx2, '\u2716', ha='center', va='center', fontsize=12)
                 elif gate.is_control_gate():
                     # Handle controlled gate
-                    control_idx =self.__circuit_qubit_num - 1 - gate.get_control_index()
-                    target_idx =self.__circuit_qubit_num - 1 - gate.get_target_index()
+                    control_idx = self.__circuit_qubit_num - 1 - gate.get_control_index()
+                    target_idx = self.__circuit_qubit_num - 1 - gate.get_target_index()
                     ax.plot([layer, layer], [control_idx, target_idx], 'k-')
                     ax.text(layer, control_idx, '\u25CF', ha='center', va='center', fontsize=12)
                     ax.text(layer, target_idx, gate.get_gate_type(), ha='center', va='center', fontsize=12,
                             bbox=dict(boxstyle='square,pad=0.7', facecolor='white', edgecolor='black'))
                 else:
                     # Single-qubit gate or measure gate
-                    qubit_idx =self.__circuit_qubit_num - 1 - qubit
+                    qubit_idx = self.__circuit_qubit_num - 1 - qubit
                     gate_color = 'lightgreen' if gate.is_measure_gate() else 'white'
                     ax.text(layer, qubit_idx, gate.get_gate_type(), 
-                    ha='center', va='center', fontsize=12,
+                            ha='center', va='center', fontsize=12,
                             bbox=dict(boxstyle='square,pad=0.7', facecolor=gate_color, edgecolor='black'))
+
+            # Second pass: draw classical double-line connections in this layer
+            # Connect any measurement gates in this layer to conditional gates that reference their bit
+            measured_qubits = set()
+            for q in range(self.__circuit_qubit_num):
+                cell = self.__circuit[layer][q]
+                if cell is not None and cell.is_measure_gate():
+                    measured_qubits.add(q)
+
+            # Draw connections from the layer's measurement to all conditional gates in this layer
+            # In dynamic QFT, each such layer has exactly one measurement and multiple conditional gates using that bit.
+            if measured_qubits:
+                # Choose the first (and typically only) measured qubit in this layer
+                src_q = sorted(measured_qubits)[0]
+                y_src = self.__circuit_qubit_num - 1 - src_q
+                x = layer
+                for tgt_q in range(self.__circuit_qubit_num):
+                    cell = self.__circuit[layer][tgt_q]
+                    if cell is not None and cell.is_conditional_gate():
+                        y_tgt = self.__circuit_qubit_num - 1 - tgt_q
+                        # Draw a double line from measurement to conditional gate at this layer x
+                        ax.plot([x, x], [y_src, y_tgt], color='green', linewidth=2, alpha=1)
+                        ax.plot([x + 0.04, x + 0.04], [y_src, y_tgt], color='green', linewidth=2, alpha=1)
 
         # Set axis limits and labels
         ax.set_xlim(-0.5, self.__number_of_layers - 0.5)
-        ax.set_ylim(-0.5,self.__circuit_qubit_num - 0.5)
+        ax.set_ylim(-0.5, self.__circuit_qubit_num - 0.5)
 
         # Set qubits ticks:
         ax.set_yticks(range(self.__circuit_qubit_num))
