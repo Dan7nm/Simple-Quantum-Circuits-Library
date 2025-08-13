@@ -10,11 +10,9 @@ from typing import Dict
 from scipy.optimize import curve_fit
 import os
 
-### Constants ###
-QUBITS_TO_TEST = 6
-NUM_MEASUREMENTS_DELTA = 100
-MAX_MEASURE_NUM = 5000
-NUM_OF_RUNS = 5000
+### Test Parameters ###
+QUBITS_TO_TEST = 7
+SAMPLE_NUM = 5000
 EPSILON = 1e-10
 
 def qft_on_sine(number_of_qubits: int) -> None:
@@ -567,34 +565,120 @@ def test_qft_phase_error_cross_entropy(input_state: MultiQubit = MultiQubit(qubi
     plt.yscale('log')
     plt.savefig(f"{filename[:-4]}_log.png", dpi=300, bbox_inches='tight')    
 
+def cross_entropy_diff_vs_qubits(
+    qubits_list,
+    measurement_num: int = 1000,
+    error_single_gate: float = 0.0,
+    error_control_gate: float = 0.0,
+    save_dir: str = "plots"
+) -> dict:
+    """
+    Compare cross-entropy between ideal QFT and two noisy implementations (regular vs dynamic)
+    across different qubit counts, and plot the difference vs qubits.
+
+    For each qubit count n in qubits_list:
+    - Generate a random n-qubit input state.
+    - Compute the ideal QFT result (no errors).
+    - Run Regular QFT with fixed gate errors and sample via run_many(measurement_num).
+    - Run Dynamic QFT with the same errors and sampling.
+    - Compute cross-entropy w.r.t. the ideal result for both; store CE_dynamic - CE_regular.
+
+    Parameters
+    ----------
+    qubits_list : iterable[int]
+        Iterable of qubit counts to test (x-axis).
+    measurement_num : int, optional
+        Number of runs used to estimate probabilities (default 1000).
+    error_single_gate : float, optional
+        Fixed phase error magnitude for single-qubit gates (default 0.0).
+    error_control_gate : float, optional
+        Fixed phase error magnitude for controlled gates (default 0.0).
+    save_dir : str, optional
+        Directory to save plots (default 'plots').
+    """
+    os.makedirs(save_dir, exist_ok=True)
+
+    qubits_axis = []
+    ce_dyn = []
+    ce_reg = []
+    ce_diff = []
+
+    for idx, n in enumerate(qubits_list):
+        print(f"Processing qubits: {n} ({idx+1}/{len(list(qubits_list))})", end='\r', flush=True)
+        # Random input state of size n
+        input_state = MultiQubit(qubits_num=n)
+
+        # Ideal (reference) QFT without errors
+        ref_circ = QuantumCircuit(input_state=input_state)
+        ref_circ.load_qft_preset()
+        ref_state = ref_circ.run_circuit()
+        min_ce = cross_entropy(ref_state, ref_state)  # baseline (zero)
+
+        # Regular QFT with errors (sampled)
+        reg_err_circ = QuantumCircuit(
+            input_state=input_state,
+            error_single_gate=error_single_gate,
+            error_control_gate=error_control_gate,
+        )
+        reg_err_circ.load_qft_preset()
+        reg_sampled = reg_err_circ.run_many(num_of_runs=measurement_num)
+
+        # Dynamic QFT with errors (sampled)
+        c_reg = ClassicalRegister(num_bits=n)
+        dyn_err_circ = QuantumCircuit(
+            input_state=input_state,
+            classical_register=c_reg,
+            error_single_gate=error_single_gate,
+            error_control_gate=error_control_gate,
+        )
+        dyn_err_circ.load_dynamic_qft_preset()
+        dyn_sampled = dyn_err_circ.run_many(num_of_runs=measurement_num)
+
+        # Cross-entropy relative to ideal
+        ce_r = cross_entropy(ref_state, reg_sampled) - min_ce
+        ce_d = cross_entropy(ref_state, dyn_sampled) - min_ce
+
+        qubits_axis.append(n)
+        ce_reg.append(ce_r)
+        ce_dyn.append(ce_d)
+
+    plt.figure(figsize=(12, 7))
+    plt.plot(qubits_axis, ce_reg, 'o-', linewidth=2, markersize=7, color='blue', label='Regular QFT (w/ errors)')
+    plt.plot(qubits_axis, ce_dyn, 's--', linewidth=2, markersize=7, color='orange', label='Dynamic QFT (w/ errors)')
+    plt.xlabel('Number of Qubits', fontsize=12)
+    plt.ylabel('Cross-Entropy (relative to ideal)', fontsize=12)
+    plt.title(
+        f'Cross-Entropy vs Qubits (relative to ideal)\nMeasurements={measurement_num}, '
+        f'err_single={error_single_gate}, err_control={error_control_gate}',
+        fontsize=14
+    )
+    plt.grid(True, alpha=0.3)
+    plt.legend(fontsize=10)
+    plt.tight_layout()
+    indiv_path = os.path.join(
+        save_dir,
+        f'cross_entropy_individual_vs_qubits_mes_{measurement_num}.png'
+    )
+    plt.savefig(indiv_path, dpi=300, bbox_inches='tight')
+    plt.close()
+
 if __name__ == "__main__":
     import time
     start_time = time.perf_counter()
-    # Random State:
-    random_state = MultiQubit(qubits_num=5)
-
-    # measurement_nums = np.linspace(100,5000,10,dtype=int)
-    measurement_nums = [100, 300, 500, 1000, 3000]
         
     print("=" * 80)
-    print(f"Testing QFT Phase Error Cross Entropy (5 qubits)")
+    print("Begin Testing")
     print("=" * 80)
 
-    # for measurement_num in measurement_nums:
-    #     print(f"Testing QFT on random state with {measurement_num} measurements...")
-    #     print("=" * 80)
-
-    #     test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/8,num_phi_points=30,measurement_num=measurement_num)
-
-    #     print("=" * 80)
-
-    #     cmp_qft_results_prob_distr(input_state=random_state, phi_max=np.pi/8, num_phi_points=30, measurement_num=measurement_num)
-
-    #     print("=" * 80)
-
-    test_qft_phase_error_cross_entropy(input_state=random_state,phi_max=np.pi/2,num_phi_points=10,measurement_num=5000)
+    cross_entropy_diff_vs_qubits(
+        qubits_list=range(3, QUBITS_TO_TEST + 1),
+        measurement_num=SAMPLE_NUM,
+        error_single_gate=0.04,
+        error_control_gate=0.2,
+        save_dir="ce_vs_qubits"
+    )
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60
     print(f"=============== All tests passed! ===============")
-    print(f"Total run time: {elapsed_minutes:.2f} minutes")
+    print(f"Total run time: {elapsed_minutes:.2f} minutes") 
