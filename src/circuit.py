@@ -668,10 +668,19 @@ class QuantumCircuit:
         """
         self.__number_of_layers = 1
         # Initialize a circuit with one layer with no gates (identity gate is counted as no gate)
-        self.__circuit= np.full(((1,self.__circuit_qubit_num)),None)
-        self.__circuit_operator = np.identity(2 ** self.__circuit_qubit_num)
+        self.__circuit = np.full(
+            (1, self.__circuit_qubit_num),
+            None,
+            dtype=QuantumCircuitCell
+        )
+        self.__circuit_operator = np.identity(
+            2 ** self.__circuit_qubit_num,
+            dtype=np.complex128
+        )
 
         self.__circuit_is_computed = False
+        # After reset, circuit is non-dynamic
+        self.__is_dynamic = False
     
     def __draw_cli(self) -> None:
         if self.__number_of_layers == 0 or self.__circuit_qubit_num == 0:
@@ -814,10 +823,21 @@ class QuantumCircuit:
         """
         return self.__circuit
     
-    def load_qft_preset(self) -> None:
+    def load_qft_preset(self, m:int = None) -> None:
         """
-        This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one.
+        This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one. If m is specified an Approximate Quantum Fourier Transform circuit will be used.
+
+        Parameters
+        ----------
+        m : int, optional
+            The cutoff number that will be used for Approximate Quantum Fourier Transform. If None is given the regular QFT circuit will be used.
+        
+        Returns
+        -------
+        None
         """
+        # start from a clean circuit
+        self.reset_circuit()
         curr_layer_index = 0
         for qubit_index in range(self.__circuit_qubit_num):
             # Add a hadamard gate at the start of each qubit axis
@@ -825,9 +845,13 @@ class QuantumCircuit:
             self.add_layer()
             curr_layer_index += 1
             # Add controlled phase shift gates
-            for phase_gate_index in range(2, self.__circuit_qubit_num + 1 - qubit_index):
-                phase = (2 * np.pi)/ (2**phase_gate_index)
-                self.add_controlled_qubit_gate(qubit_index,curr_layer_index,qubit_index + phase_gate_index - 1,'P',phase)
+            if m is None:
+                max_dist = self.__circuit_qubit_num + 1 - qubit_index
+            else:
+                max_dist = min(m+2,self.__circuit_qubit_num + 1 - qubit_index)
+            for qubit_dist in range(2, max_dist):
+                phase = (2 * np.pi)/ (2**qubit_dist)
+                self.add_controlled_qubit_gate(qubit_index,curr_layer_index,qubit_index + qubit_dist - 1,'P',phase)
                 self.add_layer()
                 curr_layer_index += 1
 
