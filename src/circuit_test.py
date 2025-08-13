@@ -570,7 +570,7 @@ def cross_entropy_diff_vs_qubits(
     measurement_num: int = 1000,
     error_single_gate: float = 0.0,
     error_control_gate: float = 0.0,
-    save_dir: str = "plots"
+    save_dir: str = "ce_vs_qubits"
 ) -> dict:
     """
     Compare cross-entropy between ideal QFT and two noisy implementations (regular vs dynamic)
@@ -661,7 +661,7 @@ def cross_entropy_diff_vs_qubits(
     plt.savefig(indiv_path, dpi=300, bbox_inches='tight')
     plt.close()
 
-def aqft_vs_qft(qubit_num:int=3):
+def aqft_vs_qft(qubit_num:int=3,save_dir:str="aqft_vs_qft",dynamic:bool = False,sample_num:int = 5000) -> None:
     """
     Compare the performance of AQFT and QFT circuits for a given number of qubits.
     The function generates a random quantum state, applies both AQFT and QFT circuits,
@@ -671,6 +671,12 @@ def aqft_vs_qft(qubit_num:int=3):
     ----------
     qubit_num : int, optional
         The number of qubits to test (default is 3).
+    save_dir : str, optional
+        Directory to save the comparison plot (default is "aqft_vs_qft").
+    dynamic : bool, optional
+        If True, uses dynamic AQFT circuit; otherwise uses unitary AQFT (default is False).
+    sample_num : int, optional
+        Number of runs for sampling the output state (default is 5000).
 
     Returns
     -------
@@ -692,10 +698,15 @@ def aqft_vs_qft(qubit_num:int=3):
     for m in m_lst:
         print(f"Testing AQFT and QFT with {qubit_num} qubits, m={m}",end='\r', flush=True)
     
-        # Load AQFT circuit
-        aqft_circuit = QuantumCircuit(input_state=input_state)
-        aqft_circuit.load_qft_preset(m=m)
-        aqft_result = aqft_circuit.run_circuit()
+        if dynamic:
+            c_reg = ClassicalRegister(num_bits=qubit_num)
+            aqft_circuit = QuantumCircuit(input_state=input_state, classical_register=c_reg)
+            aqft_circuit.load_dynamic_qft_preset(m=m)
+            aqft_result = aqft_circuit.run_many(num_of_runs=sample_num)
+        else:
+            aqft_circuit = QuantumCircuit(input_state=input_state)
+            aqft_circuit.load_qft_preset(m=m)
+            aqft_result = aqft_circuit.run_circuit()
         
         aqft_ce = cross_entropy(ref_result, aqft_result) - min_ce
         aqft_ce_lst.append(aqft_ce)
@@ -707,11 +718,15 @@ def aqft_vs_qft(qubit_num:int=3):
     plt.xlabel('Distance between qubit cutoff (m)', fontsize=12)
     plt.ylabel('Cross-Entropy (relative to ideal)', fontsize=12)
     plt.title(f'AQFT vs QFT Cross-Entropy\n{qubit_num} Qubits', fontsize=14)
-    plt.yscale('log')
+    # plt.yscale('log')
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     plt.tight_layout()
-    plt.savefig(f'aqft_vs_qft_{qubit_num}_qubits.png', dpi=300, bbox_inches='tight')
+    os.makedirs(save_dir, exist_ok=True)
+    if dynamic:
+        plt.savefig(os.path.join(save_dir, f'aqft_vs_qft_dynamic_{qubit_num}_qubits.png'), dpi=300, bbox_inches='tight')
+    else:
+        plt.savefig(os.path.join(save_dir, f'aqft_vs_qft_{qubit_num}_qubits.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
 if __name__ == "__main__":
@@ -730,7 +745,7 @@ if __name__ == "__main__":
     #     save_dir="ce_vs_qubits"
     # )
 
-    aqft_vs_qft(qubit_num=7)
+    aqft_vs_qft(qubit_num=5, save_dir="aqft_vs_qft", dynamic=True,sample_num=5000)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60
