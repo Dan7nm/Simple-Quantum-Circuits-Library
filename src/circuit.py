@@ -1120,9 +1120,15 @@ class QuantumCircuit:
                 curr_state = gate.measure(curr_state)
         return curr_state
     
-    def load_dynamic_qft_preset(self) -> None:
+    def load_dynamic_qft_preset(self,m:int = None) -> None:
         """
-        This method loads a prebuild dynamic Quantum Fourier Transform circuit. If the initialized classical register doesn't have the correct amount of bits we raise an error.
+        This method loads a prebuild dynamic Quantum Fourier Transform circuit. If the initialized classical register doesn't have the correct amount of bits we raise an error. 
+        If m is specified an Approximate Quantum Fourier Transform circuit will be used.
+
+        Parameters
+        ----------
+        m : int, optional
+            The cutoff number that will be used for Approximate Quantum Fourier Transform. If None is given the regular QFT circuit will be used.
 
         Raises
         ------
@@ -1130,6 +1136,8 @@ class QuantumCircuit:
             If the classical register has different number of bits than the number of qubits in the circuit.
 
         """
+        self.reset_circuit()
+
         # Check number of bits in the classical register
         if self.__classical_register.get_bits_num() != self.__circuit_qubit_num:
             raise ValueError(INV_NUM_C_REG)
@@ -1146,8 +1154,13 @@ class QuantumCircuit:
             self.add_measure_gate(qubit_index,curr_layer_index,qubit_index)
             first_phase_qubit_idx = qubit_index + 1
 
-            for phase_gate_index in range(2, self.__circuit_qubit_num + 1 - qubit_index):
-                phase = (2 * np.pi)/ (2**phase_gate_index)
+            if m is None:
+                max_dist = self.__circuit_qubit_num + 1 - qubit_index
+            else:
+                max_dist = min(m + 2, self.__circuit_qubit_num + 1 - qubit_index)
+
+            for qubit_dist in range(2, max_dist):
+                phase = (2 * np.pi)/ (2**qubit_dist)
                 self.add_conditional_gate(first_phase_qubit_idx,curr_layer_index,qubit_index,"P",phase)
                 first_phase_qubit_idx += 1
             
