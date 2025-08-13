@@ -12,7 +12,7 @@ import os
 
 ### Test Parameters ###
 QUBITS_TO_TEST = 7
-SAMPLE_NUM = 5000
+SAMPLE_NUM = 10000
 EPSILON = 1e-10
 
 def qft_on_sine(number_of_qubits: int) -> None:
@@ -601,7 +601,6 @@ def cross_entropy_diff_vs_qubits(
     qubits_axis = []
     ce_dyn = []
     ce_reg = []
-    ce_diff = []
 
     for idx, n in enumerate(qubits_list):
         print(f"Processing qubits: {n} ({idx+1}/{len(list(qubits_list))})", end='\r', flush=True)
@@ -662,6 +661,59 @@ def cross_entropy_diff_vs_qubits(
     plt.savefig(indiv_path, dpi=300, bbox_inches='tight')
     plt.close()
 
+def aqft_vs_qft(qubit_num:int=3):
+    """
+    Compare the performance of AQFT and QFT circuits for a given number of qubits.
+    The function generates a random quantum state, applies both AQFT and QFT circuits,
+    and compares their outputs.
+
+    Parameters
+    ----------
+    qubit_num : int, optional
+        The number of qubits to test (default is 3).
+
+    Returns
+    -------
+    None
+        
+    """
+    input_state = MultiQubit(qubits_num=qubit_num)
+
+    m_lst = range(2,qubit_num + 1)
+
+    # Load QFT circuit
+    qft_circuit = QuantumCircuit(input_state=input_state)
+    qft_circuit.load_qft_preset()
+    ref_result = qft_circuit.run_circuit()
+    min_ce = cross_entropy(ref_result, ref_result)
+
+    aqft_ce_lst = []
+
+    for m in m_lst:
+        print(f"Testing AQFT and QFT with {qubit_num} qubits, m={m}",end='\r', flush=True)
+    
+        # Load AQFT circuit
+        aqft_circuit = QuantumCircuit(input_state=input_state)
+        aqft_circuit.load_qft_preset(m=m)
+        aqft_result = aqft_circuit.run_circuit()
+        
+        aqft_ce = cross_entropy(ref_result, aqft_result) - min_ce
+        aqft_ce_lst.append(aqft_ce)
+
+    print()
+
+    plt.figure(figsize=(12, 7))
+    plt.plot(m_lst, aqft_ce_lst, 'o-', linewidth=2, markersize=7, color='blue', label='AQFT Cross-Entropy')
+    plt.xlabel('Distance between qubit cutoff (m)', fontsize=12)
+    plt.ylabel('Cross-Entropy (relative to ideal)', fontsize=12)
+    plt.title(f'AQFT vs QFT Cross-Entropy\n{qubit_num} Qubits', fontsize=14)
+    plt.yscale('log')
+    plt.grid(True, alpha=0.3)
+    plt.legend(fontsize=10)
+    plt.tight_layout()
+    plt.savefig(f'aqft_vs_qft_{qubit_num}_qubits.png', dpi=300, bbox_inches='tight')
+    plt.close()
+
 if __name__ == "__main__":
     import time
     start_time = time.perf_counter()
@@ -670,13 +722,15 @@ if __name__ == "__main__":
     print("Begin Testing")
     print("=" * 80)
 
-    cross_entropy_diff_vs_qubits(
-        qubits_list=range(3, QUBITS_TO_TEST + 1),
-        measurement_num=SAMPLE_NUM,
-        error_single_gate=0.04,
-        error_control_gate=0.2,
-        save_dir="ce_vs_qubits"
-    )
+    # cross_entropy_diff_vs_qubits(
+    #     qubits_list=range(3, QUBITS_TO_TEST + 1),
+    #     measurement_num=SAMPLE_NUM,
+    #     error_single_gate=0.04,
+    #     error_control_gate=0.2,
+    #     save_dir="ce_vs_qubits"
+    # )
+
+    aqft_vs_qft(qubit_num=7)
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60

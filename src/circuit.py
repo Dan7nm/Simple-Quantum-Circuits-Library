@@ -579,9 +579,12 @@ class QuantumCircuit:
         # Multiply all the computed matrices
         result_matrix = result_matrix @ single_qubit_gates_matrix @ controlled_gates_matrix @ swap_gates_matrices
 
-        # Multiply the input state on the resulting matrix:
-        input_state_tensor = torch.from_numpy(input_state.get_tensor_vector())
-        result_tensor = result_matrix @ input_state_tensor.to(torch.complex128)
+        # Multiply the input state on the resulting matrix (ensure same device/dtype):
+        input_state_tensor = (
+            torch.from_numpy(input_state.get_tensor_vector())
+            .to(dtype=torch.complex128, device=self.__device)
+        )
+        result_tensor = result_matrix @ input_state_tensor
         result_state = MultiQubit(result_tensor.cpu().numpy())
              
         return result_matrix,result_state
