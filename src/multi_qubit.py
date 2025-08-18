@@ -525,22 +525,9 @@ class MultiQubit:
 
         Raises
         ------
-            ValueError
-                If the qubit_index is not valid. Qubit index should be between 0 and number of qubits - 1 and an integer.
+        ValueError
+            If the qubit_index is not valid. Qubit index should be between 0 and number of qubits - 1 and an integer.
 
-        Examples
-        --------
-        >>> vector = np.full(16, 1/4)
-        >>> mt = MultiQubit(vector)
-        >>> mt.print_tensor_form()
-        >>> for i in range(4):
-        ...     mt, outcome = mt.measure_qubit(i)
-        ...     print(f"Measured qubit {i}: {outcome}")
-        ...     mt.print_tensor_form()
-        Output:
-        Tensor product in basis state form: 0.5|0000⟩ + 0.5|0001⟩ + 0.5|0010⟩ + 0.5|0011⟩
-        Measured qubit 0: 0
-        Tensor product in basis state form: ...
         """
         self.__valid_qubit_index(qubit_index)
         proj_tensor_to_zero, proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
