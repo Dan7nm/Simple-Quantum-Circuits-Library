@@ -798,7 +798,7 @@ class QuantumCircuit:
         """
         return self.__circuit
     
-    def load_qft_preset(self, m:int = None) -> None:
+    def load_qft_preset(self,include_measurement:bool = False,m:int = None,measurement_error:float = 0.0) -> None:
         """
         This method loads a prebuild Quantum Fourier Transform circuit using the number of qubits given. This QFT circuit is the regular circuit using a traditional design opposed to the dynamical one. If m is specified an Approximate Quantum Fourier Transform circuit will be used.
 
@@ -806,6 +806,10 @@ class QuantumCircuit:
         ----------
         m : int, optional
             The cutoff number that will be used for Approximate Quantum Fourier Transform. If None is given the regular QFT circuit will be used.
+        measurement_error : float, optional
+            The error rate for measurement gates. Default is 0.0 (no error).
+        include_measurement : bool, optional
+            If True, adds measurement gates to the end of the circuit. Default is False.
         
         Returns
         -------
@@ -830,7 +834,12 @@ class QuantumCircuit:
                 self.add_layer()
                 curr_layer_index += 1
 
-        self.remove_layer(curr_layer_index)  # Remove the last empty layer
+        if include_measurement:
+            # Add measurement gates at the end of each qubit axis
+            for qubit_index in range(self.__circuit_qubit_num):
+                self.add_measure_gate(qubit_index, curr_layer_index,qubit_index,measurement_error)
+        else:
+            self.remove_layer(curr_layer_index)  # Remove the last empty layer
 
         # Add Swap gates:
         # for qubit_index in range(self.__circuit_qubit_num):
@@ -980,7 +989,7 @@ class QuantumCircuit:
         else:
             raise ValueError(INV_DRAW)
 
-    def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg_index: int) -> None:
+    def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg_index: int, measurement_error:float = 0.0) -> None:
         """
         Add measure gate method adds a measure gate to the circuit in a specified layer,on a specified qubit. After performing a measurement the collapsed state of a qubit is saved as a classical bit using the proivided classical register.
 
@@ -992,6 +1001,8 @@ class QuantumCircuit:
             The layer index to which the measure gate will be applied to.
         c_reg_int : int
             The index in the classical register to save the collapsed state.
+        measurement_error : float
+            The probability of getting a bit flip for the true state.
 
         Raises
         ------
@@ -1007,7 +1018,7 @@ class QuantumCircuit:
         self.__is_dynamic = True
         self.__circuit_is_computed = False
         gate = QuantumCircuitCell()
-        gate.set_measure_gate(qubit_index,self.__classical_register,c_reg_index)
+        gate.set_measure_gate(qubit_index,self.__classical_register,c_reg_index,measurement_error)
         self.__circuit[layer_index][qubit_index]=gate
 
     def measure_all(self) -> MultiQubit:
@@ -1019,7 +1030,7 @@ class QuantumCircuit:
         MultiQubit
             The collapsed state due to measurement.
         """
-        result = self.run_circuit(self.__quantum_state)
+        result = self.run_circuit()
         return result.measure(return_as_str=False)
     
     def run_circuit(self) -> MultiQubit:
@@ -1164,7 +1175,7 @@ class QuantumCircuit:
                 curr_state = gate.measure(curr_state)
         return curr_state
     
-    def load_dynamic_qft_preset(self,m:int = None) -> None:
+    def load_dynamic_qft_preset(self,m:int = None,measurement_error:float= 0.0) -> None:
         """
         This method loads a prebuild dynamic Quantum Fourier Transform circuit. If the initialized classical register doesn't have the correct amount of bits we raise an error. 
         If m is specified an Approximate Quantum Fourier Transform circuit will be used.
@@ -1173,6 +1184,8 @@ class QuantumCircuit:
         ----------
         m : int, optional
             The cutoff number that will be used for Approximate Quantum Fourier Transform. If None is given the regular QFT circuit will be used.
+        measurement_error : float
+            The probability of getting a bit flip for the true state. Default is 0.0
 
         Raises
         ------
@@ -1195,7 +1208,7 @@ class QuantumCircuit:
             self.add_single_qubit_gate(qubit_index,curr_layer_index,"H")
             self.add_layer()
             curr_layer_index += 1
-            self.add_measure_gate(qubit_index,curr_layer_index,qubit_index)
+            self.add_measure_gate(qubit_index,curr_layer_index,qubit_index,measurement_error)
             first_phase_qubit_idx = qubit_index + 1
 
             if m is None:
@@ -1235,8 +1248,7 @@ class QuantumCircuit:
             if self.__is_dynamic:
                 collapsed_state = self.run_circuit()
             else:
-                output_state = self.run_circuit()
-                collapsed_state = output_state.measure(return_as_str=False)
+                collapsed_state = self.measure_all()
                 
             state_vector = collapsed_state.get_tensor_vector()
 

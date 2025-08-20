@@ -141,11 +141,16 @@ class Qubit:
         """
         print(self.__qubit_vector)
 
-    def measure(self) -> int:
+    def measure(self,measurement_error:float = 0.0) -> int:
         """
         Measure the qubit and return the collapsed state.
 
         Simulates a measurement in the computational basis (0 state and 1 state) by calculating the probabilities of each state and using a random number in a uniform distribution on [0,1] interval to determine the outcome.
+
+        Parameters
+        ----------
+        measurement_error : float, optional
+            The probability of getting a bit flip for the true state.
 
         Returns
         -------
@@ -155,27 +160,22 @@ class Qubit:
         Notes
         -----
         The probabilities of each state are determined by the amplitudes squared of each qubit.
-
-        Example
-        -------
-        >>> qubit = Qubit(0.6, 0.8)
-        >>> result = qubit.measure()
-        >>> print(result)  # Output will be '0' with probability 0.36, or '1' with probability 0.64
         """
 
         # Calculate the probability of measuring the state |0⟩
-        prob0 = np.abs(self.__alpha)**2  # |α|^2 gives the probability of |0⟩
-        
-        # Calculate the probability of measuring the state |1⟩
-        prob1 = np.abs(self.__beta)**2   # |β|^2 gives the probability of |1⟩
+        prob0 = np.abs(self.__alpha)**2 
 
         # Generate a random number between 0 and 1 to simulate the measurement process
         rand_num = random.uniform(0, 1)
 
-        # If the random number is within the probability of measuring |0⟩, return '0'
-        if 0 <= rand_num <= prob0:
-            return 0
-        
-        # If the random number is within the probability of measuring |1⟩, return '1'
-        if prob0 < rand_num <= 1:
-            return 1
+        # Determine the measurement result
+        if rand_num <= prob0:
+            result = 0
+        else:
+            result = 1
+
+        # With probability measurement_error, flip the result
+        if measurement_error > 0.0 and random.uniform(0, 1) < measurement_error:
+            result = 1 - result
+
+        return result

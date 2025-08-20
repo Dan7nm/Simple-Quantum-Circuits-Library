@@ -11,9 +11,11 @@ from scipy.optimize import curve_fit
 import os
 
 ### Test Parameters ###
-QUBITS_TO_TEST = 7
-SAMPLE_NUM = 10000
+QUBITS_TO_TEST = 5
+SAMPLE_NUM = 15000
 EPSILON = 1e-10
+MAX_MEASUREMENT_ERROR = 0.1
+POINTS = 5
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -729,6 +731,78 @@ def aqft_vs_qft(qubit_num:int=3,save_dir:str="aqft_vs_qft",dynamic:bool = False,
         plt.savefig(os.path.join(save_dir, f'aqft_vs_qft_{qubit_num}_qubits.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
+def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:int,sample_num:int = 1000,save_dir:str = "ce_vs_measurement_error") -> None:
+    """
+    Compare the cross-entropy of random quantum state with dynamic and regular QFT circuits vs different measurement errors.
+
+    Parameters
+    ----------
+    qubit_num : int
+        The number of qubits in the quantum state.
+    max_measurement_error : float
+        The maximum measurement error to test.
+    points : int
+        The number of points to sample between 0 and max_measurement_error.
+    sample_num : int, optional
+        The number of runs for sampling the output state (default is 1000).
+    
+    Returns
+    -------
+    None
+    """
+    measurement_lst = np.linspace(0, max_measurement_error, points)
+    ce_dyn_lst = []
+    ce_reg_lst = []
+    input_state = MultiQubit(qubits_num=qubit_num)
+    
+    # Load QFT circuit
+    qft_circuit = QuantumCircuit(input_state=input_state)
+    qft_circuit.load_qft_preset()
+    ref_result = qft_circuit.run_circuit()
+    min_ce = cross_entropy(ref_result, ref_result)
+
+    for i,measurement_error in enumerate(measurement_lst):
+        print(f"Testing QFT with measurement error={measurement_error:.3f}, Progress: ({i+1}/{points})", end='\r', flush=True)
+
+        # Regular QFT with measurement error
+        c_register_reg = ClassicalRegister(num_bits=qubit_num)
+        reg_err_circuit = QuantumCircuit(
+            input_state=input_state,
+            classical_register=c_register_reg,
+        )
+        reg_err_circuit.load_qft_preset(include_measurement=True,measurement_error=measurement_error)
+        reg_sampled = reg_err_circuit.run_many(num_of_runs=sample_num)
+
+        # Dynamic QFT with measurement error
+        c_register_dyn = ClassicalRegister(num_bits=qubit_num)
+        dyn_err_circuit = QuantumCircuit(
+            input_state=input_state,
+            classical_register=c_register_dyn,
+        )
+        dyn_err_circuit.load_dynamic_qft_preset(measurement_error=measurement_error)
+        dyn_sampled = dyn_err_circuit.run_many(num_of_runs=sample_num)
+
+        # Cross-entropy relative to ideal
+        ce_r = cross_entropy(ref_result, reg_sampled) - min_ce
+        ce_d = cross_entropy(ref_result, dyn_sampled) - min_ce
+
+        ce_reg_lst.append(ce_r)
+        ce_dyn_lst.append(ce_d)
+
+    print()
+    plt.figure(figsize=(12, 7))
+    plt.plot(measurement_lst, ce_reg_lst, 'o-', linewidth=2, markersize=7, color='blue', label='Regular QFT (w/ measurement error)')
+    plt.plot(measurement_lst, ce_dyn_lst, 's--', linewidth=2, markersize=7, color='orange', label='Dynamic QFT (w/ measurement error)')
+    plt.xlabel('Measurement Error (Probability to get a bit flip)', fontsize=12)
+    plt.ylabel('Cross-Entropy Difference', fontsize=12)
+    plt.title(f'Cross-Entropy Difference to ideal vs Measurement Error\n{qubit_num} Qubits, {sample_num} Runs', fontsize=14)
+    plt.grid(True, alpha=0.3)
+    plt.legend(fontsize=10)
+    plt.tight_layout()
+    os.makedirs(save_dir, exist_ok=True)
+    plt.savefig(f"{save_dir}/ce_vs_measurement_error_{qubit_num}_qubits_{sample_num}_runs.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
 if __name__ == "__main__":
     import time
     start_time = time.perf_counter()
@@ -737,15 +811,13 @@ if __name__ == "__main__":
     print("Begin Testing")
     print("=" * 80)
 
-    # cross_entropy_diff_vs_qubits(
-    #     qubits_list=range(3, QUBITS_TO_TEST + 1),
-    #     measurement_num=SAMPLE_NUM,
-    #     error_single_gate=0.04,
-    #     error_control_gate=0.2,
-    #     save_dir="ce_vs_qubits"
-    # )
-
-    aqft_vs_qft(qubit_num=5, save_dir="aqft_vs_qft", dynamic=True,sample_num=5000)
+    ce_vs_measurement_error(
+        qubit_num=QUBITS_TO_TEST,
+        max_measurement_error=MAX_MEASUREMENT_ERROR,
+        points=POINTS,
+        sample_num=SAMPLE_NUM,
+        save_dir="ce_vs_measurement_error"
+    )
 
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60

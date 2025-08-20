@@ -63,6 +63,7 @@ class QuantumCircuitCell:
         # store original conditional gate parameters
         self.__original_gate_type = None
         self.__original_phi = None
+        self.__measurement_error = 0.0
         
     def set_single_qubit_gate(self, gate_type: str = 'I', phi: float = 0.0, error_magnitude: float = 0.0) -> None:
         """
@@ -307,7 +308,7 @@ class QuantumCircuitCell:
         """
         return self.__is_measure_gate
     
-    def set_measure_gate(self,target_qubit:int,c_reg: ClassicalRegister,c_reg_index: int) -> None:
+    def set_measure_gate(self,target_qubit:int,c_reg: ClassicalRegister,c_reg_index: int,measurement_error:float = 0.0) -> None:
         """
         The method sets this gate to be a measurement gate.
 
@@ -319,6 +320,8 @@ class QuantumCircuitCell:
             The classical register object to which the classical bit will be stored.
         c_reg_int : int
             The index corresponding to the exact classical bit index in the classical register.
+        measurement_error : float
+            The probability of getting a bit flip for the true state.
 
         Raises
         ------
@@ -330,6 +333,7 @@ class QuantumCircuitCell:
         self.__c_reg = c_reg
         self.__c_reg_index = c_reg_index
         self.__target_qubit = target_qubit
+        self.__measurement_error = measurement_error
 
     def is_conditional_gate(self) -> bool:
         """
@@ -420,7 +424,7 @@ class QuantumCircuitCell:
         if not self.__is_measure_gate:
             raise ValueError("Invalid command. Can not perform a measurement on a non measurment gate.")
         
-        collapsed_state ,bit = input_state.measure_qubit(self.__target_qubit)
+        collapsed_state ,bit = input_state.measure_qubit(self.__target_qubit,measurement_error=self.__measurement_error)
 
         # We save the collapsed state of the specific measured qubit in the classical register
         self.__c_reg[self.__c_reg_index] = bit

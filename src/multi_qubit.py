@@ -503,7 +503,7 @@ class MultiQubit:
         beta = np.sqrt(np.sum(np.abs(proj_tensor_to_one @ self.__tensor_vector)**2))
         return Qubit(alpha,beta)
     
-    def measure_qubit(self, qubit_index: int) -> tuple[Self, int]:
+    def measure_qubit(self, qubit_index: int,measurement_error: float = 0.0) -> tuple[Self, int]:
         """
         This method measures a specified qubit inside a multi-qubit quantum state and 
         returns the new quantum state after the collapse along with the measured state (0 or 1).
@@ -515,6 +515,8 @@ class MultiQubit:
         ----------
         qubit_index : int
             The qubit index we wish to measure.
+        measurement_error : float, optional
+            The probability of getting a bit flip for the true state.
 
         Returns
         -------
@@ -532,7 +534,7 @@ class MultiQubit:
         self.__valid_qubit_index(qubit_index)
         proj_tensor_to_zero, proj_tensor_to_one = self.__compute_proj_matrices(qubit_index)
         desired_qubit = self.get_qubit(qubit_index)
-        measured_state = desired_qubit.measure()  # Measure the desired qubit (returns 0 or 1)
+        measured_state = desired_qubit.measure(measurement_error=measurement_error)  # Measure the desired qubit (returns 0 or 1)
 
         if measured_state == 0:
             collapsed_state = np.matmul(proj_tensor_to_zero, self.__tensor_vector)
