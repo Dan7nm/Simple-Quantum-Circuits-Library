@@ -11,11 +11,11 @@ from scipy.optimize import curve_fit
 import os
 
 ### Test Parameters ###
-QUBITS_TO_TEST = 5
-SAMPLE_NUM = 15000
+QUBITS_TO_TEST = 6
+SAMPLE_NUM = 30000
 EPSILON = 1e-10
 MAX_MEASUREMENT_ERROR = 0.1
-POINTS = 5
+POINTS = 7
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -800,7 +800,9 @@ def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:i
     plt.legend(fontsize=10)
     plt.tight_layout()
     os.makedirs(save_dir, exist_ok=True)
-    plt.savefig(f"{save_dir}/ce_vs_measurement_error_{qubit_num}_qubits_{sample_num}_runs.png", dpi=300, bbox_inches='tight')
+    plt.savefig(f"{save_dir}/ce_vs_measurement_error_{qubit_num}_qubits_{sample_num}_runs_{points}_points_{max_measurement_error}_max_error.png", dpi=300, bbox_inches='tight')
+    plt.yscale('log')
+    plt.savefig(f"{save_dir}/ce_vs_measurement_error_{qubit_num}_qubits_{sample_num}_runs_{points}_points_{max_measurement_error}_max_error_log.png", dpi=300, bbox_inches='tight')
     plt.close()
 
 if __name__ == "__main__":
