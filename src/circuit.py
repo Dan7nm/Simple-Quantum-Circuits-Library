@@ -18,7 +18,7 @@ INV_NUM_QUBITS = "The number of qubits should be atleast 1."
 INV_CTRL_TARG = "Invalid target and qubit index input. The target qubit and the control qubit should be different from each other"
 INV_INIT_LAYERS = "Invalid number of layers. The number should be non zero positive integer."
 INV_POS_VAL = "The value is invalid. The value should be a positive non zero integer."
-INV_DRAW = "The argument is invalid. Use 'mpl' or 'cli'."
+INV_FILENAME = "The filename is invalid. The filename should be a string."
 INV_Q_STATE = "The input is invalid. The input should be a multiqubit object."
 INV_C_REG = "The input is invalid. The input should be a classical register object."
 INV_NUM_C_REG = "Invalid Number of bits in the classical register."
@@ -656,79 +656,6 @@ class QuantumCircuit:
         self.__circuit_is_computed = False
         # After reset, circuit is non-dynamic
         self.__is_dynamic = False
-    
-    def __draw_cli(self) -> None:
-        if self.__number_of_layers == 0 or self.__circuit_qubit_num == 0:
-            print("Empty circuit")
-            return
-        
-        # Build the circuit layer by layer
-        circuit_lines = [[] for _ in range(self.__circuit_qubit_num)]
-        
-        # Process each layer
-        for layer in range(self.__number_of_layers):
-            # Track which qubits have been processed in this layer
-            processed_qubits = set()
-            
-            # First pass: Add gates and controls
-            for qubit in range(self.__circuit_qubit_num):
-                if qubit in processed_qubits:
-                    continue
-                    
-                gate = self.__circuit[layer][qubit]
-                
-                # Empty space (identity gate)
-                if gate is None or gate.get_gate_type() == "I":
-                    circuit_lines[qubit].append("──────")
-
-                # If the cell is a classical bit cell draw double lines.
-                elif gate.is_classical_bit():
-                    circuit_lines[qubit].append("======")
-                
-                elif gate.is_swap_gate():
-                    # Handle swap gate
-                    first_idx = gate.get_control_index()
-                    second_idx = gate.get_target_index()
-                    processed_qubits.add(first_idx)
-                    processed_qubits.add(second_idx)
-                    # Add swap symbols
-                    for i in range(self.__circuit_qubit_num):
-                        if i == first_idx:
-                            circuit_lines[i].append(f'──⨉{second_idx}──')
-                        if i == second_idx:
-                            circuit_lines[i].append(f'──⨉{first_idx}──')
-                                
-                elif gate.is_control_gate():
-                    # Handle controlled gates
-                    control_idx = gate.get_control_index()
-                    target_idx = gate.get_target_index()
-                    processed_qubits.add(control_idx)
-                    processed_qubits.add(target_idx)
-                    # Determine gate symbol for target
-                    target_symbol = 'C' + gate.get_gate_type()   
-                    # Add gate elements
-                    for i in range(self.__circuit_qubit_num):
-                        if i == control_idx:
-                            circuit_lines[i].append(f'──●{target_idx}──')
-                        elif i == target_idx:
-                            circuit_lines[i].append(f'─[{target_symbol}]─')
-                else:
-                    # Handle single qubit gates
-                    processed_qubits.add(qubit)
-                    gate_symbol = gate.get_gate_type()
-                    # Add the gate
-                    for i in range(self.__circuit_qubit_num):
-                        if i == qubit:
-                            circuit_lines[i].append(f'─[{gate_symbol}]──')
-        
-        # Print the circuit
-        print("\nCircuit Diagram:")
-        for i, line in enumerate(circuit_lines):
-            print(f'    q{i}: {"".join(line)}')
-        
-        layers_indexes = [f"──{i}───" if (i // 10) == 0 else f"──{i}──" for i in range(self.__number_of_layers)]
-
-        print(f"layers: {''.join(layers_indexes)}")
 
     def print_operator_matrix(self) -> None:
         """
@@ -844,9 +771,29 @@ class QuantumCircuit:
         # Add Swap gates:
         # for qubit_index in range(self.__circuit_qubit_num):
         #     if qubit_index < self.__circuit_qubit_num - 1 - qubit_index:
-        #         self.add_swap_gate(qubit_index,self.__circuit_qubit_num - 1 - qubit_index,curr_layer_index)
+        #         self.add_swap_gate(qubit_index,self.__circuit_qubit_num - 1 - qubit_index,curr_layer_index)        
 
-    def __draw_using_matplotlib(self):
+    def draw_circuit(self,filename:str=None) -> None:
+        """
+        Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.
+
+        The visualization includes:
+        - Horizontal lines (─) representing qubit wires
+        - Single qubit gates with their type (H, X, Y, Z, P)
+        - Control points (●) for controlled gates
+        - Target points (⊕ for X gates, ◯ for others)
+        - Swap gates (⨉)
+
+        Parameters
+        ----------
+        filename : str
+            If a filename is provided, the circuit diagram will be saved as an image file with the given name. Supported formats include PNG, JPG, and SVG. If None, the diagram will be displayed on screen.
+
+        Raises
+        ------
+        ValueError
+            If the input is not a string and not 'mpl' or 'cli'.
+        """
         if self.__number_of_layers == 0 or self.__circuit_qubit_num == 0:
             print("Empty circuit")
             return
@@ -956,38 +903,12 @@ class QuantumCircuit:
 
         padding = 10 if self.__circuit_qubit_num > 6 else 1.08
         plt.tight_layout(pad=padding)
-        plt.show()
-
-    def draw_circuit(self,draw_type:str = "mpl") -> None:
-        """
-        Print a visualization of the quantum circuit. You can specify to visualize in matplotlib or CLI. The method will visualize using matplotlib by default.
-
-        The visualization includes:
-        - Horizontal lines (─) representing qubit wires
-        - Single qubit gates with their type (H, X, Y, Z, P)
-        - Control points (●) for controlled gates
-        - Target points (⊕ for X gates, ◯ for others)
-        - Swap gates (⨉)
-
-        Parameters
-        ----------
-        draw_type : str
-            String to specify how to draw the circuit. "mpl" for Matplotlib and "cli" for command line.
-
-        Raises
-        ------
-        ValueError
-            If the input is not a string and not 'mpl' or 'cli'.
-        """
-        if not isinstance(draw_type,str):
-            raise ValueError("The input is invalid should be a string.")
-        draw_type = draw_type.lower()
-        if draw_type == "mpl":
-            self.__draw_using_matplotlib()
-        elif draw_type == "cli":
-            self.__draw_cli()
+        if filename is not None:
+            if not isinstance(filename,str):
+                raise ValueError(INV_FILENAME)
+            plt.savefig(filename, dpi=300)
         else:
-            raise ValueError(INV_DRAW)
+            plt.show()
 
     def add_measure_gate(self,qubit_index:int, layer_index: int,c_reg_index: int, measurement_error:float = 0.0) -> None:
         """
