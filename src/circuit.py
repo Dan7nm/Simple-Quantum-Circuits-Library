@@ -1181,3 +1181,27 @@ class QuantumCircuit:
         count_vector = np.sqrt(count_vector)
 
         return MultiQubit(count_vector)
+    
+    def __getitem__(self,key: int) -> NDArray:
+        """
+        Allow direct indexing into the circuit array.
+        This enables syntax like: gate = circuit[layer_index][qubit_index]
+        
+        Parameters
+        ----------
+        key : int
+            The layer index to access.
+            
+        Returns
+        -------
+        NDArray
+            The array of gates at the specified layer.
+            
+        Raises
+        ------
+        ValueError
+            If the layer index is invalid.
+        """
+
+        self.__valid_layer_index(key)
+        return self.__circuit[key]
