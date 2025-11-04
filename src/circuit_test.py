@@ -14,8 +14,9 @@ import os
 QUBITS_TO_TEST = 6
 SAMPLE_NUM = 30000
 EPSILON = 1e-10
-MAX_MEASUREMENT_ERROR = 0.1
+MAX_MEASUREMENT_ERROR = 0.02
 POINTS = 7
+NUM_REPEATS = 5
 
 def qft_on_sine(number_of_qubits: int) -> None:
     """
@@ -731,9 +732,10 @@ def aqft_vs_qft(qubit_num:int=3,save_dir:str="aqft_vs_qft",dynamic:bool = False,
         plt.savefig(os.path.join(save_dir, f'aqft_vs_qft_{qubit_num}_qubits.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
-def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:int,sample_num:int = 1000,save_dir:str = "ce_vs_measurement_error") -> None:
+def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:int,sample_num:int = 1000,save_dir:str = "ce_vs_measurement_error", num_repeats:int = 5) -> None:
     """
     Compare the cross-entropy of random quantum state with dynamic and regular QFT circuits vs different measurement errors.
+    Repeat the process multiple times for each measurement error to calculate error bars.
 
     Parameters
     ----------
@@ -745,14 +747,20 @@ def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:i
         The number of points to sample between 0 and max_measurement_error.
     sample_num : int, optional
         The number of runs for sampling the output state (default is 1000).
+    save_dir : str, optional
+        Directory to save plots (default is "ce_vs_measurement_error").
+    num_repeats : int, optional
+        Number of times to repeat the process for each measurement error to calculate error bars (default is 5).
     
     Returns
     -------
     None
     """
     measurement_lst = np.linspace(0, max_measurement_error, points)
-    ce_dyn_lst = []
-    ce_reg_lst = []
+    ce_dyn_means = []
+    ce_reg_means = []
+    ce_dyn_stds = []
+    ce_reg_stds = []
     input_state = MultiQubit(qubits_num=qubit_num)
     
     # Load QFT circuit
@@ -761,41 +769,59 @@ def ce_vs_measurement_error(qubit_num:int, max_measurement_error:float ,points:i
     ref_result = qft_circuit.run_circuit()
     min_ce = cross_entropy(ref_result, ref_result)
 
-    for i,measurement_error in enumerate(measurement_lst):
+    for i, measurement_error in enumerate(measurement_lst):
         print(f"Testing QFT with measurement error={measurement_error:.3f}, Progress: ({i+1}/{points})", end='\r', flush=True)
 
-        # Regular QFT with measurement error
-        c_register_reg = ClassicalRegister(num_bits=qubit_num)
-        reg_err_circuit = QuantumCircuit(
-            input_state=input_state,
-            classical_register=c_register_reg,
-        )
-        reg_err_circuit.load_qft_preset(include_measurement=True,measurement_error=measurement_error)
-        reg_sampled = reg_err_circuit.run_many(num_of_runs=sample_num)
+        ce_reg_repeats = []
+        ce_dyn_repeats = []
 
-        # Dynamic QFT with measurement error
-        c_register_dyn = ClassicalRegister(num_bits=qubit_num)
-        dyn_err_circuit = QuantumCircuit(
-            input_state=input_state,
-            classical_register=c_register_dyn,
-        )
-        dyn_err_circuit.load_dynamic_qft_preset(measurement_error=measurement_error)
-        dyn_sampled = dyn_err_circuit.run_many(num_of_runs=sample_num)
+        # Repeat the process num_repeats times for each measurement error
+        for repeat in range(num_repeats):
+            # Regular QFT with measurement error
+            c_register_reg = ClassicalRegister(num_bits=qubit_num)
+            reg_err_circuit = QuantumCircuit(
+                input_state=input_state,
+                classical_register=c_register_reg,
+            )
+            reg_err_circuit.load_qft_preset(include_measurement=True, measurement_error=measurement_error)
+            reg_sampled = reg_err_circuit.run_many(num_of_runs=sample_num)
 
-        # Cross-entropy relative to ideal
-        ce_r = cross_entropy(ref_result, reg_sampled) - min_ce
-        ce_d = cross_entropy(ref_result, dyn_sampled) - min_ce
+            # Dynamic QFT with measurement error
+            c_register_dyn = ClassicalRegister(num_bits=qubit_num)
+            dyn_err_circuit = QuantumCircuit(
+                input_state=input_state,
+                classical_register=c_register_dyn,
+            )
+            dyn_err_circuit.load_dynamic_qft_preset(measurement_error=measurement_error)
+            dyn_sampled = dyn_err_circuit.run_many(num_of_runs=sample_num)
 
-        ce_reg_lst.append(ce_r)
-        ce_dyn_lst.append(ce_d)
+            # Cross-entropy relative to ideal
+            ce_r = cross_entropy(ref_result, reg_sampled) - min_ce
+            ce_d = cross_entropy(ref_result, dyn_sampled) - min_ce
+
+            ce_reg_repeats.append(ce_r)
+            ce_dyn_repeats.append(ce_d)
+
+        # Calculate mean and standard deviation for this measurement error
+        ce_reg_means.append(np.mean(ce_reg_repeats))
+        ce_dyn_means.append(np.mean(ce_dyn_repeats))
+        ce_reg_stds.append(np.std(ce_reg_repeats))
+        ce_dyn_stds.append(np.std(ce_dyn_repeats))
 
     print()
     plt.figure(figsize=(12, 7))
-    plt.plot(measurement_lst, ce_reg_lst, 'o-', linewidth=2, markersize=7, color='blue', label='Regular QFT (w/ measurement error)')
-    plt.plot(measurement_lst, ce_dyn_lst, 's--', linewidth=2, markersize=7, color='orange', label='Dynamic QFT (w/ measurement error)')
+    
+    # Plot with error bars
+    plt.errorbar(measurement_lst, ce_reg_means, yerr=ce_reg_stds, fmt='o-', linewidth=2, 
+                markersize=7, color='blue', label='Regular QFT (w/ measurement error)', 
+                capsize=5, capthick=2, alpha=0.8)
+    plt.errorbar(measurement_lst, ce_dyn_means, yerr=ce_dyn_stds, fmt='s--', linewidth=2, 
+                markersize=7, color='orange', label='Dynamic QFT (w/ measurement error)', 
+                capsize=5, capthick=2, alpha=0.8)
+    
     plt.xlabel('Measurement Error (Probability to get a bit flip)', fontsize=12)
     plt.ylabel('Cross-Entropy Difference', fontsize=12)
-    plt.title(f'Cross-Entropy Difference to ideal vs Measurement Error\n{qubit_num} Qubits, {sample_num} Runs', fontsize=14)
+    plt.title(f'Cross-Entropy Difference to ideal vs Measurement Error\n{qubit_num} Qubits, {sample_num} Runs, {num_repeats} Repeats', fontsize=14)
     plt.grid(True, alpha=0.3)
     plt.legend(fontsize=10)
     plt.tight_layout()
@@ -813,15 +839,20 @@ if __name__ == "__main__":
     print("Begin Testing")
     print("=" * 80)
 
+    #### Add Tests to run here ####
     ce_vs_measurement_error(
         qubit_num=QUBITS_TO_TEST,
         max_measurement_error=MAX_MEASUREMENT_ERROR,
         points=POINTS,
         sample_num=SAMPLE_NUM,
-        save_dir="ce_vs_measurement_error"
+        save_dir="ce_vs_measurement_error",
+        num_repeats=NUM_REPEATS
     )
 
+    #### End of tests to run ####
     end_time = time.perf_counter()
     elapsed_minutes = (end_time - start_time) / 60
+    elapsed_hours = elapsed_minutes / 60
+    elapsed_minutes = elapsed_minutes % 60
     print(f"=============== All tests passed! ===============")
-    print(f"Total run time: {elapsed_minutes:.2f} minutes") 
+    print(f"Total run time: {elapsed_hours:.2f} hours ({elapsed_minutes:.2f} minutes)") 
